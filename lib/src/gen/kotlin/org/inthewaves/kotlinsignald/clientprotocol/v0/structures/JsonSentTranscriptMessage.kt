@@ -1,0 +1,20 @@
+package org.inthewaves.kotlinsignald.clientprotocol.v0.structures
+
+import kotlinx.serialization.Serializable
+
+/**
+ * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
+ */
+@Serializable
+@Deprecated("Will be removed on Sat, 1 Jan 2022 09:01:01 GMT")
+public data class JsonSentTranscriptMessage(
+    public val destination: JsonAddress? = null,
+    /**
+     * Example: 1615576442475
+     */
+    public val timestamp: Long? = null,
+    public val expirationStartTimestamp: Long? = null,
+    public val message: JsonDataMessage? = null,
+    public val unidentifiedStatus: Map<String, Boolean>? = null,
+    public val isRecipientUpdate: Boolean? = null
+)
