@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
 @Serializable
 @SerialName("approve_membership")
 public data class ApproveMembership private constructor(
-    public override val data: JsonGroupV2Info? = null
+    public override val `data`: JsonGroupV2Info? = null
 ) : JsonMessageWrapper<JsonGroupV2Info>()

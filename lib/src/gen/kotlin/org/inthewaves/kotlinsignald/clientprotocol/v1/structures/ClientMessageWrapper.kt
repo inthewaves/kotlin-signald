@@ -19,7 +19,7 @@ public sealed class ClientMessageWrapper {
      * the incoming object. The structure will vary from message to message, see `type` and
      * `version` fields
      */
-    public abstract val data: Data
+    public abstract val `data`: Data
 
     /**
      * true if the incoming message represents an error

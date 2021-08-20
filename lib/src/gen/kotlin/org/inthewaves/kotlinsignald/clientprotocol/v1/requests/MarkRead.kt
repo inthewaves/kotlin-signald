@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
 @Serializable
 @SerialName("mark_read")
 public data class MarkRead private constructor(
-    public override val data: EmptyResponse? = null
+    public override val `data`: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

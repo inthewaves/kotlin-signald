@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
 @Serializable
 @SerialName("add_device")
 public data class AddDevice private constructor(
-    public override val data: EmptyResponse? = null
+    public override val `data`: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
 @Serializable
 @SerialName("delete_server")
 public data class DeleteServer private constructor(
-    public override val data: EmptyResponse? = null
+    public override val `data`: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

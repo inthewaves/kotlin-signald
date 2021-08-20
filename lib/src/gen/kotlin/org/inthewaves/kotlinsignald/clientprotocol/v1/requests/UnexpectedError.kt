@@ -10,5 +10,5 @@ import kotlinx.serialization.json.JsonObject
 @Serializable
 @SerialName("unexpected_error")
 public data class UnexpectedError private constructor(
-    public override val data: JsonObject? = null
+    public override val `data`: JsonObject? = null
 ) : JsonMessageWrapper<JsonObject>()

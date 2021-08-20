@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkedDevices
 @Serializable
 @SerialName("get_linked_devices")
 public data class GetLinkedDevices private constructor(
-    public override val data: LinkedDevices? = null
+    public override val `data`: LinkedDevices? = null
 ) : JsonMessageWrapper<LinkedDevices>()

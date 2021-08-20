@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 @Serializable
 @SerialName("resolve_address")
 public data class ResolveAddress private constructor(
-    public override val data: JsonAddress? = null
+    public override val `data`: JsonAddress? = null
 ) : JsonMessageWrapper<JsonAddress>()

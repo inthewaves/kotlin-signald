@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @SerialName("ListenerState")
 public data class ListenerState(
     public override val version: String? = null,
-    public override val data: Data,
+    public override val `data`: Data,
     public override val error: Boolean? = false
 ) : ClientMessageWrapper() {
     @Serializable

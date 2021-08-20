@@ -12,7 +12,7 @@ import java.util.UUID
 @SerialName("IncomingMessage")
 public data class IncomingMessage(
     public override val version: String? = null,
-    public override val data: Data,
+    public override val `data`: Data,
     public override val error: Boolean? = false
 ) : ClientMessageWrapper() {
     @Serializable

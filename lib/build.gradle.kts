@@ -14,7 +14,7 @@ plugins {
 }
 
 val mavenArtifactId = "kotlin-signald"
-group = "org.inthewaves"
+group = "org.inthewaves.kotlin-signald"
 version = "0.1.0"
 
 base {

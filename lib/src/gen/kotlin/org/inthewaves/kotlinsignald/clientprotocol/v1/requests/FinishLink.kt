@@ -14,5 +14,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
 @Serializable
 @SerialName("finish_link")
 public data class FinishLink private constructor(
-    public override val data: Account? = null
+    public override val `data`: Account? = null
 ) : JsonMessageWrapper<Account>()

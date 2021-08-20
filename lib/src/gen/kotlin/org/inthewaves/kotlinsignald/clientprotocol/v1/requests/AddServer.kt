@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("add_server")
 public data class AddServer private constructor(
-    public override val data: String? = null
+    public override val `data`: String? = null
 ) : JsonMessageWrapper<String>()
