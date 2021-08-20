@@ -14,7 +14,7 @@ plugins {
 
 val mavenArtifactId = "clientprotocol"
 group = "org.inthewaves.kotlin-signald"
-version = "0.2.0"
+version = "0.3.0"
 
 signaldProtocolGen {
     packageName = "org.inthewaves.kotlinsignald"
@@ -124,56 +124,12 @@ publishing {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications.all {
-            val variantName = project.name
-            val type = name
-            println("Configuring $type ($variantName)")
-            when (type) {
-                "kotlinMultiplatform" -> {
-                    // https://github.com/Kotlin/kotlinx.serialization/blob/43d5f7841fc744b072a636b712e194081456b5ba/gradle/publishing.gradle#L84
-                    // https://github.com/Kotlin/kotlinx.serialization/blob/43d5f7841fc744b072a636b712e194081456b5ba/gradle/publish-mpp-root-module-in-platform.gradle
-                    val platformPublication = publications["jvm"] as MavenPublication
-                    afterEvaluate {
-                        lateinit var platformXml: XmlProvider
-                        platformPublication.pom.withXml { platformXml = this }
-                        (publishing.publications["kotlinMultiplatform"] as MavenPublication).pom.withXml {
-                            val root: groovy.util.Node = asNode()
-                            root.children().toList().forEach { root.remove(it as groovy.util.Node) }
-                            platformXml.asNode().children().forEach { root.append(it as groovy.util.Node) }
-
-                            // Adjust the self artifact ID, as it should match the root module's coordinates:
-                            ((root.get("artifactId") as groovy.util.NodeList).first() as groovy.util.Node)
-                                .setValue(mavenArtifactId)
-
-                            // Set packaging to POM to indicate that there's no artifact:
-                            root.appendNode("packaging", "pom")
-
-                            // Remove the original platform dependencies and add a single dependency on the platform
-                            // module:
-                            val dependencies: groovy.util.Node = (root.get("dependencies") as groovy.util.NodeList)
-                                .first() as groovy.util.Node
-                            dependencies.children().toList().forEach { dependencies.remove(it as groovy.util.Node) }
-                            val singleDependency = dependencies.appendNode("dependency")
-                            singleDependency.appendNode("groupId", platformPublication.groupId)
-                            singleDependency.appendNode("artifactId", platformPublication.artifactId)
-                            singleDependency.appendNode("version", platformPublication.version)
-                            singleDependency.appendNode("scope", "compile")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 tasks.withType<PublishToMavenRepository> {
-    dependsOn(tasks.test, tasks.getByName("apiCheck"))
+    dependsOn(tasks.getByName("allTests"), tasks.getByName("apiCheck"))
 }
 
 tasks.withType<PublishToMavenLocal> {
-    dependsOn(tasks.test, tasks.getByName("apiCheck"))
+    dependsOn(tasks.getByName("allTests"), tasks.getByName("apiCheck"))
 }
 
 signing {
