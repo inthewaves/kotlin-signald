@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="clientprotocol-js-0.2.0">
+    <output-path>$PROJECT_DIR$/clientprotocol/build/libs</output-path>
+    <root id="archive" name="clientprotocol-js-0.2.0.jar">
+      <element id="module-output" name="kotlin-signald.clientprotocol.jsMain" />
+    </root>
+  </artifact>
+</component>

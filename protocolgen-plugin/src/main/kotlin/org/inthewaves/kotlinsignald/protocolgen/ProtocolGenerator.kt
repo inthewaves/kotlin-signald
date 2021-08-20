@@ -14,6 +14,7 @@ import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.asClassName
+import kotlinx.datetime.Clock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName
@@ -23,7 +24,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import java.io.File
-import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -129,9 +129,10 @@ class ProtocolGenerator(
 
     private val socketCommunicatorClassName = ClassName(clientProtocolPackage, "SocketCommunicator")
 
+    private val signaldExceptionClassName = ClassName(clientProtocolPackage, "SignaldException")
+
     private val requestFailedExceptionClassName = ClassName(clientProtocolPackage, "RequestFailedException")
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun generateSignaldProtocol() {
         if (!protocolJsonFile.exists()) {
             System.err.println("specified [$protocolJsonFile] as the protocol.json, but it doesn't exist")
@@ -148,8 +149,16 @@ class ProtocolGenerator(
         }
 
         val genFilesDir = generatedFilesRootDir
-        if (!genFilesDir.absolutePath.contains("gen${File.separatorChar}kotlin")) {
-            println("error: expected gen${File.separatorChar}kotlin in the path, but was given $genFilesDir")
+
+        val sep = File.separatorChar
+        val acceptablePaths = setOf(
+            "gen${sep}kotlin",
+            "commonMain${sep}kotlin",
+            "commonMain${sep}generated"
+        )
+
+        if (!acceptablePaths.any { genFilesDir.absolutePath.contains(it) }) {
+            println("error: expected one of $acceptablePaths in the path, but was given $genFilesDir")
             exitProcess(1)
         }
         if (genFilesDir.exists() && !genFilesDir.deleteRecursively()) {
@@ -173,10 +182,29 @@ class ProtocolGenerator(
             .build()
         writePropertySpecFile(signaldJsonClassName, jsonProperty, genFilesDir)
 
+        val signaldExceptionTypeSpec = TypeSpec.classBuilder(signaldExceptionClassName)
+            .superclass(ClassName("kotlin", "Exception"))
+            .addModifiers(KModifier.EXPECT, KModifier.OPEN)
+            .addFunction(FunSpec.constructorBuilder().build())
+            .addFunction(FunSpec.constructorBuilder()
+                .addParameter("message", String::class.asClassName().copy(nullable = true))
+                .build()
+            )
+            .addFunction(FunSpec.constructorBuilder()
+                .addParameter("message", String::class.asClassName().copy(nullable = true))
+                .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
+                .build()
+            )
+            .addFunction(FunSpec.constructorBuilder()
+                .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
+                .build()
+            )
+            .build()
+        writeTypeSpecFile(signaldExceptionClassName, signaldExceptionTypeSpec, genFilesDir)
 
         val requestFailedExceptionTypeSpec = TypeSpec.classBuilder(requestFailedExceptionClassName).apply {
             addModifiers(KModifier.OPEN)
-            superclass(IOException::class)
+            superclass(signaldExceptionClassName)
             addKdoc(
                 "%L",
                 "An exception that is thrown if " +
@@ -283,39 +311,33 @@ class ProtocolGenerator(
         writeTypeSpecFile(requestFailedExceptionClassName, requestFailedExceptionTypeSpec, genFilesDir)
 
         val socketCommunicatorSubmitFunName = "submit"
+
+
+
         val socketCommunicatorTypeSpec = TypeSpec.interfaceBuilder(socketCommunicatorClassName)
+            .addModifiers(KModifier.EXPECT)
             .addFunction(
                 FunSpec.builder(socketCommunicatorSubmitFunName)
-                    .addAnnotation(
-                        AnnotationSpec.builder(Throws::class)
-                            .addMember("%T::class", IOException::class.asClassName())
-                            .build()
-                    )
                     .addModifiers(KModifier.ABSTRACT)
                     .addKdoc(
                         "%L",
                         "Sends the [request] to the socket as a single line of JSON (line terminated with \\n), and " +
                                 "returns the JSON response from signald."
                     )
-                    .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
+                    // .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
                     .addParameter("request", String::class)
                     .returns(String::class)
                     .build()
             )
             .addFunction(
                 FunSpec.builder(SOCKET_COMM_READLINE_FUN_NAME)
-                    .addAnnotation(
-                        AnnotationSpec.builder(Throws::class)
-                            .addMember("%T::class", IOException::class.asClassName())
-                            .build()
-                    )
                     .addModifiers(KModifier.ABSTRACT)
                     .addKdoc(
                         "%L",
                         "Reads a JSON message from the socket, blocking until a message is received or " +
                                 "returning null if the socket closes."
                     )
-                    .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
+                    // .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
                     .returns(String::class.asClassName().copy(nullable = true))
                     .build()
             )
@@ -399,7 +421,7 @@ class ProtocolGenerator(
                                 //  https://github.com/Kotlin/kotlinx.serialization/pull/1528
                                 "The id to include in the request. This is expected to be present in the response JSON."
                             )
-                            .initializer("%P", "\${System.currentTimeMillis()}")
+                            .initializer("%T.System.now().toEpochMilliseconds().toString()", Clock::class)
                             .build()
                         addProperty(idPropertySpec)
 
@@ -415,8 +437,8 @@ class ProtocolGenerator(
                                 .returns(responseDataTypeVar)
                                 .addParameter("socketCommunicator", socketCommunicatorClassName)
                                 .addAnnotation(
-                                    AnnotationSpec.builder(Throws::class)
-                                        .addMember("%T::class", IOException::class)
+                                    AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                        .addMember("%T::class", requestFailedExceptionClassName)
                                         .build()
                                 )
                                 .addKdoc(
@@ -424,10 +446,10 @@ class ProtocolGenerator(
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
                                             "sends a bad or error response, or unable to serialize our request"
                                 )
-                                .addKdoc(
-                                    "\n%L",
-                                    "@throws IOException if an I/O error occurs during socket communication"
-                                )
+                                //.addKdoc(
+                                //    "\n%L",
+                                //    "@throws IOException if an I/O error occurs during socket communication"
+                                //)
                                 .addStatement("return $BASE_RESPONSE_SUBMIT_FUN_NAME(socketCommunicator, id)")
                                 .build()
                         )
@@ -436,7 +458,8 @@ class ProtocolGenerator(
                                 .addModifiers(KModifier.OPEN, KModifier.INTERNAL)
                                 .returns(responseDataTypeVar)
                                 .addAnnotation(
-                                    AnnotationSpec.builder(Throws::class).addMember("%T::class", IOException::class)
+                                    AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                        .addMember("%T::class", requestFailedExceptionClassName)
                                         .build()
                                 )
                                 .addKdoc(
@@ -449,10 +472,10 @@ class ProtocolGenerator(
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
                                             "sends a bad or error response, or unable to serialize our request"
                                 )
-                                .addKdoc(
-                                    "\n%L",
-                                    "@throws IOException if an I/O error occurs during socket communication"
-                                )
+                                //.addKdoc(
+                                //    "\n%L",
+                                //    "@throws IOException if an I/O error occurs during socket communication"
+                               // )
                                 .addParameter("socketCommunicator", socketCommunicatorClassName)
                                 .addParameter(idParameterSpec)
                                 .addCode(
@@ -540,8 +563,8 @@ class ProtocolGenerator(
                                     requestFailedExceptionClassName,
                                     "responseJson",
                                     "response failed verification " +
-                                            "(wrapper type: \${response::class.java.simpleName}, " +
-                                            "data type: \${response.data!!::class.java.simpleName})"
+                                            "(wrapper type: \${response::class.simpleName}, " +
+                                            "data type: \${response.data!!::class.simpleName})"
                                 )
                                 .build()
                         )
@@ -1112,10 +1135,13 @@ class ProtocolGenerator(
                             }
                             pendingChatMessages.add(incomingMessage)
                             rawJsonResponse = socketCommunicator.${SOCKET_COMM_READLINE_FUN_NAME}() 
-                                ?: throw %T("unable to read line from socket", originalException)
+                                ?: throw %T(extraMessage = %S, cause = originalException)
                         }
 
-                        throw %T("too many messages; didn't see subscribe acknowledgement", originalException)
+                        throw %T(
+                            extraMessage = %S,
+                            cause = originalException
+                        )
                     """.trimIndent(),
                         // if (originalException.cause !is %T) {
                         SerializationException::class,
@@ -1127,10 +1153,13 @@ class ProtocolGenerator(
                         createJsonMessageWrapperInfo(protocolDoc, version).className,
                         // return %T(pendingChatMessages)
                         getSubscriptionResponseClassName(version),
-                        // ?: throw %T()
-                        IOException::class,
-                        // throw %T("too many messages; didn't see subscribe acknowledgement", originalException)
-                        IOException::class
+                        // ?: throw %T(extraMessage = %S, cause = originalException)
+                        requestFailedExceptionClassName, "unable to read line from socket",
+                        // throw %T(
+                        //     extraMessage = %S,
+                        //     cause = originalException
+                        // )
+                        requestFailedExceptionClassName, "too many messages; didn't see subscribe acknowledgement"
                     )
                     endControlFlow()
                 }.build()

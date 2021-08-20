@@ -48,7 +48,7 @@ value class SignaldType(val name: String) {
         )
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
+    
     fun asBuiltinTypeNameOrNull(pkg: PackageName): TypeName? = when (name.lowercase()) {
         "string" -> String::class.asClassName()
         "boolean" -> Boolean::class.asClassName()
@@ -121,7 +121,7 @@ data class Structure(
         val example: String? = null,
         val required: Boolean = false,
     ) {
-        @OptIn(ExperimentalStdlibApi::class)
+        
         fun getTypeName(pkg: PackageName, fieldName: String): TypeName {
             val builtInTypeName = type.asBuiltinTypeNameOrNull(pkg)
 
