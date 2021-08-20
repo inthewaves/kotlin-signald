@@ -52,7 +52,7 @@ publishing {
 
             pom {
                 name.set(artifactId)
-                description.set("A Kotlin library for interacting with a signald socket.")
+                description.set("A Kotlin library for communicating with signald")
                 url.set("https://github.com/inthewaves/kotlin-signald")
 
                 licenses {
