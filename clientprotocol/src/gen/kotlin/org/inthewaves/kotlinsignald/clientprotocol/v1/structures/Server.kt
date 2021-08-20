@@ -2,8 +2,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.inthewaves.kotlinsignald.serializers.UUIDSerializer
-import java.util.UUID
 
 /**
  * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
@@ -16,8 +14,7 @@ public data class Server(
      * A unique identifier for the server, referenced when adding accounts. Must be a valid UUID.
      * Will be generated if not specified when creating.
      */
-    @Serializable(UUIDSerializer::class)
-    public val uuid: UUID? = null,
+    public val uuid: String? = null,
     public val proxy: String? = null,
     public val ca: String? = null,
     @SerialName("service_url")

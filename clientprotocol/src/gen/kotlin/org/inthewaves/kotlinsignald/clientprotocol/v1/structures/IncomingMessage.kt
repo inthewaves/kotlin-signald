@@ -2,8 +2,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.inthewaves.kotlinsignald.serializers.UUIDSerializer
-import java.util.UUID
 
 /**
  * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
@@ -56,7 +54,6 @@ public data class IncomingMessage(
         @SerialName("typing_message")
         public val typingMessage: TypingMessage? = null,
         @SerialName("server_guid")
-        @Serializable(UUIDSerializer::class)
-        public val serverGuid: UUID? = null
+        public val serverGuid: String? = null
     ) : ClientMessageWrapper.Data()
 }

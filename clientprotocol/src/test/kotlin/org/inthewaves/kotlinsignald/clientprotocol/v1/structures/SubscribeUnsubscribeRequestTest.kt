@@ -8,7 +8,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.UUID
 import kotlin.test.assertEquals
 
 internal class SubscribeUnsubscribeRequestTest {
@@ -104,7 +103,7 @@ internal class SubscribeUnsubscribeRequestTest {
                     account = "+1234567890",
                     source = JsonAddress(
                         number = "+1337133713",
-                        uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                        uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                     ),
                     type = "RECEIPT",
                     timestamp = 12345,
@@ -114,7 +113,7 @@ internal class SubscribeUnsubscribeRequestTest {
                     hasLegacyMessage = false,
                     hasContent = false,
                     unidentifiedSender = false,
-                    serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                    serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                 )
             )
         )

@@ -7,7 +7,6 @@ import com.squareup.kotlinpoet.asClassName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
-import java.util.UUID
 
 typealias Versioned<T> = Map<SignaldProtocolVersion, T>
 
@@ -59,7 +58,7 @@ value class SignaldType(val name: String) {
             // Put something that will definitely prevent compiling
             ClassName(GenUtil.getClientProtocolPackage(pkg), "TODO-FixThisUp")
         }
-        "uuid" -> UUID::class.asClassName()
+        "uuid" -> String::class.asClassName()
         "map" -> {
             // TODO: The only data type where Map<String, Boolean> is used is in JsonSentTranscriptMessage's
             //  unidentifiedStatus field. There exists a to-do note in the signald source code to include the
@@ -126,12 +125,7 @@ data class Structure(
         fun getTypeName(pkg: PackageName, fieldName: String): TypeName {
             val builtInTypeName = type.asBuiltinTypeNameOrNull(pkg)
 
-            val baseType: TypeName = if (
-                fieldName.lowercase().endsWith("uuid") ||
-                fieldName.lowercase().endsWith("guid")
-            ) {
-                UUID::class.asClassName()
-            } else if (builtInTypeName != null) {
+            val baseType: TypeName = if (builtInTypeName != null) {
                 builtInTypeName
             } else {
                 require(version != null) { "version is not null despite not being a primitive type:\n$this" }

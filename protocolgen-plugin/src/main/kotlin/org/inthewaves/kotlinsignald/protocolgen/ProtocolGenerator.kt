@@ -27,7 +27,6 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.UUID
 import kotlin.system.exitProcess
 
 typealias SpecialTypeHandler = TypeSpec.Builder.(
@@ -45,7 +44,6 @@ class ProtocolGenerator(
 ) {
     private val clientProtocolPackage = GenUtil.getClientProtocolPackage(packageName)
 
-    private val uuidSerializer = ClassName("$packageName.serializers", "UUIDSerializer")
     private val signaldJsonClassName = ClassName(clientProtocolPackage, "SignaldJson")
 
     private fun writeTypeSpecFile(className: ClassName, typeSpec: TypeSpec, dirToWriteTo: File) {
@@ -122,8 +120,7 @@ class ProtocolGenerator(
     private val extraRequestWrappers: Versioned<Map<SignaldActionName, Action>>
         get() = mapOf(
             SignaldProtocolVersion.v1 to mapOf(
-                
-UNEXPECTED_ERROR_ACTION_NAME to Action(
+                UNEXPECTED_ERROR_ACTION_NAME to Action(
                     request = SignaldType.UNUSED,
                     response = SignaldType.JSON_OBJECT_TYPE,
                 )
@@ -794,13 +791,6 @@ UNEXPECTED_ERROR_ACTION_NAME to Action(
                                 }
                                 if (kdoc.isNotBlank()) {
                                     addKdoc("%L", kdoc)
-                                }
-                                if (fieldDetail.getTypeName(packageName, fieldName) == UUID::class.asClassName()) {
-                                    addAnnotation(
-                                        AnnotationSpec.builder(Serializable::class)
-                                            .addMember("%T::class", uuidSerializer)
-                                            .build()
-                                    )
                                 }
                             }.build()
 

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.UUID
 import java.util.stream.Stream
 
 internal class IncomingMessageTest {
@@ -33,7 +32,7 @@ internal class IncomingMessageTest {
                         account = "+1234567890",
                         source = JsonAddress(
                             number = "+1337133713",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "RECEIPT",
                         timestamp = 12345,
@@ -43,7 +42,7 @@ internal class IncomingMessageTest {
                         hasLegacyMessage = false,
                         hasContent = false,
                         unidentifiedSender = false,
-                        serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                        serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                     )
                 ),
                 """
@@ -77,7 +76,7 @@ internal class IncomingMessageTest {
                         account = "+1234567890",
                         source = JsonAddress(
                             number = "+1337133713",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 123457,
@@ -92,7 +91,7 @@ internal class IncomingMessageTest {
                             timestamps = listOf(11111111L),
                             `when` = 222222222L
                         ),
-                        serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                        serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                     )
                 ),
                 """
@@ -131,7 +130,7 @@ internal class IncomingMessageTest {
                         account = "+1234567890",
                         source = JsonAddress(
                             number = "+1234567890",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "PREKEY_BUNDLE",
                         timestamp = 90004,
@@ -141,7 +140,7 @@ internal class IncomingMessageTest {
                         hasLegacyMessage = false,
                         hasContent = true,
                         unidentifiedSender = true,
-                        serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                        serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                         syncMessage = JsonSyncMessage(
                             contactsComplete = false,
                             request = "KEYS"
@@ -183,7 +182,7 @@ internal class IncomingMessageTest {
                         account = "+1234567890",
                         source = JsonAddress(
                             number = "+1234567890",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 90004,
@@ -197,7 +196,7 @@ internal class IncomingMessageTest {
                             action = "STARTED",
                             timestamp = 86543
                         ),
-                        serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                        serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                     )
                 ),
                 """
@@ -235,7 +234,7 @@ internal class IncomingMessageTest {
                         account = "+1234567890",
                         source = JsonAddress(
                             number = "+1234567890",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 90004,
@@ -250,7 +249,7 @@ internal class IncomingMessageTest {
                             timestamp = 1724340098565,
                             groupId = "Enfw3fE4fUm7RcfSUhEA1c7KAGmbZC2ot4oicB0ZXuk=",
                         ),
-                        serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                        serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                     )
                 ),
                 """
@@ -289,7 +288,7 @@ internal class IncomingMessageTest {
                         account = "+123",
                         source = JsonAddress(
                             number = "+456",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 70004,
@@ -307,7 +306,7 @@ internal class IncomingMessageTest {
                             profileKeyUpdate = false,
                             viewOnce = false
                         ),
-                        serverGuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44"),
+                        serverGuid = "d769c83e-8781-4161-97a6-22a58ae67e44",
                     )
                 ),
                 """
@@ -349,7 +348,7 @@ internal class IncomingMessageTest {
                         account = "+123",
                         source = JsonAddress(
                             number = "+456",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 70004,
@@ -383,7 +382,7 @@ internal class IncomingMessageTest {
                             ),
                             viewOnce = false
                         ),
-                        serverGuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44"),
+                        serverGuid = "d769c83e-8781-4161-97a6-22a58ae67e44",
                     )
                 ),
                 """
@@ -463,7 +462,7 @@ internal class IncomingMessageTest {
                         account = "+123",
                         source = JsonAddress(
                             number = "+456",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 70004,
@@ -481,7 +480,7 @@ internal class IncomingMessageTest {
                             ),
                             multiRing = true
                         ),
-                        serverGuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44"),
+                        serverGuid = "d769c83e-8781-4161-97a6-22a58ae67e44",
                     )
                 ),
                 """
@@ -523,7 +522,7 @@ internal class IncomingMessageTest {
                         account = "+123",
                         source = JsonAddress(
                             number = "+456",
-                            uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                            uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                         ),
                         type = "UNIDENTIFIED_SENDER",
                         timestamp = 70004,
@@ -545,7 +544,7 @@ internal class IncomingMessageTest {
                             profileKeyUpdate = false,
                             viewOnce = false
                         ),
-                        serverGuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44"),
+                        serverGuid = "d769c83e-8781-4161-97a6-22a58ae67e44",
                     )
                 ),
                 """
@@ -591,7 +590,7 @@ internal class IncomingMessageTest {
                         account = "+11111111111",
                         source = JsonAddress(
                             number = "+11111111111",
-                            uuid = UUID.fromString("2f70e07c-62ad-4f09-a288-a9285b545963")
+                            uuid = "2f70e07c-62ad-4f09-a288-a9285b545963"
                         ),
                         type = "CIPHERTEXT",
                         timestamp = 1111870121111,
@@ -610,7 +609,7 @@ internal class IncomingMessageTest {
                                 linkPreviews = Optional(present = true),
                             ),
                         ),
-                        serverGuid = UUID.fromString("6532b52f-9e2c-41dd-92d5-08fad64faa9a")
+                        serverGuid = "6532b52f-9e2c-41dd-92d5-08fad64faa9a"
                     )
                 ),
                 """
@@ -661,7 +660,7 @@ internal class IncomingMessageTest {
                         account = "+11111111111",
                         source = JsonAddress(
                             number = "+11111111111",
-                            uuid = UUID.fromString("2f70e07c-62ad-4f09-a288-a9285b545963")
+                            uuid = "2f70e07c-62ad-4f09-a288-a9285b545963"
                         ),
                         type = "CIPHERTEXT",
                         timestamp = 1111870121111,
@@ -685,7 +684,7 @@ internal class IncomingMessageTest {
                             ),
                             contactsComplete = true,
                         ),
-                        serverGuid = UUID.fromString("6532b52f-9e2c-41dd-92d5-08fad64faa9a")
+                        serverGuid = "6532b52f-9e2c-41dd-92d5-08fad64faa9a"
                     )
                 ),
                 """
@@ -732,7 +731,7 @@ internal class IncomingMessageTest {
                         account = "+11111111111",
                         source = JsonAddress(
                             number = "+11111111111",
-                            uuid = UUID.fromString("2f70e07c-62ad-4f09-a288-a9285b545963")
+                            uuid = "2f70e07c-62ad-4f09-a288-a9285b545963"
                         ),
                         type = "CIPHERTEXT",
                         timestamp = 1111870121111,
@@ -762,7 +761,7 @@ internal class IncomingMessageTest {
                                 ),
                             )
                         ),
-                        serverGuid = UUID.fromString("6532b52f-9e2c-41dd-92d5-08fad64faa9a")
+                        serverGuid = "6532b52f-9e2c-41dd-92d5-08fad64faa9a"
                     )
                 ),
                 """
@@ -816,7 +815,7 @@ internal class IncomingMessageTest {
                         account = "+12222223333",
                         source = JsonAddress(
                             number = "+12222223333",
-                            uuid = UUID.fromString("6b4952b1-d50a-4498-91a2-6a274073e182")
+                            uuid = "6b4952b1-d50a-4498-91a2-6a274073e182"
                         ),
                         type = "CIPHERTEXT",
                         timestamp = 1634476410711,
@@ -850,7 +849,7 @@ internal class IncomingMessageTest {
                             ),
                             contactsComplete = false,
                         ),
-                        serverGuid = UUID.fromString("fb8d1c0d-ffe0-412e-ba2f-72086fed28da")
+                        serverGuid = "fb8d1c0d-ffe0-412e-ba2f-72086fed28da"
                     )
                 ),
                 """

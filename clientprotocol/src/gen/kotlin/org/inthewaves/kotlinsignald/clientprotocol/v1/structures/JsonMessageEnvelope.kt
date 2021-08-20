@@ -4,8 +4,6 @@ import kotlinx.serialization.Serializable
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonCallMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonReceiptMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonTypingMessage
-import org.inthewaves.kotlinsignald.serializers.UUIDSerializer
-import java.util.UUID
 
 /**
  * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
@@ -19,8 +17,7 @@ public data class JsonMessageEnvelope(
     /**
      * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
-    @Serializable(UUIDSerializer::class)
-    public val uuid: UUID? = null,
+    public val uuid: String? = null,
     public val source: JsonAddress? = null,
     public val sourceDevice: Int? = null,
     public val type: String? = null,

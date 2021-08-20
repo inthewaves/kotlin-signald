@@ -13,7 +13,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.UUID
 import java.util.stream.Stream
 
 internal class SendRequestTest {
@@ -105,7 +104,7 @@ internal class SendRequestTest {
                         JsonSendMessageResult(
                             address = JsonAddress(
                                 number = "+11112223333",
-                                uuid = UUID.fromString("f752327a-f947-4bdc-a6b5-2e53b95e6e06")
+                                uuid = "f752327a-f947-4bdc-a6b5-2e53b95e6e06"
                             ),
                             success = Success(
                                 unidentified = true,

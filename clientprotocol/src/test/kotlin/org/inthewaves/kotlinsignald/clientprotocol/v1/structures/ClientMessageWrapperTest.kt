@@ -6,7 +6,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.UUID
 
 internal class ClientMessageWrapperTest {
     @Test
@@ -26,7 +25,7 @@ internal class ClientMessageWrapperTest {
                     account = "+1234567890",
                     source = JsonAddress(
                         number = "+1337133713",
-                        uuid = UUID.fromString("d769c83e-8781-4161-97a6-22a58ae67e44")
+                        uuid = "d769c83e-8781-4161-97a6-22a58ae67e44"
                     ),
                     type = "RECEIPT",
                     timestamp = 12345,
@@ -36,7 +35,7 @@ internal class ClientMessageWrapperTest {
                     hasLegacyMessage = false,
                     hasContent = false,
                     unidentifiedSender = false,
-                    serverGuid = UUID.fromString("dd821c2c-708c-4f2b-9765-8bc32f4cc3fb"),
+                    serverGuid = "dd821c2c-708c-4f2b-9765-8bc32f4cc3fb",
                 )
             ) to """
                 {
