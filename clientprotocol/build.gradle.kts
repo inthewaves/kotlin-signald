@@ -13,7 +13,7 @@ plugins {
     signing
 }
 
-val mavenArtifactId = "kotlin-signald"
+val mavenArtifactId = "clientprotocol"
 group = "org.inthewaves.kotlin-signald"
 version = "0.1.0"
 
@@ -39,20 +39,18 @@ val javadocJar: TaskProvider<Jar> = run {
     }
 }
 
-val kotlinSourcesJar = tasks.findByName("kotlinSourcesJar")
-
 publishing {
     publications {
         create<MavenPublication>("mavenKotlinSignald") {
             from(components["kotlin"])
 
             artifactId = mavenArtifactId
-            artifact(kotlinSourcesJar)
+            artifact(tasks.kotlinSourcesJar)
             artifact(javadocJar)
 
             pom {
                 name.set(artifactId)
-                description.set("A Kotlin library for communicating with signald")
+                description.set("signald request and response classes in Kotlin")
                 url.set("https://github.com/inthewaves/kotlin-signald")
 
                 licenses {
@@ -80,11 +78,11 @@ publishing {
 }
 
 tasks.withType<PublishToMavenRepository> {
-    dependsOn(tasks.test)
+    dependsOn(tasks.test, tasks.apiCheck)
 }
 
 tasks.withType<PublishToMavenLocal> {
-    dependsOn(tasks.test)
+    dependsOn(tasks.test, tasks.apiCheck)
 }
 
 signing {
@@ -117,9 +115,6 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.5.21"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
-
-    implementation("com.kohlschutter.junixsocket:junixsocket-common:2.3.2")
-    implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.3.2")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.5.21")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")

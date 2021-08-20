@@ -13,6 +13,10 @@ public class org/inthewaves/kotlinsignald/clientprotocol/RequestFailedException 
 public final class org/inthewaves/kotlinsignald/clientprotocol/RequestFailedException$Companion {
 }
 
+public final class org/inthewaves/kotlinsignald/clientprotocol/SignaldJsonKt {
+	public static final fun getSignaldJson ()Lkotlinx/serialization/json/Json;
+}
+
 public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
 	public abstract fun readLine ()Ljava/lang/String;
 	public abstract fun submit (Ljava/lang/String;)Ljava/lang/String;
@@ -6179,7 +6183,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Sub
 	public fun getTypedResponseOrNull (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
 	public fun hashCode ()I
 	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
-	public synthetic fun submit$kotlin_signald (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscribeRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6363,7 +6367,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Uns
 	public fun getTypedResponseOrNull (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
 	public fun hashCode ()I
 	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
-	public synthetic fun submit$kotlin_signald (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnsubscribeRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }

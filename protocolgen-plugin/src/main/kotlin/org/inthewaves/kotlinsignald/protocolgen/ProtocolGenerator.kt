@@ -46,7 +46,7 @@ class ProtocolGenerator(
     private val clientProtocolPackage = GenUtil.getClientProtocolPackage(packageName)
 
     private val uuidSerializer = ClassName("$packageName.serializers", "UUIDSerializer")
-    private val signaldJsonClassName = ClassName(packageName.name, "SignaldJson")
+    private val signaldJsonClassName = ClassName(clientProtocolPackage, "SignaldJson")
 
     private fun writeTypeSpecFile(className: ClassName, typeSpec: TypeSpec, dirToWriteTo: File) {
         require(className.simpleName == typeSpec.name) {
@@ -55,6 +55,17 @@ class ProtocolGenerator(
         FileSpec.builder(className.packageName, className.simpleName)
             .indent("    ")
             .addType(typeSpec)
+            .build()
+            .writeTo(dirToWriteTo)
+    }
+
+    private fun writePropertySpecFile(className: ClassName, propertySpec: PropertySpec, dirToWriteTo: File) {
+        require(className.simpleName == propertySpec.name) {
+            "bad name: got class name ${className.canonicalName} ($className) vs typeSpec ${propertySpec.name} ($propertySpec)"
+        }
+        FileSpec.builder(className.packageName, className.simpleName)
+            .indent("    ")
+            .addProperty(propertySpec)
             .build()
             .writeTo(dirToWriteTo)
     }
@@ -158,16 +169,13 @@ UNEXPECTED_ERROR_ACTION_NAME to Action(
                     "into $genFilesDir"
         )
 
-        FileSpec.builder(packageName.name, "SignaldJson")
-            .indent("    ")
-            .addImport("kotlinx.serialization.json", "Json")
-            .addProperty(PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
-                .initializer("Json { encodeDefaults = false }")
-                .addKdoc("The [Json] instance used to serialize and deserialize signald requests and responses.")
-                .build()
-            )
+
+        val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
+            .initializer("%M { encodeDefaults = false }", MemberName("kotlinx.serialization.json", "Json"))
+            .addKdoc("The [Json] instance used to serialize and deserialize signald requests and responses.")
             .build()
-            .writeTo(genFilesDir)
+        writePropertySpecFile(signaldJsonClassName, jsonProperty, genFilesDir)
+
 
         val requestFailedExceptionTypeSpec = TypeSpec.classBuilder(requestFailedExceptionClassName).apply {
             addModifiers(KModifier.OPEN)

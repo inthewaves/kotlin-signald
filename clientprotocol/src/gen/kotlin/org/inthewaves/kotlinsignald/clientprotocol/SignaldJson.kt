@@ -1,4 +1,4 @@
-package org.inthewaves.kotlinsignald
+package org.inthewaves.kotlinsignald.clientprotocol
 
 import kotlinx.serialization.json.Json
 

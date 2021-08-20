@@ -3,8 +3,8 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import org.inthewaves.kotlinsignald.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Success
 import org.junit.jupiter.api.Assertions.assertEquals

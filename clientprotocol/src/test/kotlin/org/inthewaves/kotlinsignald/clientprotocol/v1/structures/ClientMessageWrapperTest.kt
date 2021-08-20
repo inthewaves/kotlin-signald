@@ -2,7 +2,7 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
-import org.inthewaves.kotlinsignald.SignaldJson
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

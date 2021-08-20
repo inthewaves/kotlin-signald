@@ -1,5 +1,5 @@
 rootProject.name = "kotlin-signald"
-include("lib")
+include("clientprotocol")
 includeBuild("protocolgen-plugin")
 
 pluginManagement {
