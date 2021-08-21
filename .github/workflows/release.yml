@@ -18,8 +18,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Publish publications to Sonatype
         env:
-          ORG_GRADLE_PROJECT_mavenCentralRepositoryUsername: ${{ secrets.SONATYPE_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralRepositoryPassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
