@@ -14,7 +14,7 @@ plugins {
 
 val mavenArtifactId = "clientprotocol"
 group = "org.inthewaves.kotlin-signald"
-version = "0.3.3-SNAPSHOT"
+version = "0.3.4-SNAPSHOT"
 
 signaldProtocolGen {
     packageName = "org.inthewaves.kotlinsignald"
