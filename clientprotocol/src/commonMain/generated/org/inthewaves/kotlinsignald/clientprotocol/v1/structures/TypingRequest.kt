@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Typing
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * send a typing started or stopped message
  */
 @Serializable

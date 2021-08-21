@@ -3,8 +3,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v0.structures
 import kotlinx.serialization.Serializable
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * A quote is a reply to a previous message. ID is the sent time of the message being replied to
  */
 @Serializable

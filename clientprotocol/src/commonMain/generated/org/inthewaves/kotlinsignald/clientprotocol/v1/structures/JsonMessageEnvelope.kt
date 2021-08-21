@@ -5,9 +5,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonCallMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonReceiptMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonTypingMessage
 
-/**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- */
 @Serializable
 public data class JsonMessageEnvelope(
     /**

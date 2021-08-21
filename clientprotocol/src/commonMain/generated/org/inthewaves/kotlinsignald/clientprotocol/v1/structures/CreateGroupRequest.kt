@@ -6,9 +6,6 @@ import kotlinx.serialization.Serializable
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.CreateGroup
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
-/**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- */
 @Serializable
 @SerialName("create_group")
 public data class CreateGroupRequest(

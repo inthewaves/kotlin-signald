@@ -12,8 +12,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UnexpectedError
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * A base class for requests. This class is only used for serializing requests to the signald
  * socket; the [ResponseWrapper] type variable represents the response JSON structure.
  */

@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetGroup
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * Query the server for the latest state of a known group. If no account in signald is a member of
  * the group (anymore), an error with error_type: 'UnknownGroupException' is returned.
  */

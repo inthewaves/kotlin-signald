@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.RemoveLinkedDevice
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * Remove a linked device from the Signal account. Only allowed when the local device id is 1
  */
 @Serializable

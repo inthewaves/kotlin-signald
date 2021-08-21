@@ -5,9 +5,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.ConfigurationMe
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonStickerPackOperationMessage
 
-/**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- */
 @Serializable
 public data class JsonSyncMessage(
     public val sent: JsonSentTranscriptMessage? = null,

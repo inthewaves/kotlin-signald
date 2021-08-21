@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Register
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * begin the account registration process by requesting a phone number verification code. when the
  * code is received, submit it with a verify request
  */

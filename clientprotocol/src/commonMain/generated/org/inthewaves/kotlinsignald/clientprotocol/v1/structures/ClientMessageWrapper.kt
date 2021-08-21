@@ -3,8 +3,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.Serializable
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * Wraps all incoming messages after a v1 subscribe request is issued
  * Note that the `type` field has been removed. kotlinx.serialization uses that as a discriminator
  */
@@ -19,7 +17,7 @@ public sealed class ClientMessageWrapper {
      * the incoming object. The structure will vary from message to message, see `type` and
      * `version` fields
      */
-    public abstract val data: Data
+    public abstract val `data`: Data
 
     /**
      * true if the incoming message represents an error

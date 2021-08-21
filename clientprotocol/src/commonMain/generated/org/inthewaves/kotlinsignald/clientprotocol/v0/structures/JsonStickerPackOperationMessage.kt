@@ -3,7 +3,7 @@ package org.inthewaves.kotlinsignald.clientprotocol.v0.structures
 import kotlinx.serialization.Serializable
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
+ *
  * https://github.com/signalapp/Signal-Android/blob/44d014c4459e9ac34b74800002fa86b402d0501c/libsignal/service/src/main/java/org/whispersystems/signalservice/api/messages/multidevice/StickerPackOperationMessage.java
  */
 @Serializable

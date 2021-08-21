@@ -3,8 +3,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.Serializable
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * Responses from the subscribe / unsubscribe endpoint. The protocol describes these as empty
  * responses, but race conditions can occur. This response can contain messages sent before the
  * (un)subscribe acknowledgement message from signald.

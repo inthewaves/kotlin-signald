@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Trust
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * Trust another user's safety number using either the QR code data or the safety number text
  */
 @Serializable

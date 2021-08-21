@@ -11,8 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Subscribe
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * receive incoming messages. After making a subscribe request, incoming messages will be sent to
  * the client encoded as ClientMessageWrapper. Send an unsubscribe request or disconnect from the
  * socket to stop receiving messages.

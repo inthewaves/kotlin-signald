@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetDeviceName
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * set this device's name. This will show up on the mobile device on the same account under
  */
 @Serializable

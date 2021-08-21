@@ -7,9 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonPreview
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonSticker
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.SharedContact
 
-/**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- */
 @Serializable
 public data class JsonDataMessage(
     /**

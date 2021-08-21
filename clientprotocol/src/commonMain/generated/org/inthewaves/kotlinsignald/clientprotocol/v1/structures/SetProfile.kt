@@ -6,9 +6,6 @@ import kotlinx.serialization.Serializable
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile
 
-/**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- */
 @Serializable
 @SerialName("set_profile")
 public data class SetProfile(

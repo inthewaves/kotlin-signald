@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetLinkedDevices
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * list all linked devices on a Signal account
  */
 @Serializable

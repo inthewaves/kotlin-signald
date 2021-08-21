@@ -29,6 +29,11 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
+/**
+ * Every structure / type is generated in the same way, with special handling for request and response types.
+ * However, sometimes we require the need to add extra properties or modifiers, so a [SpecialTypeHandler] modifies
+ * the builder after all the common steps have been applied
+ */
 typealias SpecialTypeHandler = TypeSpec.Builder.(
     version: SignaldProtocolVersion,
     className: ClassName,
@@ -39,9 +44,51 @@ typealias SpecialTypeHandler = TypeSpec.Builder.(
 
 class ProtocolGenerator(
     private val protocolJsonFile: File,
-    private val generatedFilesRootDir: File,
+    generatedFilesRootDir: File,
     private val packageName: PackageName
 ) {
+
+    private val protocolDoc: SignaldProtocolDocument
+
+    private val genFilesDir: File
+
+    init {
+        if (!protocolJsonFile.exists()) {
+            System.err.println("specified [$protocolJsonFile] as the protocol.json, but it doesn't exist")
+            exitProcess(1)
+        }
+
+        val protocolJson: String = protocolJsonFile.readText()
+
+        protocolDoc = try {
+            Json.decodeFromString(protocolJson)
+        } catch (e: SerializationException) {
+            println("specified [$protocolJsonFile] as the protocol.json, but it is invalid")
+            exitProcess(1)
+        }
+
+        genFilesDir = generatedFilesRootDir
+
+        val sep = File.separatorChar
+        val acceptablePaths = setOf(
+            "gen${sep}kotlin",
+            "commonMain${sep}kotlin",
+            "commonMain${sep}generated"
+        )
+
+        if (!acceptablePaths.any { genFilesDir.absolutePath.contains(it) }) {
+            println("error: expected one of $acceptablePaths in the path, but was given $genFilesDir")
+            exitProcess(1)
+        }
+        if (genFilesDir.exists() && !genFilesDir.deleteRecursively()) {
+            println("warning: can't delete $genFilesDir")
+        }
+        if (!genFilesDir.mkdirs()) {
+            println("can't make $genFilesDir")
+            exitProcess(1)
+        }
+    }
+
     private val clientProtocolPackage = GenUtil.getClientProtocolPackage(packageName)
 
     private val signaldJsonClassName = ClassName(clientProtocolPackage, "SignaldJson")
@@ -134,47 +181,11 @@ class ProtocolGenerator(
     private val requestFailedExceptionClassName = ClassName(clientProtocolPackage, "RequestFailedException")
 
     fun generateSignaldProtocol() {
-        if (!protocolJsonFile.exists()) {
-            System.err.println("specified [$protocolJsonFile] as the protocol.json, but it doesn't exist")
-            exitProcess(1)
-        }
-
-        val protocolJson: String = protocolJsonFile.readText()
-
-        val protocolDoc: SignaldProtocolDocument = try {
-            Json.decodeFromString(protocolJson)
-        } catch (e: SerializationException) {
-            println("specified [$protocolJsonFile] as the protocol.json, but it is invalid")
-            exitProcess(1)
-        }
-
-        val genFilesDir = generatedFilesRootDir
-
-        val sep = File.separatorChar
-        val acceptablePaths = setOf(
-            "gen${sep}kotlin",
-            "commonMain${sep}kotlin",
-            "commonMain${sep}generated"
-        )
-
-        if (!acceptablePaths.any { genFilesDir.absolutePath.contains(it) }) {
-            println("error: expected one of $acceptablePaths in the path, but was given $genFilesDir")
-            exitProcess(1)
-        }
-        if (genFilesDir.exists() && !genFilesDir.deleteRecursively()) {
-            println("warning: can't delete $genFilesDir")
-        }
-        if (!genFilesDir.mkdirs()) {
-            println("can't make $genFilesDir")
-            exitProcess(1)
-        }
-
         println(
             "Generating signald protocol from $protocolJsonFile,\n" +
                     "version ${protocolDoc.version.version} (doc version ${protocolDoc.docVersion} " +
                     "into $genFilesDir"
         )
-
 
         val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
             .initializer("%M { encodeDefaults = false }", MemberName("kotlinx.serialization.json", "Json"))
@@ -356,27 +367,23 @@ class ProtocolGenerator(
                     protocolVersion.getResponseSealedClassName(packageName),
                     createSealedClassTypeSpecBuilder(
                         responseInterfaceClassName = protocolVersion.getResponseSealedClassName(packageName),
-                        protocolDoc = protocolDoc
                     ).build(),
                     genFilesDir
                 )
             }
 
             if (protocolVersion in protocolDoc.actions) {
-                val (responseWrapperClassName, _, responseWrapperTypeVar, responseDataTypeVar) = createJsonMessageWrapperInfo(
-                    protocolDoc,
-                    protocolVersion
-                )
+                val (responseWrapperClassName, _, responseWrapperTypeVar, responseDataTypeVar) =
+                    createJsonMessageWrapperInfo(protocolVersion)
 
                 writeTypeSpecFile(
                     protocolVersion.getRequestSealedClassName(packageName),
                     createSealedClassTypeSpecBuilder(
                         responseInterfaceClassName = protocolVersion.getRequestSealedClassName(packageName),
-                        protocolDoc = protocolDoc,
                         typeVariables = arrayOf(responseWrapperTypeVar, responseDataTypeVar),
                     ).apply {
                         addKdoc(
-                            "\n\n%L",
+                            "%L",
                             "A base class for requests. This class is only used for serializing requests to the signald " +
                                     "socket; the [${responseWrapperTypeVar.name}] type variable represents the response " +
                                     "JSON structure."
@@ -392,7 +399,6 @@ class ProtocolGenerator(
                         addProperty(responseDataSerializerProperty)
 
                         val responseVerificationFunSpec = createResponseResolveFunSpec(
-                            protocolDoc,
                             protocolVersion,
                             responseDataTypeVar,
                             ResponseResolveFunCreationParams.Abstract
@@ -582,10 +588,7 @@ class ProtocolGenerator(
             val responseTypes: MutableSet<SignaldType> = actionResponseTypes.getOrPut(version) { linkedSetOf() }
 
             val structuresPackage = GenUtil.getStructuresPackage(packageName, version)
-            val (jsonMsgWrapperClassName, jsonMsgWrapperTypeSpec) = createJsonMessageWrapperInfo(
-                protocolDoc,
-                version
-            )
+            val (jsonMsgWrapperClassName, jsonMsgWrapperTypeSpec) = createJsonMessageWrapperInfo(version)
             writeTypeSpecFile(jsonMsgWrapperClassName, jsonMsgWrapperTypeSpec, genFilesDir)
 
             val emptyResponseClassName = ClassName(structuresPackage, "EmptyResponse")
@@ -637,7 +640,6 @@ class ProtocolGenerator(
                     ActionInfo(requestClassName, responseClassName, actionName)
 
                 val typeSpec = TypeSpec.classBuilder(requestClassName).apply {
-                    addKdoc("%L", protocolDoc.version.kDocVersionLine)
                     if (actionDetail.request != SignaldType.UNUSED) {
                         val requestStructureClassName = ClassName(
                             GenUtil.getStructuresPackage(packageName, version),
@@ -645,9 +647,9 @@ class ProtocolGenerator(
                         )
                         addKdoc(
                             "%L",
-                            "\n\nThis class only represents the response from signald for the request. " +
-                                    "Make a request by creating an instance of [${requestStructureClassName.canonicalName}] " +
-                                    "and then calling its `${BASE_RESPONSE_SUBMIT_FUN_NAME}` function."
+                            "This class only represents the response from signald for the request. " +
+                                "Make a request by creating an instance of [${requestStructureClassName.canonicalName}] " +
+                                "and then calling its `${BASE_RESPONSE_SUBMIT_FUN_NAME}` function."
                         )
                     }
 
@@ -697,7 +699,7 @@ class ProtocolGenerator(
         }
 
         // Sometimes, we may need to modify structure, e.g. subclass something or create nested classes
-        val specialTypeHandlers = getSpecialTypeHandler(protocolDoc)
+        val specialTypeHandlers = getSpecialTypeHandler()
 
         for ((version: SignaldProtocolVersion, typeMapForVersion: Map<SignaldType, Structure>) in protocolDoc.types) {
             val structurePackage = GenUtil.getStructuresPackage(packageName, version)
@@ -745,7 +747,7 @@ class ProtocolGenerator(
                         )
                         addFunction(
                             createResponseResolveFunSpec(
-                                protocolDoc, version, actionResponseDataType,
+                                version, actionResponseDataType,
                                 ResponseResolveFunCreationParams.Override(actionWrapperType)
                             )
                         )
@@ -754,9 +756,8 @@ class ProtocolGenerator(
                         responseActionInfo = null
                     }
 
-                    addKdoc("%L", protocolDoc.version.kDocVersionLine)
                     if (structureDetails.doc != null) {
-                        addKdoc("\n\n%L", structureDetails.doc)
+                        addKdoc("%L", structureDetails.doc)
                     }
 
                     if (structureDetails.deprecated) {
@@ -842,27 +843,18 @@ class ProtocolGenerator(
         println("Generated signald classes for ${protocolDoc.version.version}")
     }
 
-    val BUILTIN_CLASSES = setOf(
-        Pair::class.asClassName(),
-        Map.Entry::class.asClassName(),
-        Triple::class.asClassName(),
-        Char::class.asClassName(),
-        Byte::class.asClassName(),
-    )
-
     sealed class ResponseResolveFunCreationParams {
         object Abstract : ResponseResolveFunCreationParams()
         class Override(val responseWrapperType: TypeName) : ResponseResolveFunCreationParams()
     }
 
     private fun createResponseResolveFunSpec(
-        protocolDoc: SignaldProtocolDocument,
         version: SignaldProtocolVersion,
         responseDataType: TypeName,
         funCreationParams: ResponseResolveFunCreationParams,
     ): FunSpec {
         return FunSpec.builder(RESPONSE_RESOLVE_FUN_NAME).apply {
-            val jsonMessageWrapperInfo = createJsonMessageWrapperInfo(protocolDoc, version)
+            val jsonMessageWrapperInfo = createJsonMessageWrapperInfo(version)
             val funParam =
                 ParameterSpec.builder("responseWrapper", jsonMessageWrapperInfo.className.parameterizedBy(STAR))
                     .build()
@@ -897,20 +889,28 @@ class ProtocolGenerator(
     }
 
     private fun createSerializerProperty(propertyName: String, type: TypeName, override: Boolean): PropertySpec {
-        val useBuiltIn = type == String::class.asClassName()
-
         return PropertySpec.builder(propertyName, KSerializer::class.asClassName().parameterizedBy(type)).apply {
             addModifiers(KModifier.PROTECTED)
             if (override) {
                 addModifiers(KModifier.OVERRIDE)
                 getter(
                     FunSpec.getterBuilder().apply {
-                        if (useBuiltIn) {
-                            addStatement(
-                                "return %T.%M()",
-                                type,
-                                MemberName("kotlinx.serialization.builtins", "serializer")
-                            )
+                        if (type.hasBuiltinCompanionSerializer) {
+                            if (type.isNullable) {
+                                addStatement(
+                                    "return %T.%M().%M",
+                                    // If we don't do this copy, it will use T?.serializer, which is wrong.
+                                    type.copy(nullable = false),
+                                    MemberName("kotlinx.serialization.builtins", "serializer"),
+                                    MemberName("kotlinx.serialization.builtins", "nullable")
+                                )
+                            } else {
+                                addStatement(
+                                    "return %T.%M()",
+                                    type,
+                                    MemberName("kotlinx.serialization.builtins", "serializer"),
+                                )
+                            }
                         } else {
                             addStatement("return %T.serializer()", type)
                         }
@@ -933,10 +933,7 @@ class ProtocolGenerator(
      * See
      * https://github.com/thefinn93/signald/blob/488fc612a2cd29f29920cc5ff21011c758182377/src/main/java/io/finn/signald/JsonMessageWrapper.java
      */
-    private fun createJsonMessageWrapperInfo(
-        protocolDoc: SignaldProtocolDocument,
-        version: SignaldProtocolVersion
-    ): JsonMessageWrapperInfo {
+    private fun createJsonMessageWrapperInfo(version: SignaldProtocolVersion): JsonMessageWrapperInfo {
         val jsonMessageWrapperClassName = ClassName(GenUtil.getRequestsPackage(packageName, version), "JsonMessageWrapper")
         val responseTypeVariable = TypeVariableName("Response", KModifier.OUT)
 
@@ -957,8 +954,7 @@ class ProtocolGenerator(
             addTypeVariable(responseTypeVariable)
             addModifiers(KModifier.SEALED)
             addAnnotation(Serializable::class)
-            addKdoc(protocolDoc.version.kDocVersionLine)
-            addKdoc("%L", "\n\nEncapsulates the response schema from the signald socket.")
+            addKdoc("%L", "Encapsulates the response schema from the signald socket.")
 
             for ((fieldName, paramInfo) in jsonMessageWrapperFieldsMap) {
                 val propertyName = fieldName.snakeDashToCamelCase()
@@ -1013,9 +1009,7 @@ class ProtocolGenerator(
      * @return A map of special type handlers that act on a class builder. This will be called after the entire
      * class has been configured.
      */
-    private fun getSpecialTypeHandler(
-        protocolDoc: SignaldProtocolDocument
-    ): Versioned<Map<SignaldType, SpecialTypeHandler>> {
+    private fun getSpecialTypeHandler(): Versioned<Map<SignaldType, SpecialTypeHandler>> {
         val clientMessageWrapperSubclassHandler: SpecialTypeHandler = { version, className, _, constructorBuilder, _ ->
             require(constructorBuilder != null)
 
@@ -1150,7 +1144,7 @@ class ProtocolGenerator(
                         // %T.serializer(ClientMessageWrapper.serializer(), rawJsonResponse)
                         signaldJsonClassName,
                         // val nextResponse: %T<*> = try {
-                        createJsonMessageWrapperInfo(protocolDoc, version).className,
+                        createJsonMessageWrapperInfo(version).className,
                         // return %T(pendingChatMessages)
                         getSubscriptionResponseClassName(version),
                         // ?: throw %T(extraMessage = %S, cause = originalException)
@@ -1229,11 +1223,9 @@ class ProtocolGenerator(
 
     private fun createSealedClassTypeSpecBuilder(
         responseInterfaceClassName: ClassName,
-        protocolDoc: SignaldProtocolDocument,
         vararg typeVariables: TypeVariableName
     ): TypeSpec.Builder = TypeSpec.classBuilder(responseInterfaceClassName)
         .addAnnotation(Serializable::class)
-        .addKdoc("%L", protocolDoc.version.kDocVersionLine)
         .addModifiers(KModifier.SEALED)
         .apply { typeVariables.forEach(::addTypeVariable) }
 

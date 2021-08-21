@@ -7,8 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.DeleteAccount
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
 /**
- * Generated from signald version 0.14.1+git2021-08-13r7dde35de.21
- *
  * delete all account data signald has on disk, and optionally delete the account from the server as
  * well. Note that this is not "unlink" and will delete the entire account, even from a linked device.
  */
