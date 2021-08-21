@@ -23,7 +23,8 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew publishAllPublicationsToSonatypeRepository
+        run: ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
 
 env:
   CI: true
+  GRADLE_OPTS: -Dorg.gradle.parallel=false -Dorg.gradle.configureondemand=true -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
