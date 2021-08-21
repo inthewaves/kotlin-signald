@@ -16,7 +16,7 @@ gradlePlugin {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
