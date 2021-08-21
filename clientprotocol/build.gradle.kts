@@ -1,4 +1,3 @@
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 plugins {
@@ -73,22 +72,10 @@ kotlin {
     }
 }
 
-val javadocJar: TaskProvider<Jar> = run {
-    val dokkaOutputDir = "$buildDir/dokka"
-
-    tasks.getByName<DokkaTask>("dokkaHtml") {
-        outputDirectory.set(file(dokkaOutputDir))
-    }
-
-    val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") {
-        delete(dokkaOutputDir)
-    }
-
-    tasks.register<Jar>("javadocJar") {
-        dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
-        archiveClassifier.set("javadoc")
-        from(dokkaOutputDir)
-    }
+val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
 }
 
 publishing {
@@ -105,9 +92,7 @@ publishing {
         }
 
         withType<MavenPublication> {
-            // artifactId = mavenArtifactId
-            // artifact(tasks.kotlinSourcesJar)
-            artifact(javadocJar)
+            artifact(dokkaJavadocJar)
 
             pom {
                 name.set(mavenArtifactId)
