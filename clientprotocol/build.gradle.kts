@@ -87,6 +87,27 @@ val javadocJar: TaskProvider<Jar> = run {
 
 publishing {
     publications {
+        repositories {
+            maven {
+                name = "sonatype"
+                url = if (version.toString().endsWith("SNAPSHOT")) {
+                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                } else {
+                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                }
+                credentials {
+                    fun getPropertyOrBlank(propertyName: String) = if (project.hasProperty(propertyName)) {
+                        project.property(propertyName).toString()
+                    } else {
+                        ""
+                    }
+
+                    username = getPropertyOrBlank("sonatypeUsername")
+                    password = getPropertyOrBlank("sonatypePassword")
+                }
+            }
+        }
+
         withType<MavenPublication> {
             // artifactId = mavenArtifactId
             // artifact(tasks.kotlinSourcesJar)
@@ -118,9 +139,6 @@ publishing {
                 }
             }
         }
-        // create<MavenPublication>("mavenKotlinSignald") {
-        //    from(components["kotlin"])
-        // }
     }
 }
 
