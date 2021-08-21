@@ -8,8 +8,8 @@ This library provides a type-safe way to communicate with a signald UNIX socket,
 document (https://signald.org/articles/protocol-documentation/).
 
 The following platforms are supported: JVM, Linux x64, and JavaScript. (Since signald currently
-works by communicating with UNIX sockets, JVM and JavaScript are effectively also limited to
-Linux.)
+works by communicating with UNIX sockets, JVM and JavaScript are effectively limited to UNIX
+environments supported by signald.)
 
 ## Using in your projects
 
@@ -47,7 +47,9 @@ Linux.)
     }
     ```
 
-## Building
+## Development
+
+### Generating classes
 
 The signald classes are generated from the signald protocol JSON file, located in
 [`clientprotocol/protocol.json`](./clientprotocol/protocol.json). Generation is handled by the

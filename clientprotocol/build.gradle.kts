@@ -1,4 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 plugins {
     kotlin("multiplatform")
@@ -39,10 +40,19 @@ kotlin {
         binaries.library()
     }
 
+    val nativeBaseName = "kotlinsignaldprotocol"
     linuxX64 {
         binaries {
             sharedLib {
-                baseName = "kotlinsignald"
+                baseName = nativeBaseName
+            }
+        }
+    }
+
+    macosX64 {
+        binaries {
+            sharedLib {
+               baseName = nativeBaseName
             }
         }
     }
@@ -91,16 +101,6 @@ publishing {
                 } else {
                     uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                 }
-                credentials {
-                    fun getPropertyOrBlank(propertyName: String) = if (project.hasProperty(propertyName)) {
-                        project.property(propertyName).toString()
-                    } else {
-                        ""
-                    }
-
-                    username = getPropertyOrBlank("sonatypeUsername")
-                    password = getPropertyOrBlank("sonatypePassword")
-                }
             }
         }
 
@@ -147,6 +147,13 @@ tasks.withType<PublishToMavenLocal> {
 }
 
 signing {
-    useGpgCmd()
+    if (System.getenv()["CI"]?.toLowerCaseAsciiOnly() == "true") {
+        val signingKeyId: String? by project
+        val signingKey: String? by project
+        val signingPassword: String? by project
+        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    } else {
+        useGpgCmd()
+    }
     sign(publishing.publications)
 }
