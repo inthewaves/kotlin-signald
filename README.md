@@ -60,7 +60,12 @@ To regenerate the classes,
 * Reformat the code with `./gradlew :clientprotocol:ktlintFormat` 
 * Find and replace instances of <code>\`data\`:</code> with `data:`
 
-### Compiling dynamic library
+### Compiling a dynamic library
+
+Kotlin/Native supports compiling the code into a dynamic library which can then be used in native
+C / C++ programs. More information on this topic can be found at
+https://kotlinlang.org/docs/native-dynamic-libraries.html. This library in its current state is
+not fit for this purpose, but we document this here for posterity.
 
 Ensure you have these dependencies. For Debian,
 
@@ -68,4 +73,8 @@ Ensure you have these dependencies. For Debian,
 sudo apt install libncurses5
 ```
 
-Then, run `./gradlew linkLinuxX64`.
+Then, run `./gradlew :clientprotocol:linkReleaseSharedLinuxX64`. This will generate `libkotlinsignald_api.h` and
+`libkotlinsignald.so` inside of `clientprotocol/build/bin/linuxX64/releaseShared`.
+
+As [noted on the Kotlin site](https://kotlinlang.org/docs/native-dynamic-libraries.html#generated-headers-file), the way
+that Kotlin/Native exports symbols in the header file is subject to change without notice.
