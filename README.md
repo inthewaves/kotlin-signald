@@ -30,7 +30,7 @@ communicating with UNIX sockets, JVM and JavaScript are effectively limited to U
         sourceSets {
             commonMain {
                  dependencies {
-                     implementation("org.inthewaves.kotlin-signald:clientprotocol:0.3.0")
+                     implementation("org.inthewaves.kotlin-signald:client:0.3.0")
                  }
             }
         }
@@ -41,7 +41,7 @@ communicating with UNIX sockets, JVM and JavaScript are effectively limited to U
 
     ```groovy
     dependencies {
-        implementation("org.inthewaves.kotlin-signald:clientprotocol:0.3.0")
+        implementation("org.inthewaves.kotlin-signald:client:0.3.0")
     }
     ```
 
@@ -50,14 +50,14 @@ communicating with UNIX sockets, JVM and JavaScript are effectively limited to U
 ### Generating classes
 
 The signald classes are generated from the signald protocol JSON file, located in
-[`clientprotocol/protocol.json`](./clientprotocol/protocol.json). Generation is handled by the
+[`client/protocol.json`](./client/protocol.json). Generation is handled by the
 [`protocolgen-plugin`](./protocolgen-plugin).
 
 To regenerate the classes, 
 
 * Replace `protocol.json` with a newer version
 * Run `./gradlew generateSignaldClasses`
-* Reformat the code with `./gradlew :clientprotocol:ktlintFormat` 
+* Reformat the code with `./gradlew :client:ktlintFormat` 
 * Find and replace instances of <code>\`data\`:</code> with `data:`
 
 ### Compiling a dynamic library
@@ -72,8 +72,8 @@ Ensure you have these dependencies. For Debian,
 sudo apt install libncurses5
 ```
 
-Then, run `./gradlew :clientprotocol:linkReleaseSharedLinuxX64`. This will generate `libkotlinsignaldprotocol_api.h` and
-`libkotlinsignaldprotocol.so` inside of `clientprotocol/build/bin/linuxX64/releaseShared`.
+Then, run `./gradlew :client:linkReleaseSharedLinuxX64`. This will generate `libktsignald_api.h` and
+`libktsignald.so` inside of `client/build/bin/linuxX64/releaseShared`.
 
 As [noted on the Kotlin site](https://kotlinlang.org/docs/native-dynamic-libraries.html#generated-headers-file), the way
 that Kotlin/Native exports symbols in the header file is subject to change without notice.

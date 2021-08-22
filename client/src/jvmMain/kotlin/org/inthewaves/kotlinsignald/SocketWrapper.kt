@@ -17,15 +17,21 @@ import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import java.nio.file.Paths
 
+private fun isPathReadableAndWritable(path: Path) =
+    Files.exists(path) && Files.isReadable(path) && Files.isWritable(path)
+
 private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
     val socketPathToUse: Path = try {
-        customPath
-            ?.let { Path.of(it) }
-            ?.takeIf { Files.exists(it) && Files.isReadable(it) && Files.isWritable(it) }
-            ?: Paths.get(System.getenv("XDG_RUNTIME_DIR"), "signald/signald.sock")
-                .takeIf { Files.exists(it) && Files.isReadable(it) && Files.isWritable(it) }
-            ?: Paths.get("/var/run/signald/signald.sock")
-                .takeIf { Files.exists(it) && Files.isReadable(it) && Files.isWritable(it) }
+        if (customPath != null) {
+            customPath
+                .let { Path.of(it) }
+                .takeIf(::isPathReadableAndWritable)
+        } else {
+            Paths.get(System.getenv("XDG_RUNTIME_DIR"), "signald/signald.sock")
+                .takeIf(::isPathReadableAndWritable)
+                ?: Paths.get("/var/run/signald/signald.sock")
+                    .takeIf(::isPathReadableAndWritable)
+        }
     } catch (e: SecurityException) {
         throw SocketUnavailableException("failed to test socket due to SecurityException", e)
     } catch (e: InvalidPathException) {

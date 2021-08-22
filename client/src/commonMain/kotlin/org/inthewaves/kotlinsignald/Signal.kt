@@ -7,7 +7,21 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RegisterRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 
+/**
+ * A signald client.
+ *
+ * @constructor Creates a [Signal] instance for a particular account. A connection with the signald socket with be
+ * attempted, throwing an exception if unable to connect to the socket.
+ * @throws SocketUnavailableException if unable to connect to the socket
+ * @throws SignaldException if unable to get list of accounts to cache current account data if already registered.
+ * @param accountId See [accountId].
+ * @param socketPath An optional path to the signald socket.
+ */
 public class Signal @Throws(SignaldException::class) constructor(
+    /**
+     * The ID of account corresponding to the signald account to use. As of the current version, this is
+     * a phone number in E.164 format starting with a + character.
+     */
     public val accountId: String,
     socketPath: String? = null
 ) {
