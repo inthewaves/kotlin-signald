@@ -18,6 +18,12 @@ signaldProtocolGen {
     protocolJsonFile = "protocol.json"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configureEach {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+    }
+}
+
 kotlin {
     explicitApi()
 
