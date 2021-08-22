@@ -58,13 +58,22 @@ private fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null)
 
 /**
  * A wrapper for a socket that creates a new socket connection for every request.
+ *
+ * @throws SocketUnavailableException if unable to connect to the socket
+ * @throws IOException if there is any I/O errors when communicating to the socket (it first returns the signald version
+ * JSON as [Version]).
  */
-internal actual class SocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+public actual class SocketWrapper @Throws(IOException::class) actual constructor(
     socketPath: String?
 ) : SocketCommunicator {
     private val socketAddress: AFUNIXSocketAddress = getSocketAddressOrThrow(socketPath)
 
-    val version: Version? = useSocket(skipVersion = false) { _, reader, _ -> decodeVersionOrNull(reader.readLine()) }
+    /**
+     * Version of signald. This is sent when we connect to the socket.
+     */
+    public val version: Version? = useSocket(skipVersion = false) { _, reader, _ ->
+        decodeVersionOrNull(reader.readLine())
+    }
 
     override fun submit(request: String): String {
         useSocket { _, reader, writer ->
@@ -97,15 +106,19 @@ internal actual class SocketWrapper @Throws(SocketUnavailableException::class) a
 
 /**
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
- * from a subscribe request.
+ * after a subscribe request.
  */
-internal actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
     socketPath: String?
 ) : SocketCommunicator, AutoCloseable {
     private val socket: AFUNIXSocket = AFUNIXSocket.connectTo(getSocketAddressOrThrow(socketPath))
     private val writer: PrintWriter = PrintWriter(socket.outputStream, true)
     private val reader: BufferedReader = socket.inputStream.bufferedReader()
-    val version: Version?
+
+    /**
+     * Version of signald.
+     */
+    public val version: Version?
 
     init {
         val versionLine = reader.readLine()
@@ -119,7 +132,7 @@ internal actual class PersistentSocketWrapper @Throws(SocketUnavailableException
 
     override fun readLine(): String? = reader.readLine()
 
-    actual override fun close() {
+    public actual override fun close() {
         socket.close()
     }
 }

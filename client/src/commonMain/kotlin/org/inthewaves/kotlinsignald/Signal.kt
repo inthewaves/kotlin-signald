@@ -1,6 +1,8 @@
 package org.inthewaves.kotlinsignald
 
 import kotlinx.datetime.Clock
+import org.inthewaves.kotlinsignald.Signal.Recipient.Group
+import org.inthewaves.kotlinsignald.Signal.Recipient.Individual
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
@@ -88,6 +90,14 @@ public class Signal @Throws(SignaldException::class) constructor(
 ) {
     private val socketWrapper = SocketWrapper(socketPath)
 
+    /**
+     * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
+     * If this is null, getting the account info will attempt a request to the signald socket.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming account list is invalid
+     * @throws SignaldException if the request to the socket fails
+     */
+    @get:Throws(SignaldException::class)
     public var accountInfo: Account? = getAccountOrNull()
         private set
         get() {
@@ -102,12 +112,17 @@ public class Signal @Throws(SignaldException::class) constructor(
         }
 
     /**
-     * Whether the [accountId] of this [Signal] instance is registered with signald.
+     * Whether the [accountId] of this [Signal] instance is registered with signald. This will do a check with the
+     * socket to ensure that the account is present with signald.
      *
      * Note that this does not detect registration with the Signal service itself. See
      * [https://gitlab.com/signald/signald/-/issues/192] for an issue about checking login status with the Signal
      * service
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
+    @get:Throws(SignaldException::class)
     public val isRegisteredWithSignald: Boolean
         get() {
             if (accountInfo == null) {
@@ -134,7 +149,10 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Accept a group V2 invitation. Note that you must have a profile name set to join groups.
+     *
      * @param groupID A base-64 encoded ID of the group.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun acceptInvitation(
@@ -150,8 +168,11 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Adds a linked device to the current account.
+     *
      * @param uri the `tsdevice:/` uri provided (typically in qr code form) by the new device. Example:
      * `tsdevice:/?uuid=jAaZ5lxLfh7zVw5WELd6-Q&pub_key=BfFbjSwmAgpVJBXUdfmSgf61eX3a%2Bq9AoxAVpl1HUap9`
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun addDevice(uri: String) {
@@ -165,6 +186,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Adds a new server to connect to and returns the new server's UUID.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun addServer(server: Server): String {
@@ -173,6 +197,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Approves the [members] requests to join a V2 group with the given [groupID]. Returns the new group information.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun approveMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
@@ -194,6 +221,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param timer The message expiration timer for the group.
      * @param memberRole The role of all members other than the group creator. Options are ADMINISTRATOR or DEFAULT
      * (case-insensitive). Example: "ADMINISTRATOR"
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun createGroup(
@@ -218,6 +247,9 @@ public class Signal @Throws(SignaldException::class) constructor(
     /**
      * Deletes all account data signald has on disk, and optionally delete the account from the server as
      * well. Note that this is not "unlink" and will delete the entire account, even from a linked device.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun deleteAccount(alsoDeleteAccountOnServer: Boolean) {
@@ -231,6 +263,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Deletes a previously added server from [addServer].
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun deleteServer(serverUuid: String) {
@@ -244,6 +279,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * with the URI.
      *
      * @return Information about the new account once the linking process is completed by the other device.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun finishLink(deviceName: String, sessionId: String): Account {
@@ -258,6 +295,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      *
      * @param serverUuid The identifier of the server to use. Leave `null` for default (usually Signal production
      * servers but configurable at build time)
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
@@ -268,6 +307,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Returns all known identity keys for the current account
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getAllIdentities(): AllIdentityKeyList {
@@ -282,6 +324,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * returned.
      *
      * @param revision The latest known revision of the group, default value (-1) forces fetch from server
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
@@ -292,6 +336,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Get information about known identity keys for a particular [address].
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getIdentities(address: JsonAddress): IdentityKeyList {
@@ -302,6 +349,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Gets a list of all linked devices for this account.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getLinkedDevices(): LinkedDevices {
@@ -326,12 +376,18 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Gets a list of all signald servers
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getServers(): ServerList = GetServersRequest().submit(socketWrapper)
 
     /**
      * Get information about a group from a `signal.group` [groupLink].
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun getGroupLinkInfo(groupLink: String): JsonGroupJoinInfo {
@@ -342,6 +398,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Joins a group using the given `signal.group` [groupLink].
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun joinGroup(groupLink: String): JsonGroupJoinInfo {
@@ -352,6 +411,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Leaves a group with the specified [groupID]
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun leaveGroup(groupID: String): GroupInfo {
@@ -362,6 +424,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Returns a list of [Account]s logged-in to signald.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun listAccounts(): AccountList {
@@ -373,6 +438,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      *
      * @param async Return results from local store immediately, refreshing from server afterward if needed. If
      * false (default), block until all pending profiles have been retrieved.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun listContacts(async: Boolean? = null): ProfileList {
@@ -383,6 +450,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Returns a list of groups for this account.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun listGroups(): GroupList {
@@ -398,6 +468,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param to The address that sent the messages that will be marked as read.
      * @param timestamps The timestamps of the messages we want to mark as read.
      * @param when The timestamp to use for when we mark as read. Defaults to the current system clock's timestamp.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun markRead(
@@ -417,6 +489,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Reacts to a previous message.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun react(
@@ -446,6 +521,9 @@ public class Signal @Throws(SignaldException::class) constructor(
     /**
      * Begin the account registration process by requesting a phone number verification code. When the code is received,
      * submit it with a [verify] request.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun register(voice: Boolean = false, captcha: String? = null) {
@@ -464,6 +542,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param recipient The recipient that received that message that we are trying to delete.
      * @param timestampOfTarget The timestamp of the message to delete. Note that messages are identified by their
      * timestamp.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
@@ -486,6 +566,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Remove a linked device from the Signal account. Only allowed when the local device id is 1
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun removeLinkedDevice(deviceId: Long) {
@@ -505,6 +588,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param configuration Request configuration sync (default: true)
      * @param contacts Request contact list sync (default: true)
      * @param blocked Request block list sync (default: true)
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun requestSync(
@@ -526,8 +611,11 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Resets a secure session with a particular user identified by the given [address].
+     *
      * @param address The user to reset session with
      * @param timestamp The timestamp to use when resetting session. Defaults to now.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun resetSession(
@@ -547,6 +635,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * Resolve a [partial] JsonAddress with only a number or UUID to one with both. Anywhere that signald
      * accepts a JsonAddress will accept a partial; this is a convenience function for client authors,
      * mostly because signald doesn't resolve all the partials it returns.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun resolveAddress(partial: JsonAddress): JsonAddress {
@@ -569,6 +660,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param mentions Mentions to include in the message. Typically, an empty space is used as the mention placeholder,
      * and then the position of the empty space is referred to by the [JsonMention.start] property.
      * @param timestamp The timestamp of the message that we are sending. Default to the current system clock time.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun send(
@@ -610,6 +703,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param recipientAddress The user that will receive the payment.
      * @param payment The payment to make.
      * @param when The timestamp of the payment. Defaults to the current system clock time.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun sendPayment(
@@ -629,6 +724,9 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Set this device's name. This will show up on the mobile device on the same account under linked devices
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun setDeviceName(deviceName: String) {
@@ -645,6 +743,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      *
      * @param recipient The recipient to set the [expiration] timer for.
      * @param expiration The new expiration timer in seconds. Set to 0 to disable timer. Example: 604800
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
@@ -678,6 +779,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * not the traditional MobileCoin address encoding, which is custom. Clients are responsible for converting between
      * MobileCoin's custom base58 on the user-facing side and base64 encoding on the signald side. If unset, null or an
      * empty string, will empty the profile payment address
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun setProfile(
@@ -701,10 +804,16 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     // TODO: Subscribe
 
+    /**
+     * Used with the [trust] function.
+     */
     public enum class TrustLevel {
         TRUSTED_UNVERIFIED, TRUSTED_VERIFIED, UNTRUSTED
     }
 
+    /**
+     * Used with the [trust] function.
+     */
     public sealed class Fingerprint {
         public class SafetyNumber(public val safetyNumber: String) : Fingerprint()
 
@@ -721,6 +830,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param fingerprint The fingerprint to use for trusting the user. Either use their safety number
      * ([Fingerprint.SafetyNumber]) or base64-encoded QR code data ([Fingerprint.QrCodeData]).
      * @param trustLevel One of TRUSTED_UNVERIFIED, TRUSTED_VERIFIED or UNTRUSTED. Default is TRUSTED_VERIFIED
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun trust(
@@ -753,6 +864,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param recipient The recipient to send the typing message to.
      * @param isTyping Whether the message should be a typing started (true) or typing stopped (false) message.
      * @param when The timestamp of the typing message. Defaults to the current system clock time.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun typing(
@@ -788,6 +901,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param name The new name of the contact
      * @param color The new color for the contact.
      * @param inboxPosition The new inbox position for the contact.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun updateContact(
@@ -808,7 +923,7 @@ public class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
-     * For use with [updateGroup].
+     * Used with the [updateGroup] function.
      *
      * Derived from
      * [https://github.com/signalapp/Signal-Android/blob/c615b14c512d3b0fffec3da93f8e2e3607ed6ab4/libsignal/service/src/main/proto/Groups.proto#L49]
@@ -823,21 +938,21 @@ public class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
-     * For use with [updateGroup].
+     * Used with the [updateGroup] function.
      */
     public enum class GroupLinkStatus {
         OFF, ON_NO_ADMIN_APPROVAL, ON_WITH_ADMIN_APPROVAL
     }
 
     /**
-     * A class to enforce that only one of the group attributes are updated at once. For use with [updateGroup].
+     * Used with the [updateGroup] function. class to enforce that only one of the group attributes are updated at once.
      */
     public sealed interface GroupUpdate {
         public class Title(public val newTitle: String) : GroupUpdate
         public class Description(public val newDescription: String) : GroupUpdate
         public class Avatar(public val newAvatarPath: String) : GroupUpdate
         /**
-         * The new disappearing message timer in seconds. Set to 0 to disable
+         * @property newTimerSeconds The new disappearing message timer in seconds. Set to 0 to disable
          */
         public class UpdateExpirationTimer(public val newTimerSeconds: Int) : GroupUpdate
         public class AddMembers(public val membersToAdd: Iterable<JsonAddress>) : GroupUpdate
@@ -850,7 +965,8 @@ public class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
-     * A class to enforce that only one of the access controls are updated at once. For use with [updateGroup].
+     * Used with the [updateGroup] function inside of [GroupUpdate]. A class to enforce that only one of the access
+     * controls are updated at once.
      */
     public sealed class AccessControlUpdate {
         internal abstract val accessRequired: AccessRequired
@@ -866,7 +982,7 @@ public class Signal @Throws(SignaldException::class) constructor(
             }
 
         /**
-         * Edit the group link status
+         * Edit the group link status.
          */
         public class GroupLink(newGroupLinkStatus: GroupLinkStatus) : AccessControlUpdate() {
             override val accessRequired: AccessRequired = when (newGroupLinkStatus) {
@@ -891,6 +1007,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param groupID The base64-encoded ID of the V2 group to update
      * @param groupUpdate The update to make to the group. This is done so that only one of the modification actions can
      * be performed at once. See [GroupUpdate] for details.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
@@ -954,6 +1072,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * process.
      *
      * @param code The verification code from SMS or voice call.
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun verify(code: String) {
@@ -963,12 +1083,28 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Gets the version of signald
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
     public fun version(code: String): JsonVersionMessage = VersionRequest().submit(socketWrapper)
 
+    /**
+     * Specifies a recipient type for functions that can send to either type (e.g., [react], [remoteDelete], [send],
+     * [setExpiration], [typing]). Recipients are either to a [Group] or an [Individual].
+     */
     public sealed class Recipient {
+        /**
+         * A group as the recipient, using the base64-encoded [groupID] as the identifier. [groupID]s can be retrieved
+         * with [listGroups] or by reading the responses from [joinGroup] or [getGroupLinkInfo].
+         */
         public class Group(public val groupID: String) : Recipient()
+        /**
+         * A Signal user as the recipient.
+         */
         public class Individual(public val address: JsonAddress) : Recipient()
     }
+
+    public abstract class MessageSubscriptionHandler(protected val persistentSocket: PersistentSocketWrapper)
 }

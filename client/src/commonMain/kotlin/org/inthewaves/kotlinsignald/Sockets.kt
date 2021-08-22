@@ -16,16 +16,16 @@ public class SocketUnavailableException : SignaldException {
 /**
  * A wrapper for a socket that creates a new socket connection for every request.
  */
-internal expect class SocketWrapper @Throws(SocketUnavailableException::class) constructor(
+public expect class SocketWrapper @Throws(SocketUnavailableException::class) constructor(
     socketPath: String? = null
 ) : SocketCommunicator
 
 /**
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
- * from a subscribe request.
+ * after a subscribe request.
  */
-internal expect class PersistentSocketWrapper @Throws(SocketUnavailableException::class) constructor(
+public expect class PersistentSocketWrapper @Throws(SocketUnavailableException::class) constructor(
     socketPath: String? = null
 ) : SocketCommunicator {
-    fun close()
+    public fun close()
 }
