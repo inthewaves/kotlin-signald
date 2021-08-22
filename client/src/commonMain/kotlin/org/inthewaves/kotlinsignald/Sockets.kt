@@ -15,10 +15,14 @@ public class SocketUnavailableException : SignaldException {
 
 /**
  * A wrapper for a socket that creates a new socket connection for every request.
+ * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
+ * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
 public expect class SocketWrapper @Throws(SocketUnavailableException::class) constructor(
     socketPath: String? = null
-) : SocketCommunicator
+) : SocketCommunicator {
+    public val actualSocketPath: String
+}
 
 /**
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages

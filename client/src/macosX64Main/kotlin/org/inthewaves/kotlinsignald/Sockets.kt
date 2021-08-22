@@ -2,10 +2,6 @@ package org.inthewaves.kotlinsignald
 
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 
-/**
- * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
- * after a subscribe request.
- */
 public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
     socketPath: String?
 ) : SocketCommunicator {
@@ -21,11 +17,12 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
     }
 }
 
-/**
- * A wrapper for a socket that creates a new socket connection for every request.
- */
-public actual class SocketWrapper @Throws(SocketUnavailableException::class) actual constructor(socketPath: String?) :
-    SocketCommunicator {
+public actual class SocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+    socketPath: String?
+) : SocketCommunicator {
+
+    public actual val actualSocketPath: String = TODO()
+
     override fun submit(request: String): String {
         TODO("Not yet implemented")
     }

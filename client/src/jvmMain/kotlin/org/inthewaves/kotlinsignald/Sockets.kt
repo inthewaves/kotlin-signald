@@ -75,6 +75,9 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         decodeVersionOrNull(reader.readLine())
     }
 
+    public actual val actualSocketPath: String
+        get() = socketAddress.path
+
     override fun submit(request: String): String {
         useSocket { _, reader, writer ->
             writer.println(request)
@@ -107,6 +110,9 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
 /**
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
  * after a subscribe request.
+ *
+ * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
+ * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
 public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
     socketPath: String?

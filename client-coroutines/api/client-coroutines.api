@@ -1,0 +1,7 @@
+public final class org/inthewaves/kotlinsignald/CoroutineMessageSubscriptionHandler : org/inthewaves/kotlinsignald/MessageSubscriptionHandler {
+	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;ILkotlinx/coroutines/CoroutineScope;)V
+	public synthetic fun <init> (Lorg/inthewaves/kotlinsignald/Signal;ILkotlinx/coroutines/CoroutineScope;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public final fun getMessages ()Lkotlinx/coroutines/flow/SharedFlow;
+}
+
