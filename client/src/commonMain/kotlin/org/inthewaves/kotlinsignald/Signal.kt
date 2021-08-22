@@ -1,9 +1,12 @@
 package org.inthewaves.kotlinsignald
 
+import kotlinx.datetime.Clock
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
+import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AcceptInvitationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddLinkedDeviceRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddServerRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AllIdentityKeyList
@@ -18,22 +21,52 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetIdentitiesRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetLinkedDevicesRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetProfileRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetServersRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupAccessControl
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkInfoRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupMember
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JoinGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMention
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonReaction
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LeaveGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkedDevices
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkingURI
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListAccountsRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListContactsRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListGroupsRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.MarkReadRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Payment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ReactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RegisterRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteDeleteRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveLinkedDeviceRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveServerRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RequestSyncRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResetSessionRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResolveAddressRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendPaymentRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Server
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
 
 /**
  * A signald client.
@@ -76,7 +109,20 @@ public class Signal @Throws(SignaldException::class) constructor(
      * service
      */
     public val isRegisteredWithSignald: Boolean
-        get() = accountInfo != null
+        get() {
+            if (accountInfo == null) {
+                return false
+            }
+
+            val newAccount = getAccountOrNull()
+            return if (newAccount != null) {
+                accountInfo = newAccount
+                true
+            } else {
+                accountInfo = null
+                false
+            }
+        }
 
     private fun getAccountOrNull() =
         ListAccountsRequest().submit(socketWrapper).accounts.find { it.accountId == accountId }
@@ -304,6 +350,103 @@ public class Signal @Throws(SignaldException::class) constructor(
         }
     }
 
+    /**
+     * Leaves a group with the specified [groupID]
+     */
+    @Throws(SignaldException::class)
+    public fun leaveGroup(groupID: String): GroupInfo {
+        withAccountOrThrow {
+            return LeaveGroupRequest(account = accountId, groupID = groupID).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Returns a list of [Account]s logged-in to signald.
+     */
+    @Throws(SignaldException::class)
+    public fun listAccounts(): AccountList {
+        return ListAccountsRequest().submit(socketWrapper)
+    }
+
+    /**
+     * Returns a list of contacts for this account.
+     *
+     * @param async Return results from local store immediately, refreshing from server afterward if needed. If
+     * false (default), block until all pending profiles have been retrieved.
+     */
+    @Throws(SignaldException::class)
+    public fun listContacts(async: Boolean? = null): ProfileList {
+        withAccountOrThrow {
+            return ListContactsRequest(account = accountId, async = async).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Returns a list of groups for this account.
+     */
+    @Throws(SignaldException::class)
+    public fun listGroups(): GroupList {
+        withAccountOrThrow {
+            return ListGroupsRequest(account = accountId).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Marks the given messages (represented as [timestamps]) as read. Note that messages are identified using their
+     * timestamps.
+     *
+     * @param to The address that sent the messages that will be marked as read.
+     * @param timestamps The timestamps of the messages we want to mark as read.
+     * @param when The timestamp to use for when we mark as read. Defaults to the current system clock's timestamp.
+     */
+    @Throws(SignaldException::class)
+    public fun markRead(
+        to: JsonAddress,
+        timestamps: Iterable<Long>,
+        `when`: Long = Clock.System.now().toEpochMilliseconds()
+    ) {
+        withAccountOrThrow {
+            MarkReadRequest(
+                account = accountId,
+                to = to,
+                timestamps = timestamps.toList(),
+                `when` = `when`
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Reacts to a previous message.
+     */
+    @Throws(SignaldException::class)
+    public fun react(
+        recipient: Recipient,
+        reaction: JsonReaction,
+        timestamp: Long = Clock.System.now().toEpochMilliseconds()
+    ): SendResponse {
+        withAccountOrThrow {
+            val request = when (recipient) {
+                is Recipient.Group -> ReactRequest(
+                    username = accountId,
+                    recipientGroupId = recipient.groupID,
+                    reaction = reaction,
+                    timestamp = timestamp
+                )
+                is Recipient.Individual -> ReactRequest(
+                    username = accountId,
+                    recipientAddress = recipient.address,
+                    reaction = reaction,
+                    timestamp = timestamp
+                )
+            }
+            return request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Begin the account registration process by requesting a phone number verification code. When the code is received,
+     * submit it with a [verify] request.
+     */
     @Throws(SignaldException::class)
     public fun register(voice: Boolean = false, captcha: String? = null) {
         RegisterRequest(
@@ -313,15 +456,218 @@ public class Signal @Throws(SignaldException::class) constructor(
         ).submit(socketWrapper)
     }
 
+    /**
+     * Sends a remote delete message to delete a message that was previously sent to the given [recipient]
+     * (group or individual address).
+     *
+     * @return The [SendResponse] of the remote delete message.
+     * @param recipient The recipient that received that message that we are trying to delete.
+     * @param timestampOfTarget The timestamp of the message to delete. Note that messages are identified by their
+     * timestamp.
+     */
     @Throws(SignaldException::class)
-    public fun verify(code: String) {
-        val account = VerifyRequest(accountId, code).submit(socketWrapper)
-        accountInfo = account
+    public fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
+        withAccountOrThrow {
+            val request = when (recipient) {
+                is Recipient.Group -> RemoteDeleteRequest(
+                    account = accountId,
+                    group = recipient.groupID,
+                    timestamp = timestampOfTarget
+                )
+                is Recipient.Individual -> RemoteDeleteRequest(
+                    account = accountId,
+                    address = recipient.address,
+                    timestamp = timestampOfTarget
+                )
+            }
+            return request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Remove a linked device from the Signal account. Only allowed when the local device id is 1
+     */
+    @Throws(SignaldException::class)
+    public fun removeLinkedDevice(deviceId: Long) {
+        withAccountOrThrow {
+            // we could check the account here and bail out earlier
+            RemoveLinkedDeviceRequest(
+                account = accountId,
+                deviceId = deviceId
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Request other devices on the account send us their group list, syncable config, contact list, and block list.
+     *
+     * @param groups Request group list sync (default: true)
+     * @param configuration Request configuration sync (default: true)
+     * @param contacts Request contact list sync (default: true)
+     * @param blocked Request block list sync (default: true)
+     */
+    @Throws(SignaldException::class)
+    public fun requestSync(
+        groups: Boolean = true,
+        configuration: Boolean = true,
+        contacts: Boolean = true,
+        blocked: Boolean = true,
+    ) {
+        withAccountOrThrow {
+            RequestSyncRequest(
+                account = accountId,
+                groups = groups,
+                configuration = configuration,
+                contacts = contacts,
+                blocked = blocked,
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Resets a secure session with a particular user identified by the given [address].
+     * @param address The user to reset session with
+     * @param timestamp The timestamp to use when resetting session. Defaults to now.
+     */
+    @Throws(SignaldException::class)
+    public fun resetSession(
+        address: JsonAddress,
+        timestamp: Long = Clock.System.now().toEpochMilliseconds(),
+    ): SendResponse {
+        withAccountOrThrow {
+            return ResetSessionRequest(
+                account = accountId,
+                address = address,
+                timestamp = timestamp
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Resolve a [partial] JsonAddress with only a number or UUID to one with both. Anywhere that signald
+     * accepts a JsonAddress will accept a partial; this is a convenience function for client authors,
+     * mostly because signald doesn't resolve all the partials it returns.
+     */
+    @Throws(SignaldException::class)
+    public fun resolveAddress(partial: JsonAddress): JsonAddress {
+        withAccountOrThrow {
+            return ResolveAddressRequest(
+                account = accountId,
+                partial = partial,
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Sends a message to either a single user ([Recipient.Individual]) or a group ([Recipient.Group]).
+     *
+     * @param recipient The recipient that will receive our message. If sending to a group, note that signald will
+     * handle the fan-out of messages to all users.
+     * @param messageBody The body of the message.
+     * @param attachments Attachments to include in the message.
+     * @param quote A quote to include in the message, where the quote refers to a previous message.
+     * @param mentions Mentions to include in the message. Typically, an empty space is used as the mention placeholder,
+     * and then the position of the empty space is referred to by the [JsonMention.start] property.
+     * @param timestamp The timestamp of the message that we are sending. Default to the current system clock time.
+     */
+    @Throws(SignaldException::class)
+    public fun send(
+        recipient: Recipient,
+        messageBody: String,
+        attachments: Iterable<JsonAttachment> = emptyList(),
+        quote: JsonQuote? = null,
+        mentions: Iterable<JsonMention> = emptyList(),
+        timestamp: Long = Clock.System.now().toEpochMilliseconds()
+    ): SendResponse {
+        withAccountOrThrow {
+            val request = when (recipient) {
+                is Recipient.Group -> SendRequest(
+                    username = accountId,
+                    recipientGroupId = recipient.groupID,
+                    messageBody = messageBody,
+                    attachments = attachments.toList(),
+                    quote = quote,
+                    timestamp = timestamp,
+                    mentions = mentions.toList(),
+                )
+                is Recipient.Individual -> SendRequest(
+                    username = accountId,
+                    recipientAddress = recipient.address,
+                    messageBody = messageBody,
+                    attachments = attachments.toList(),
+                    quote = quote,
+                    timestamp = timestamp,
+                    mentions = mentions.toList(),
+                )
+            }
+            return request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Sends a MobileCoin [payment] to the user identified by the [recipientAddress].
+     *
+     * @param recipientAddress The user that will receive the payment.
+     * @param payment The payment to make.
+     * @param when The timestamp of the payment. Defaults to the current system clock time.
+     */
+    @Throws(SignaldException::class)
+    public fun sendPayment(
+        recipientAddress: JsonAddress,
+        payment: Payment,
+        `when`: Long = Clock.System.now().toEpochMilliseconds(),
+    ): SendResponse {
+        withAccountOrThrow {
+            return SendPaymentRequest(
+                account = accountId,
+                address = recipientAddress,
+                payment = payment,
+                `when` = `when`
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Set this device's name. This will show up on the mobile device on the same account under linked devices
+     */
+    @Throws(SignaldException::class)
+    public fun setDeviceName(deviceName: String) {
+        withAccountOrThrow {
+            SetDeviceNameRequest(
+                account = accountId,
+                deviceName = deviceName
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Set the message expiration timer for a thread.
+     *
+     * @param recipient The recipient to set the [expiration] timer for.
+     * @param expiration The new expiration timer in seconds. Set to 0 to disable timer. Example: 604800
+     */
+    @Throws(SignaldException::class)
+    public fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
+        withAccountOrThrow {
+            val request = when (recipient) {
+                is Recipient.Group -> SetExpirationRequest(
+                    account = accountId,
+                    group = recipient.groupID,
+                    expiration = expiration,
+                )
+                is Recipient.Individual -> SetExpirationRequest(
+                    account = accountId,
+                    address = recipient.address,
+                    expiration = expiration,
+                )
+            }
+            return request.submit(socketWrapper)
+        }
     }
 
     /**
      * Sets the profile of the current account. Note that all the parameters here will be used as the new profile
-     * fields; leaving one of the fields unset means it will be treated as clearing it.
+     * fields; leaving one of the fields unset or null means it will be treated as clearing it.
      *
      * @param name A new profile name. Set to empty string for no profile name Example: "signald user"
      * @param avatarFile Path to new profile avatar file. If unset or null, this will unset the profile avatar.
@@ -351,5 +697,278 @@ public class Signal @Throws(SignaldException::class) constructor(
                 mobilecoinAddress = mobileCoinAddress
             ).submit(socketWrapper)
         }
+    }
+
+    // TODO: Subscribe
+
+    public enum class TrustLevel {
+        TRUSTED_UNVERIFIED, TRUSTED_VERIFIED, UNTRUSTED
+    }
+
+    public sealed class Fingerprint {
+        public class SafetyNumber(public val safetyNumber: String) : Fingerprint()
+
+        /**
+         * @param qrCodeData base64-encoded QR code data.
+         */
+        public class QrCodeData(public val qrCodeData: String) : Fingerprint()
+    }
+
+    /**
+     * Trust another user's safety number using either the QR code data or the safety number text
+     *
+     * @param address The user to trust
+     * @param fingerprint The fingerprint to use for trusting the user. Either use their safety number
+     * ([Fingerprint.SafetyNumber]) or base64-encoded QR code data ([Fingerprint.QrCodeData]).
+     * @param trustLevel One of TRUSTED_UNVERIFIED, TRUSTED_VERIFIED or UNTRUSTED. Default is TRUSTED_VERIFIED
+     */
+    @Throws(SignaldException::class)
+    public fun trust(
+        address: JsonAddress,
+        fingerprint: Fingerprint,
+        trustLevel: TrustLevel = TrustLevel.TRUSTED_VERIFIED
+    ) {
+        withAccountOrThrow {
+            val request = when (fingerprint) {
+                is Fingerprint.SafetyNumber -> TrustRequest(
+                    account = accountId,
+                    address = address,
+                    safetyNumber = fingerprint.safetyNumber,
+                    trustLevel = trustLevel.name
+                )
+                is Fingerprint.QrCodeData -> TrustRequest(
+                    account = accountId,
+                    address = address,
+                    qrCodeData = fingerprint.qrCodeData,
+                    trustLevel = trustLevel.name
+                )
+            }
+            request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Send a typing started or stopped message
+     *
+     * @param recipient The recipient to send the typing message to.
+     * @param isTyping Whether the message should be a typing started (true) or typing stopped (false) message.
+     * @param when The timestamp of the typing message. Defaults to the current system clock time.
+     */
+    @Throws(SignaldException::class)
+    public fun typing(
+        recipient: Recipient,
+        isTyping: Boolean,
+        `when`: Long = Clock.System.now().toEpochMilliseconds()
+    ) {
+        withAccountOrThrow {
+            val request = when (recipient) {
+                is Recipient.Group -> TypingRequest(
+                    account = accountId,
+                    group = recipient.groupID,
+                    typing = isTyping,
+                    `when` = `when`
+                )
+                is Recipient.Individual -> TypingRequest(
+                    account = accountId,
+                    address = recipient.address,
+                    typing = isTyping,
+                    `when` = `when`
+                )
+            }
+            request.submit(socketWrapper)
+        }
+    }
+
+    // TODO: Unsubscribe
+
+    /**
+     * Update information about a local contact. Null properties will be left alone.
+     *
+     * @param address Address of the local contact to update.
+     * @param name The new name of the contact
+     * @param color The new color for the contact.
+     * @param inboxPosition The new inbox position for the contact.
+     */
+    @Throws(SignaldException::class)
+    public fun updateContact(
+        address: JsonAddress,
+        name: String? = null,
+        color: String? = null,
+        inboxPosition: Int? = null,
+    ) {
+        withAccountOrThrow {
+            UpdateContactRequest(
+                account = accountId,
+                address = address,
+                name = name,
+                color = color,
+                inboxPosition = inboxPosition
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * For use with [updateGroup].
+     *
+     * Derived from
+     * [https://github.com/signalapp/Signal-Android/blob/c615b14c512d3b0fffec3da93f8e2e3607ed6ab4/libsignal/service/src/main/proto/Groups.proto#L49]
+     */
+    public enum class AccessRequired(public val value: Int) {
+        UNRECOGNIZED(-1),
+        UNKNOWN(0),
+        ANY(1),
+        MEMBER(2),
+        ADMINISTRATOR(3),
+        UNSATISFIABLE(4),
+    }
+
+    /**
+     * For use with [updateGroup].
+     */
+    public enum class GroupLinkStatus {
+        OFF, ON_NO_ADMIN_APPROVAL, ON_WITH_ADMIN_APPROVAL
+    }
+
+    /**
+     * A class to enforce that only one of the group attributes are updated at once. For use with [updateGroup].
+     */
+    public sealed interface GroupUpdate {
+        public class Title(public val newTitle: String) : GroupUpdate
+        public class Description(public val newDescription: String) : GroupUpdate
+        public class Avatar(public val newAvatarPath: String) : GroupUpdate
+        /**
+         * The new disappearing message timer in seconds. Set to 0 to disable
+         */
+        public class UpdateExpirationTimer(public val newTimerSeconds: Int) : GroupUpdate
+        public class AddMembers(public val membersToAdd: Iterable<JsonAddress>) : GroupUpdate
+        public class RemoveMembers(public val membersToRemove: Iterable<JsonAddress>) : GroupUpdate
+        public class UpdateRole(public val memberWithUpdatedRole: GroupMember) : GroupUpdate
+        public class UpdateAccessControl(update: AccessControlUpdate) : GroupUpdate {
+            public val groupAccessControl: GroupAccessControl = update.groupAccessControlBody
+        }
+        public object ResetLink : GroupUpdate
+    }
+
+    /**
+     * A class to enforce that only one of the access controls are updated at once. For use with [updateGroup].
+     */
+    public sealed class AccessControlUpdate {
+        internal abstract val accessRequired: AccessRequired
+
+        /**
+         * The body of the [GroupAccessControl] to perform the change.
+         */
+        public val groupAccessControlBody: GroupAccessControl
+            get() = when (this) {
+                is GroupLink -> GroupAccessControl(link = accessRequired.name)
+                is Attributes -> GroupAccessControl(attributes = accessRequired.name)
+                is Members -> GroupAccessControl(attributes = accessRequired.name)
+            }
+
+        /**
+         * Edit the group link status
+         */
+        public class GroupLink(newGroupLinkStatus: GroupLinkStatus) : AccessControlUpdate() {
+            override val accessRequired: AccessRequired = when (newGroupLinkStatus) {
+                GroupLinkStatus.OFF -> AccessRequired.UNSATISFIABLE
+                GroupLinkStatus.ON_NO_ADMIN_APPROVAL -> AccessRequired.ANY
+                GroupLinkStatus.ON_WITH_ADMIN_APPROVAL -> AccessRequired.ADMINISTRATOR
+            }
+        }
+        /**
+         * Edit the access required to edit group information.
+         */
+        public class Attributes(public override val accessRequired: AccessRequired) : AccessControlUpdate()
+        /**
+         * Edit the access required to add new members.
+         */
+        public class Members(public override val accessRequired: AccessRequired) : AccessControlUpdate()
+    }
+
+    /**
+     * Update information about a group
+     *
+     * @param groupID The base64-encoded ID of the V2 group to update
+     * @param groupUpdate The update to make to the group. This is done so that only one of the modification actions can
+     * be performed at once. See [GroupUpdate] for details.
+     */
+    @Throws(SignaldException::class)
+    public fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
+        withAccountOrThrow {
+            val request = when (groupUpdate) {
+                is GroupUpdate.Title -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    title = groupUpdate.newTitle
+                )
+                is GroupUpdate.Description -> {
+                    TODO("Wait until next update")
+                    // UpdateGroupRequest(
+                    //     account = accountId,
+                    //     groupID = groupID,
+                    //     description = groupUpdate.newDescription
+                    // )
+                }
+                is GroupUpdate.Avatar -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    avatar = groupUpdate.newAvatarPath
+                )
+                is GroupUpdate.UpdateExpirationTimer -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    updateTimer = groupUpdate.newTimerSeconds
+                )
+                is GroupUpdate.AddMembers -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    addMembers = groupUpdate.membersToAdd.toList()
+                )
+                is GroupUpdate.RemoveMembers -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    removeMembers = groupUpdate.membersToRemove.toList()
+                )
+                is GroupUpdate.UpdateRole -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    updateRole = groupUpdate.memberWithUpdatedRole
+                )
+                is GroupUpdate.UpdateAccessControl -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    updateAccessControl = groupUpdate.groupAccessControl
+                )
+                is GroupUpdate.ResetLink -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    resetLink = true
+                )
+            }
+            return request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Verify an account's phone number with a code after registering, completing the account creation
+     * process.
+     *
+     * @param code The verification code from SMS or voice call.
+     */
+    @Throws(SignaldException::class)
+    public fun verify(code: String) {
+        val account = VerifyRequest(accountId, code).submit(socketWrapper)
+        accountInfo = account
+    }
+
+    /**
+     * Gets the version of signald
+     */
+    @Throws(SignaldException::class)
+    public fun version(code: String): JsonVersionMessage = VersionRequest().submit(socketWrapper)
+
+    public sealed class Recipient {
+        public class Group(public val groupID: String) : Recipient()
+        public class Individual(public val address: JsonAddress) : Recipient()
     }
 }
