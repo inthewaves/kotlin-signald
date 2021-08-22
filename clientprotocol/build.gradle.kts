@@ -47,7 +47,7 @@ kotlin {
     macosX64 {
         binaries {
             sharedLib {
-               baseName = nativeBaseName
+                baseName = nativeBaseName
             }
         }
     }

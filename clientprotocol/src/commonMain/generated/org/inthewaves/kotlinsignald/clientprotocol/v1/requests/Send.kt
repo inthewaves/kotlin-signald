@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 @Serializable
 @SerialName("send")
 public data class Send private constructor(
-    public override val `data`: SendResponse? = null
+    public override val data: SendResponse? = null
 ) : JsonMessageWrapper<SendResponse>()

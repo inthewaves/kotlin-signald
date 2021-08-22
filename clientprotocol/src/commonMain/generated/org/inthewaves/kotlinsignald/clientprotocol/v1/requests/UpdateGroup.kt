@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
 @Serializable
 @SerialName("update_group")
 public data class UpdateGroup private constructor(
-    public override val `data`: GroupInfo? = null
+    public override val data: GroupInfo? = null
 ) : JsonMessageWrapper<GroupInfo>()

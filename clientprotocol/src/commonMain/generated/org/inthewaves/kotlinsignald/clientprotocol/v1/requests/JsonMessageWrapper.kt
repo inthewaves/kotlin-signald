@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonObject
 public sealed class JsonMessageWrapper<out Response> {
     public open val id: String? = null
 
-    public abstract val `data`: Response?
+    public abstract val data: Response?
 
     public open val error: JsonObject? = null
 

@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
 @Serializable
 @SerialName("update_contact")
 public data class UpdateContact private constructor(
-    public override val `data`: Profile? = null
+    public override val data: Profile? = null
 ) : JsonMessageWrapper<Profile>()

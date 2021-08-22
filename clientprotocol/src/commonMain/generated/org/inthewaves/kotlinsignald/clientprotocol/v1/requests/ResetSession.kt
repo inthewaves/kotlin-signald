@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 @Serializable
 @SerialName("reset_session")
 public data class ResetSession private constructor(
-    public override val `data`: SendResponse? = null
+    public override val data: SendResponse? = null
 ) : JsonMessageWrapper<SendResponse>()

@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscriptionRes
 @Serializable
 @SerialName("unsubscribe")
 public data class Unsubscribe private constructor(
-    public override val `data`: SubscriptionResponse? = null
+    public override val data: SubscriptionResponse? = null
 ) : JsonMessageWrapper<SubscriptionResponse>()

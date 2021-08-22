@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IdentityKeyList
 @Serializable
 @SerialName("get_identities")
 public data class GetIdentities private constructor(
-    public override val `data`: IdentityKeyList? = null
+    public override val data: IdentityKeyList? = null
 ) : JsonMessageWrapper<IdentityKeyList>()

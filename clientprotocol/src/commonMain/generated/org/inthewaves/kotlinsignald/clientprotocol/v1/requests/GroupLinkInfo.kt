@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinIn
 @Serializable
 @SerialName("group_link_info")
 public data class GroupLinkInfo private constructor(
-    public override val `data`: JsonGroupJoinInfo? = null
+    public override val data: JsonGroupJoinInfo? = null
 ) : JsonMessageWrapper<JsonGroupJoinInfo>()

@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
 @Serializable
 @SerialName("get_group")
 public data class GetGroup private constructor(
-    public override val `data`: JsonGroupV2Info? = null
+    public override val data: JsonGroupV2Info? = null
 ) : JsonMessageWrapper<JsonGroupV2Info>()

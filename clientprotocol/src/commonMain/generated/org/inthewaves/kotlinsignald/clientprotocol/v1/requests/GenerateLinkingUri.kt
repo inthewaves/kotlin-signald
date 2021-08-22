@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkingURI
 @Serializable
 @SerialName("generate_linking_uri")
 public data class GenerateLinkingUri private constructor(
-    public override val `data`: LinkingURI? = null
+    public override val data: LinkingURI? = null
 ) : JsonMessageWrapper<LinkingURI>()

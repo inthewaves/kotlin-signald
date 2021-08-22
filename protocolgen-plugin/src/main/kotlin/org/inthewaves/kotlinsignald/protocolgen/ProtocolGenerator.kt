@@ -321,21 +321,30 @@ class ProtocolGenerator(
         }.build()
         writeTypeSpecFile(requestFailedExceptionClassName, requestFailedExceptionTypeSpec, genFilesDir)
 
-        val socketCommunicatorSubmitFunName = "submit"
-
-
-
         val socketCommunicatorTypeSpec = TypeSpec.interfaceBuilder(socketCommunicatorClassName)
-            .addModifiers(KModifier.EXPECT)
+            .addKdoc(
+                "%L",
+                "An interface to facilitate communication with signald socket. The implementation might close socket " +
+                    "connections after making a request, in which case, the [$SOCKET_COMM_READLINE_FUN_NAME] " +
+                    "function will not be supported."
+            )
             .addFunction(
-                FunSpec.builder(socketCommunicatorSubmitFunName)
+                FunSpec.builder(SOCKET_COMM_SUBMIT_FUN_NAME)
                     .addModifiers(KModifier.ABSTRACT)
                     .addKdoc(
                         "%L",
                         "Sends the [request] to the socket as a single line of JSON (line terminated with \\n), and " +
                                 "returns the JSON response from signald."
                     )
-                    // .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
+                    .addKdoc(
+                        "\n%L",
+                        "@throws [${signaldExceptionClassName.simpleName}] if an " +
+                            "I/O error occurs during socket communication")
+                    .addAnnotation(
+                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                            .addMember("%T::class", signaldExceptionClassName)
+                            .build()
+                    )
                     .addParameter("request", String::class)
                     .returns(String::class)
                     .build()
@@ -346,9 +355,23 @@ class ProtocolGenerator(
                     .addKdoc(
                         "%L",
                         "Reads a JSON message from the socket, blocking until a message is received or " +
-                                "returning null if the socket closes."
+                                "returning null if the socket closes. Might not be supported by the implementation."
                     )
-                    // .addKdoc("\n%L", "@throws IOException if an I/O error occurs during socket communication")
+                    .addKdoc(
+                        "\n%L",
+                        "@throws [${signaldExceptionClassName.simpleName}] if an " +
+                            "I/O error occurs during socket communication"
+                    )
+                    .addKdoc(
+                        "\n%L",
+                        "@throws [${UnsupportedOperationException::class.simpleName}] the communicator " +
+                            "doesn't support this operation (can happen if the communicator closes connections after " +
+                            "a request is handled).")
+                    .addAnnotation(
+                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                            .addMember("%T::class", signaldExceptionClassName)
+                            .build()
+                    )
                     .returns(String::class.asClassName().copy(nullable = true))
                     .build()
             )
@@ -514,7 +537,7 @@ class ProtocolGenerator(
                                     }
                                     
                                 """.trimIndent(),
-                                    socketCommunicatorSubmitFunName,
+                                    SOCKET_COMM_SUBMIT_FUN_NAME,
                                     // val response: %T<%T> = try {
                                     responseWrapperClassName, STAR,
                                     signaldJsonClassName, responseWrapperClassName, responseDataSerializerProperty.name,
@@ -1233,6 +1256,7 @@ class ProtocolGenerator(
         const val RESPONSE_RESOLVE_FUN_NAME = "getTypedResponseOrNull"
         const val RESPONSE_WRAPPER_SERIALIZER_PROPERTY_NAME = "responseWrapperSerializer"
         const val RESPONSE_DATA_SERIALIZER_PROPERTY_NAME = "responseDataSerializer"
+        const val SOCKET_COMM_SUBMIT_FUN_NAME = "submit"
         const val SOCKET_COMM_READLINE_FUN_NAME = "readLine"
         const val BASE_RESPONSE_SUBMIT_FUN_NAME = "submit"
         val UNEXPECTED_ERROR_ACTION_NAME = SignaldActionName("unexpected_error")

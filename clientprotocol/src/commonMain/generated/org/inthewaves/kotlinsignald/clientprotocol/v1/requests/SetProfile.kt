@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
 @Serializable
 @SerialName("set_profile")
 public data class SetProfile private constructor(
-    public override val `data`: EmptyResponse? = null
+    public override val data: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

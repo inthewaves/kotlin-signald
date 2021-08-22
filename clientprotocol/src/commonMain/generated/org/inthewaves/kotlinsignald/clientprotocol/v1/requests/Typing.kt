@@ -12,5 +12,5 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
 @Serializable
 @SerialName("typing")
 public data class Typing private constructor(
-    public override val `data`: EmptyResponse? = null
+    public override val data: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()
