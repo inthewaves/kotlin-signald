@@ -1,6 +1,10 @@
 name: Run unit tests and apiCheck
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
