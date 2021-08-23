@@ -1,10 +1,7 @@
 package org.inthewaves.kotlinsignald
 
-import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
-import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Version
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import org.newsclub.net.unix.AFUNIXSocket
@@ -45,16 +42,6 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
         }
     )
     return AFUNIXSocketAddress.of(socketPathToUse.toFile())
-}
-
-private fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null) {
-    try {
-        SignaldJson.decodeFromString(JsonMessageWrapper.serializer(JsonVersionMessage.serializer()), versionLine).data
-    } catch (e: SerializationException) {
-        null
-    }
-} else {
-    null
 }
 
 /**

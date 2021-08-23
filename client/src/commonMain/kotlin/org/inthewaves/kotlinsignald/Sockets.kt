@@ -1,7 +1,23 @@
+@file:JvmName("SocketUtil")
 package org.inthewaves.kotlinsignald
 
+import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
+import kotlin.jvm.JvmName
+
+internal fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null) {
+    try {
+        SignaldJson.decodeFromString(JsonMessageWrapper.serializer(JsonVersionMessage.serializer()), versionLine).data
+    } catch (e: SerializationException) {
+        null
+    }
+} else {
+    null
+}
 
 public class SocketUnavailableException : SignaldException {
     public constructor() : super()
