@@ -14,7 +14,7 @@ The following platforms are supported:
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.
 
-Linux x64 and JavaScript (NodeJS) support are incomplete.
+Linux x64 and JavaScript (Node.js) support are incomplete.
 
 ## Usage
 
@@ -53,20 +53,22 @@ This snippet provides an overview of the client (API inspired by [pysignald](htt
 
 ```kotlin
 import org.inthewaves.kotlinsignald.Signal
+import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 
+// Create an instance of the simple client tied to an accountID.
 // The accountId must be an E.164 identifier, i.e., a phone number
 // starting with + and the country calling code.
-val signal = Signal("+12223334444")
+val signal = Signal("+<example number>")
 // You can also specify a custom path to the socket.
 val signalWithCustomSocketPath = Signal(
-  "+12223334444",
-  socketPath = customPathString
+  "+<example number>",
+  socketPath = "/opt/signald-dev/signald.sock"
 )
 
-// Register +12223334444 with Signal if it is not already registered
+// Register +<example number> with Signal if it is not already registered
 // and stored by signald. This will send a verification code via SMS.
 // You can also specify a captcha token if it is requested, and specify
 // voice verification to get a call instead of an SMS.
@@ -94,13 +96,13 @@ signal.verify("some verification code")
 // about the sent message, including the message timestamp (which identifies the message),
 // and the result.
 val sendResponse: SendResponse = signal.send(
-  recipient = Signal.Recipient.Individual(JsonAddress(number = "+15556667777")),
+  recipient = Signal.Recipient.Individual(JsonAddress(number = "+<another number>")),
   messageBody = "Hello"
 )
 
 // You can also send to a single user via their UUID.
 signal.send(
-  recipient = Signal.Recipient.Individual(JsonAddress(uuid = "eeeeeeee-eeee-5555-5555-555555555555")),
+  recipient = Signal.Recipient.Individual(JsonAddress(uuid = "********-****-****-****-************")),
   messageBody = "Hello"
 )
 
@@ -110,7 +112,7 @@ val joinInfo: JsonGroupJoinInfo = signal.joinGroup("https://signal.group/#<encod
 // Send a message to the group that we just joined
 // (omitted checks to see if joining requires admin approval)
 signal.send(
-  recipient = Signal.Recipient.Group(groupID = joinInfo.groupID),
+  recipient = Signal.Recipient.Group(groupID = joinInfo.groupID!!),
   messageBody = "Hello to group"
 )
 
