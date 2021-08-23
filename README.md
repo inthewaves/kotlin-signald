@@ -1,6 +1,7 @@
 # kotlin-signald
 
-A Kotlin Multiplatform library for communicating with signald. For more information, visit https://signald.org.
+A Kotlin Multiplatform library for communicating with signald. For more information about signald, visit
+https://signald.org.
 
 This library provides a type-safe way to communicate with a signald UNIX socket, handling (de)serialization of responses
 and requests. The classes are generated from the signald protocol document
@@ -9,13 +10,13 @@ and requests. The classes are generated from the signald protocol document
 The following platforms are supported: JVM, Linux x64, macOS x64, and JavaScript. (Since signald currently works by
 communicating with UNIX sockets, JVM and JavaScript are effectively limited to UNIX environments supported by signald.)
 
-## Using in your projects
+## Usage
 
 > This library is experimental, with the API subject to breaking changes.
 
-This project comes with a client library for signald (the `client` module). There is also a coroutine-based message
-subscription handler (the `client-coroutines` module), which is optional if a custom message subscription handler is
-desired.
+This project comes with a client library for signald (the `client` module). There are also coroutine-based message
+subscription handlers, which is provided as optional module (`client-coroutines`) to accommodate cases where a custom
+implementation of a message subscription handler is desired.
 
 It's recommended to ensure that a message receiver is active at all times, because signald will not process incoming
 messages without any client subscriptions.
@@ -23,7 +24,7 @@ messages without any client subscriptions.
 Incoming messages are not limited to text messages sent by a user. They can also include
 
 * updates to groups (e.g., when someone joins a group, a message indicating new group info is sent to the group members.
-  If there are no message receivers active, any group messages sent by signald after someone new joins will not be sent 
+  If there are no message receivers active, any group messages sent by signald after someone new joins will not be sent
   to that new user),
 * read and typing receipts;
 * expiration timer changes;
@@ -33,7 +34,10 @@ Incoming messages are not limited to text messages sent by a user. They can also
 
 signald will handle these incoming messages, as long as there is a message subscription.
 
-### Client library
+### Client
+
+The `client` module has support for connecting to the UNIX socket and (de)serializing responses and requests. (Note:
+Currently, only JVM has a working socket implementation.)
 
 Ensure that signald is running and that the socket is available. The default socket paths of
 `$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock` will be tested if an explicit socket path is
@@ -140,23 +144,34 @@ placeholders can be replaced by one of the versions from the
 
 ### Coroutine-based message receiver
 
-This adds a coroutine-based message handler via a `SharedFlow`:
+The `client-coroutines` module adds coroutine-based message subscription handlers via the `signalMessagesChannel` and
+`signalMessagesSharedFlow` functions. Each function is an extension function of `CoroutineScope` that creates a
+persistent socket connection to receive messages, launching a coroutine in the inherited scope in order to receive
+messages asynchronously.  When the inherited `CoroutineScope` is cancelled, an unsubscribe request is sent and the
+socket is closed.
+
+- `signalMessagesChannel` has incoming messages sent through a
+  [`Channel`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html).
+  This is best for when only one subscriber for incoming messages is needed.
+- `signalMessagesSharedFlow` has incoming messages emitted through a
+  [`SharedFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/))
+  `SharedFlow`s support multiple subscribers, so this approach is good for broadcasting incoming messages using one shared
+  socket connection.
 
 ```kotlin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
-import org.inthewaves.kotlinsignald.CoroutineMessageSubscriptionHandler
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
+import org.inthewaves.kotlinsignald.signalMessagesChannel
 
 suspend fun receiveMessages(signal: Signal) {
   coroutineScope {
-    val messageHandler = CoroutineMessageSubscriptionHandler(signal = signal, coroutineScope = this)
-
-    messageHandler.messages.collect { message ->
+    val channel = signalMessagesChannel(signal)
+    channel.consumeEach { message ->
       when (message) {
         is IncomingMessage -> TODO()
         is ListenerState -> TODO()
@@ -167,9 +182,8 @@ suspend fun receiveMessages(signal: Signal) {
 }
 ```
 
-Note that each instance of `CoroutineMessageSubscriptionHandler` will make a new socket connection when a `Signal`
-instance is passed into the constructor. The `messageHandler` variable should be reused if there is a need for multiple
-subscribers to the flow.
+See the [`example-bot-jvm`](./example-bot-jvm/src/main/kotlin/org/inthewaves/examplejvmbot/ExampleBotMain.kt) module for
+a full example of a bot that sends back messages that it receives.
 
 #### Gradle
 
