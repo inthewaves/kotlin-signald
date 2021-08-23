@@ -4602,19 +4602,21 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Jso
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SignaldResponseBodyV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/Integer;
 	public final fun component5 ()Ljava/lang/Integer;
-	public final fun component6 ()Ljava/lang/Boolean;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
-	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun component7 ()Ljava/lang/Boolean;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAddFromInviteLink ()Ljava/lang/Integer;
+	public final fun getDescription ()Ljava/lang/String;
 	public final fun getGroupID ()Ljava/lang/String;
 	public final fun getMemberCount ()Ljava/lang/Integer;
 	public final fun getPendingAdminApproval ()Ljava/lang/Boolean;
@@ -6657,25 +6659,27 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Upd
 
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SignaldRequestBodyV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component10 ()Ljava/lang/Boolean;
+	public final fun component10 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;
+	public final fun component11 ()Ljava/lang/Boolean;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/Integer;
-	public final fun component6 ()Ljava/util/List;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/Integer;
 	public final fun component7 ()Ljava/util/List;
-	public final fun component8 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
-	public final fun component9 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;
-	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;
+	public final fun component8 ()Ljava/util/List;
+	public final fun component9 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAccount ()Ljava/lang/String;
 	public final fun getAddMembers ()Ljava/util/List;
 	public final fun getAvatar ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
 	public final fun getGroupID ()Ljava/lang/String;
 	public final fun getRemoveMembers ()Ljava/util/List;
 	public final fun getResetLink ()Ljava/lang/Boolean;

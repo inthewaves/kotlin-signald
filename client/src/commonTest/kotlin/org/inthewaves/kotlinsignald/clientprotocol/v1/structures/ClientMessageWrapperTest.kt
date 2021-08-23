@@ -1,9 +1,7 @@
 package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
-import org.inthewaves.kotlinsignald.clientprotocol.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,10 +11,8 @@ internal class ClientMessageWrapperTest {
         val jsonString = """{"type":"ListenerState","version":"v1","data":{"connected":true}}"""
         val clientMessageWrapper = SignaldJson.decodeFromString<ClientMessageWrapper>(jsonString)
         assertEquals(ListenerState(version = "v1", data = ListenerState.Data(connected = true)), clientMessageWrapper)
-
-        assertThrows<SerializationException> {
-            SignaldJson.decodeFromString<ListenerState>(jsonString)
-        }
+        val directlyFromString = SignaldJson.decodeFromString<ListenerState>(jsonString)
+        assertEquals(ListenerState(version = "v1", data = ListenerState.Data(connected = true)), directlyFromString)
 
         val (expectedIncomingMessage, incomingMessageAsJsonString) =
             IncomingMessage(
