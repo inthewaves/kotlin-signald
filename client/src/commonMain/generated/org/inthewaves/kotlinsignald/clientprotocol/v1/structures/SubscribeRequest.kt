@@ -53,7 +53,7 @@ public data class SubscribeRequest(
             var rawJsonResponse = originalException.responseJsonString ?: throw originalException
             val pendingChatMessages = mutableListOf<ClientMessageWrapper>()
 
-            for (i in 0 until 10) {
+            for (i in 0 until 25) {
                 val incomingMessage: ClientMessageWrapper = try {
                     SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
                 } catch (e: SerializationException) {

@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * Wraps all incoming messages after a v1 subscribe request is issued
+ *
  * Note that the `type` field has been removed. kotlinx.serialization uses that as a discriminator
  */
 @Serializable

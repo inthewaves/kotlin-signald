@@ -9,6 +9,7 @@ public interface SocketCommunicator {
     /**
      * Sends the [request] to the socket as a single line of JSON (line terminated with \n), and
      * returns the JSON response from signald.
+     *
      * @throws [SignaldException] if an I/O error occurs during socket communication
      */
     @Throws(SignaldException::class)

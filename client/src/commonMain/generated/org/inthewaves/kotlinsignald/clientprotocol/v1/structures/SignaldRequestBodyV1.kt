@@ -6,6 +6,7 @@ import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
@@ -46,8 +47,9 @@ public sealed class SignaldRequestBodyV1<ResponseWrapper : JsonMessageWrapper<Re
     /**
      * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
      * to serialize our request
+     * @throws SignaldException if an I/O error occurs during socket communication
      */
-    @Throws(RequestFailedException::class)
+    @Throws(SignaldException::class)
     public fun submit(socketCommunicator: SocketCommunicator): ResponseData =
         submit(socketCommunicator, id)
 
@@ -57,10 +59,11 @@ public sealed class SignaldRequestBodyV1<ResponseWrapper : JsonMessageWrapper<Re
      *
      * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
      * to serialize our request
+     * @throws SignaldException if an I/O error occurs during socket communication
      * @param id The id to include in the request. This is expected to be present in the response
      * JSON
      */
-    @Throws(RequestFailedException::class)
+    @Throws(SignaldException::class)
     internal open fun submit(socketCommunicator: SocketCommunicator, id: String = this.id):
         ResponseData {
         val requestJson = try {

@@ -338,7 +338,7 @@ class ProtocolGenerator(
                                 "returns the JSON response from signald."
                     )
                     .addKdoc(
-                        "\n%L",
+                        "\n\n%L",
                         "@throws [${signaldExceptionClassName.simpleName}] if an " +
                             "I/O error occurs during socket communication")
                     .addAnnotation(
@@ -468,7 +468,7 @@ class ProtocolGenerator(
                                 .addParameter("socketCommunicator", socketCommunicatorClassName)
                                 .addAnnotation(
                                     AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                                        .addMember("%T::class", requestFailedExceptionClassName)
+                                        .addMember("%T::class", signaldExceptionClassName)
                                         .build()
                                 )
                                 .addKdoc(
@@ -476,10 +476,11 @@ class ProtocolGenerator(
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
                                             "sends a bad or error response, or unable to serialize our request"
                                 )
-                                //.addKdoc(
-                                //    "\n%L",
-                                //    "@throws IOException if an I/O error occurs during socket communication"
-                                //)
+                                .addKdoc(
+                                    "\n%L",
+                                    "@throws ${signaldExceptionClassName.simpleName} if an I/O error occurs during " +
+                                        "socket communication"
+                                )
                                 .addStatement("return $BASE_RESPONSE_SUBMIT_FUN_NAME(socketCommunicator, id)")
                                 .build()
                         )
@@ -489,7 +490,7 @@ class ProtocolGenerator(
                                 .returns(responseDataTypeVar)
                                 .addAnnotation(
                                     AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                                        .addMember("%T::class", requestFailedExceptionClassName)
+                                        .addMember("%T::class", signaldExceptionClassName)
                                         .build()
                                 )
                                 .addKdoc(
@@ -502,10 +503,11 @@ class ProtocolGenerator(
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
                                             "sends a bad or error response, or unable to serialize our request"
                                 )
-                                //.addKdoc(
-                                //    "\n%L",
-                                //    "@throws IOException if an I/O error occurs during socket communication"
-                               // )
+                                .addKdoc(
+                                    "\n%L",
+                                    "@throws ${signaldExceptionClassName.simpleName} if an I/O error occurs during " +
+                                        "socket communication"
+                                )
                                 .addParameter("socketCommunicator", socketCommunicatorClassName)
                                 .addParameter(idParameterSpec)
                                 .addCode(
@@ -1126,7 +1128,7 @@ class ProtocolGenerator(
                         var rawJsonResponse = originalException.responseJsonString ?: throw originalException
                         val pendingChatMessages = mutableListOf<%T>()
 
-                        for (i in 0 until 10) {
+                        for (i in 0 until 25) {
                             val incomingMessage: ClientMessageWrapper = try {
                                 %T.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
                             } catch (e: SerializationException) {
@@ -1188,7 +1190,7 @@ class ProtocolGenerator(
             SignaldProtocolVersion.v0 to mapOf(
                 SignaldType("JsonStickerPackOperationMessage") to { _, _, _, _, _ ->
                     addKdoc(
-                        "\n%L",
+                        "\n\n%L",
                         "https://github.com/signalapp/Signal-Android/blob/44d014c4459e9ac34b74800002fa86b402d0501c/" +
                                 "libsignal/service/src/main/java/org/whispersystems/signalservice/api/messages/" +
                                 "multidevice/StickerPackOperationMessage.java"
@@ -1234,8 +1236,8 @@ class ProtocolGenerator(
                     //  field is used as a discriminator.
                     propertySpecs.removeIf { it.name == "type" }
                     addKdoc(
-                        "%L",
-                        "\nNote that the `type` field has been removed. kotlinx.serialization uses that as a discriminator"
+                        "\n\n%L",
+                        "Note that the `type` field has been removed. kotlinx.serialization uses that as a discriminator"
                     )
                 },
                 SignaldType("IncomingMessage") to clientMessageWrapperSubclassHandler,

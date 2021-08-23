@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 /**
  *
+ *
  * https://github.com/signalapp/Signal-Android/blob/44d014c4459e9ac34b74800002fa86b402d0501c/libsignal/service/src/main/java/org/whispersystems/signalservice/api/messages/multidevice/StickerPackOperationMessage.java
  */
 @Serializable
