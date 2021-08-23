@@ -10,7 +10,6 @@ plugins {
     signing
 }
 
-version = "0.5.0"
 description = "A Kotlin Multiplatform library for communicating with signald"
 
 signaldProtocolGen {
