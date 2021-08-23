@@ -44,7 +44,7 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
             "tried default paths but they don't exist"
         }
     )
-    return AFUNIXSocketAddress(socketPathToUse.toFile())
+    return AFUNIXSocketAddress.of(socketPathToUse.toFile())
 }
 
 private fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null) {

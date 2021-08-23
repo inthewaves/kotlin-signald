@@ -74,8 +74,8 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("com.kohlschutter.junixsocket:junixsocket-common:2.3.2")
-                implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.3.2")
+                implementation("com.kohlschutter.junixsocket:junixsocket-common:2.4.0")
+                implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.4.0")
             }
         }
     }
