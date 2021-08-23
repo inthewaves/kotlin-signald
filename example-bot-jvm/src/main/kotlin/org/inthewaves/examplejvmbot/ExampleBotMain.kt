@@ -14,8 +14,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
 import org.inthewaves.kotlinsignald.signalMessagesChannel
 import org.inthewaves.kotlinsignald.signalMessagesSharedFlow
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 private const val USAGE = "usage: pass in account ID registered with signald (E.164 format), and " +
     "optionally one of \"flow\" or \"channel\""
@@ -27,17 +28,17 @@ enum class ReceiverType {
 /**
  * A bot that responds back with the message sent iff the message is in a 1-1 conversation (i.e. not a group chat).
  */
-suspend fun runBot(args: Array<String>, context: CoroutineContext = EmptyCoroutineContext): Int {
+suspend fun main(args: Array<String>) {
     if (args.size !in 1..2) {
-        println(USAGE)
-        return 1
+        System.err.println(USAGE)
+        exitProcess(1)
     }
     val accountId = args.first()
     val signal = Signal(accountId)
     if (!signal.isRegisteredWithSignald) {
-        println("error: $accountId is not registered with signald")
-        println("available accounts: ${signal.listAccounts().accounts.map { it.accountId }}")
-        return 1
+        System.err.println("error: $accountId is not registered with signald")
+        System.err.println("available accounts: ${signal.listAccounts().accounts.map { it.accountId }}")
+        exitProcess(1)
     }
 
     val receiverType = if (args.size == 2) {
@@ -45,11 +46,11 @@ suspend fun runBot(args: Array<String>, context: CoroutineContext = EmptyCorouti
         try {
             ReceiverType.valueOf(upperType)
         } catch (e: IllegalArgumentException) {
-            println(
+            System.err.println(
                 "invalid receiver type ${upperType}. " +
                     "Valid types: ${ReceiverType.values().map { it.name.uppercase() }}"
             )
-            return 1
+            exitProcess(1)
         }
     } else {
         // default
@@ -59,8 +60,7 @@ suspend fun runBot(args: Array<String>, context: CoroutineContext = EmptyCorouti
     println("Starting example bot with type $receiverType. It will reply back with the text that is sent to it.")
     when (receiverType) {
         ReceiverType.CHANNEL -> coroutineScope {
-            val channel = signalMessagesChannel(signal, context = context)
-            println("Now waiting for messages")
+            val channel = signalMessagesChannel(signal)
             for (message in channel) {
                 val handleResult = handleMessage(message, signal)
                 if (handleResult is HandleResult.Failure) {
@@ -69,7 +69,7 @@ suspend fun runBot(args: Array<String>, context: CoroutineContext = EmptyCorouti
             }
         }
         ReceiverType.FLOW -> coroutineScope {
-            val flow = signalMessagesSharedFlow(signal, context = context)
+            val flow = signalMessagesSharedFlow(signal)
             // note: SharedFlow can have multiple collectors / subscribers
             flow.collect { message ->
                 val handleResult = handleMessage(message, signal)
@@ -79,7 +79,6 @@ suspend fun runBot(args: Array<String>, context: CoroutineContext = EmptyCorouti
             }
         }
     }
-    return 0
 }
 
 sealed class HandleResult {
@@ -100,28 +99,28 @@ private suspend fun handleMessage(
             println("Received message: $data")
             val source: JsonAddress? = data.source
             if (source == null) {
-                println("Incoming message is missing a source")
+                System.err.println("Incoming message is missing a source")
                 return HandleResult.Success
             }
 
             val body: String? = data.dataMessage?.body
             if (body.isNullOrBlank()) {
-                println("Incoming message is missing a body; not responding")
+                System.err.println("Incoming message is missing a body; not responding")
                 return HandleResult.Success
             }
 
             if (body == "crash") {
-                throw Error("I am crashing now!")
+                throw IOException("I am crashing now!")
             } else if (body == "fail") {
                 return HandleResult.Failure("Fail message received")
             }
 
             if (data.dataMessage?.groupV2 != null || data.dataMessage?.group != null) {
-                println("Incoming message is to a group; not responding")
+                System.err.println("Incoming message is to a group; not responding")
                 return HandleResult.Success
             }
 
-            delay(2000L)
+            delay(TimeUnit.SECONDS.toMillis(2))
             val sendResponse = signal.send(
                 recipient = Signal.Recipient.Individual(source),
                 messageBody = "You sent me this message:\n$body",
@@ -143,7 +142,7 @@ private suspend fun handleMessage(
             }
         }
         is ExceptionWrapper -> {
-            println("warning: received exception: ${message.data}")
+            System.err.println("warning: received exception: ${message.data}")
             return HandleResult.Success
         }
     }
