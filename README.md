@@ -228,10 +228,11 @@ The signald classes are generated from the signald protocol JSON file, located i
 
 To regenerate the classes, 
 
-* Replace `protocol.json` with a newer version
-* Run `./gradlew generateSignaldClasses`
-* Reformat the code with `./gradlew :client:ktlintFormat` 
-* Find and replace instances of <code>\`data\`:</code> with `data:`
+- Replace `protocol.json` with a newer version
+- Run `./gradlew generateSignaldClasses`
+- Reformat the code with `./gradlew ktlintFormat` 
+- Find and replace instances of <code>\`data\`:</code> with `data:`
+- Optimize imports with IDEA
 
 ### Compiling a dynamic library (experimental)
 

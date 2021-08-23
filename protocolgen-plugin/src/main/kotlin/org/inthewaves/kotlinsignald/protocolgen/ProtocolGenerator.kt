@@ -189,6 +189,7 @@ class ProtocolGenerator(
 
         val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
             .initializer("%M { encodeDefaults = false }", MemberName("kotlinx.serialization.json", "Json"))
+            .addAnnotation(ClassName("kotlin.native.concurrent", "ThreadLocal"))
             .addKdoc("The [Json] instance used to serialize and deserialize signald requests and responses.")
             .build()
         writePropertySpecFile(signaldJsonClassName, jsonProperty, genFilesDir)
