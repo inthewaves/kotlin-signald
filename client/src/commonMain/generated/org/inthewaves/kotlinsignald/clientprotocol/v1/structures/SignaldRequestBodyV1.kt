@@ -14,14 +14,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UnexpectedError
 
 /**
  * A base class for requests. This class is only used for serializing requests to the signald
- * socket; the [ResponseWrapper] type variable represents the response JSON structure.
+ * socket; the type of the [responseWrapperSerializer] property represents the response JSON structure.
  */
 @Serializable
-public sealed class SignaldRequestBodyV1<ResponseWrapper : JsonMessageWrapper<ResponseData>,
-    ResponseData> {
-    protected abstract val responseWrapperSerializer: KSerializer<ResponseWrapper>
+public sealed class SignaldRequestBodyV1<ResponseData> {
+    internal abstract val responseWrapperSerializer: KSerializer<out JsonMessageWrapper<*>>
 
-    protected abstract val responseDataSerializer: KSerializer<ResponseData>
+    internal abstract val responseDataSerializer: KSerializer<ResponseData>
 
     /**
      * The version to include in the request. As this class won't be used to deserialize the
@@ -67,13 +66,7 @@ public sealed class SignaldRequestBodyV1<ResponseWrapper : JsonMessageWrapper<Re
     internal open fun submit(socketCommunicator: SocketCommunicator, id: String = this.id):
         ResponseData {
         val requestJson = try {
-            SignaldJson.encodeToString(
-                serializer(
-                    responseWrapperSerializer,
-                    responseDataSerializer
-                ),
-                this
-            )
+            SignaldJson.encodeToString(serializer(responseDataSerializer), this)
         } catch (e: SerializationException) {
             throw RequestFailedException(
                 responseJsonString = null,

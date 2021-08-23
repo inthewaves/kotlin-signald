@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
  */
 @Serializable
 @SerialName("get_servers")
-public data class GetServers private constructor(
+internal data class GetServers private constructor(
     public override val data: ServerList? = null
 ) : JsonMessageWrapper<ServerList>()

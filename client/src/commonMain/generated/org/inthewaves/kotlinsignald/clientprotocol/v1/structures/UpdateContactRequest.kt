@@ -18,11 +18,11 @@ public data class UpdateContactRequest(
     public val color: String? = null,
     @SerialName("inbox_position")
     public val inboxPosition: Int? = null
-) : SignaldRequestBodyV1<UpdateContact, Profile>() {
-    protected override val responseWrapperSerializer: KSerializer<UpdateContact>
+) : SignaldRequestBodyV1<Profile>() {
+    internal override val responseWrapperSerializer: KSerializer<UpdateContact>
         get() = UpdateContact.serializer()
 
-    protected override val responseDataSerializer: KSerializer<Profile>
+    internal override val responseDataSerializer: KSerializer<Profile>
         get() = Profile.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =

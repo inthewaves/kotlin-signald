@@ -23,11 +23,11 @@ public data class GroupLinkInfoRequest(
      * "https://signal.group/#CjQKINH_GZhXhfifTcnBkaKTNRxW-hHKnGSq-cJNyPVqHRp8EhDUB7zjKNEl0NaULhsqJCX3"
      */
     public val uri: String
-) : SignaldRequestBodyV1<GroupLinkInfo, JsonGroupJoinInfo>() {
-    protected override val responseWrapperSerializer: KSerializer<GroupLinkInfo>
+) : SignaldRequestBodyV1<JsonGroupJoinInfo>() {
+    internal override val responseWrapperSerializer: KSerializer<GroupLinkInfo>
         get() = GroupLinkInfo.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupJoinInfo>
+    internal override val responseDataSerializer: KSerializer<JsonGroupJoinInfo>
         get() = JsonGroupJoinInfo.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

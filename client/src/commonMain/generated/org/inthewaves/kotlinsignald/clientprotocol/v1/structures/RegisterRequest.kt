@@ -31,11 +31,11 @@ public data class RegisterRequest(
      * servers but configurable at build time)
      */
     public val server: String? = null
-) : SignaldRequestBodyV1<Register, Account>() {
-    protected override val responseWrapperSerializer: KSerializer<Register>
+) : SignaldRequestBodyV1<Account>() {
+    internal override val responseWrapperSerializer: KSerializer<Register>
         get() = Register.serializer()
 
-    protected override val responseDataSerializer: KSerializer<Account>
+    internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =

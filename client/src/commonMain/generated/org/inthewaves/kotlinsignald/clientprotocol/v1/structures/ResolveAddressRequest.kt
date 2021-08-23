@@ -23,11 +23,11 @@ public data class ResolveAddressRequest(
      * The partial address, missing fields
      */
     public val partial: JsonAddress
-) : SignaldRequestBodyV1<ResolveAddress, JsonAddress>() {
-    protected override val responseWrapperSerializer: KSerializer<ResolveAddress>
+) : SignaldRequestBodyV1<JsonAddress>() {
+    internal override val responseWrapperSerializer: KSerializer<ResolveAddress>
         get() = ResolveAddress.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonAddress>
+    internal override val responseDataSerializer: KSerializer<JsonAddress>
         get() = JsonAddress.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): JsonAddress? =

@@ -23,11 +23,11 @@ public data class SendPaymentRequest(
     public val address: JsonAddress,
     public val payment: Payment,
     public val `when`: Long? = null
-) : SignaldRequestBodyV1<SendPayment, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<SendPayment>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<SendPayment>
         get() = SendPayment.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

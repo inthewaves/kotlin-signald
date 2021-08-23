@@ -17,11 +17,11 @@ public data class GetLinkedDevicesRequest(
      * Example: "+12024561414"
      */
     public val account: String
-) : SignaldRequestBodyV1<GetLinkedDevices, LinkedDevices>() {
-    protected override val responseWrapperSerializer: KSerializer<GetLinkedDevices>
+) : SignaldRequestBodyV1<LinkedDevices>() {
+    internal override val responseWrapperSerializer: KSerializer<GetLinkedDevices>
         get() = GetLinkedDevices.serializer()
 
-    protected override val responseDataSerializer: KSerializer<LinkedDevices>
+    internal override val responseDataSerializer: KSerializer<LinkedDevices>
         get() = LinkedDevices.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

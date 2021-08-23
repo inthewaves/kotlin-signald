@@ -10,11 +10,11 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ListGroups
 @SerialName("list_groups")
 public data class ListGroupsRequest(
     public val account: String
-) : SignaldRequestBodyV1<ListGroups, GroupList>() {
-    protected override val responseWrapperSerializer: KSerializer<ListGroups>
+) : SignaldRequestBodyV1<GroupList>() {
+    internal override val responseWrapperSerializer: KSerializer<ListGroups>
         get() = ListGroups.serializer()
 
-    protected override val responseDataSerializer: KSerializer<GroupList>
+    internal override val responseDataSerializer: KSerializer<GroupList>
         get() = GroupList.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupList? =

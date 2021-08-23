@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
  */
 @Serializable
 @SerialName("remove_linked_device")
-public data class RemoveLinkedDevice private constructor(
+internal data class RemoveLinkedDevice private constructor(
     public override val data: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

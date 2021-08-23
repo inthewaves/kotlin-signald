@@ -27,11 +27,11 @@ public data class TypingRequest(
      */
     public val typing: Boolean,
     public val `when`: Long? = null
-) : SignaldRequestBodyV1<Typing, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<Typing>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<Typing>
         get() = Typing.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinIn
  */
 @Serializable
 @SerialName("join_group")
-public data class JoinGroup private constructor(
+internal data class JoinGroup private constructor(
     public override val data: JsonGroupJoinInfo? = null
 ) : JsonMessageWrapper<JsonGroupJoinInfo>()

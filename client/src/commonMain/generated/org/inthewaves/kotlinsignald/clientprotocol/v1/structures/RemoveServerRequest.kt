@@ -10,11 +10,11 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 @SerialName("delete_server")
 public data class RemoveServerRequest(
     public val uuid: String? = null
-) : SignaldRequestBodyV1<DeleteServer, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<DeleteServer>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<DeleteServer>
         get() = DeleteServer.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

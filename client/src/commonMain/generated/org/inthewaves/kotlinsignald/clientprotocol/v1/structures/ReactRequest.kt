@@ -23,11 +23,11 @@ public data class ReactRequest(
     public val recipientGroupId: String? = null,
     public val reaction: JsonReaction,
     public val timestamp: Long? = null
-) : SignaldRequestBodyV1<React, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<React>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<React>
         get() = React.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

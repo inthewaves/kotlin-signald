@@ -13,6 +13,7 @@ import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.asClassName
 import kotlinx.datetime.Clock
 import kotlinx.serialization.KSerializer
@@ -393,41 +394,45 @@ class ProtocolGenerator(
             .toSet()
 
         for (protocolVersion in protocolVersions) {
+            val responseBodySealedClassName = protocolVersion.getResponseSealedClassName(packageName)
             if (protocolVersion in protocolDoc.types) {
                 writeTypeSpecFile(
                     protocolVersion.getResponseSealedClassName(packageName),
-                    createSealedClassTypeSpecBuilder(
-                        responseInterfaceClassName = protocolVersion.getResponseSealedClassName(packageName),
-                    ).build(),
+                    createSealedClassTypeSpecBuilder(responseInterfaceClassName = responseBodySealedClassName).build(),
                     genFilesDir
                 )
             }
 
             if (protocolVersion in protocolDoc.actions) {
-                val (responseWrapperClassName, _, responseWrapperTypeVar, responseDataTypeVar) =
-                    createJsonMessageWrapperInfo(protocolVersion)
+                val (responseWrapperClassName, _, responseDataTypeVar) = createJsonMessageWrapperInfo(protocolVersion)
 
                 writeTypeSpecFile(
                     protocolVersion.getRequestSealedClassName(packageName),
                     createSealedClassTypeSpecBuilder(
                         responseInterfaceClassName = protocolVersion.getRequestSealedClassName(packageName),
-                        typeVariables = arrayOf(responseWrapperTypeVar, responseDataTypeVar),
+                        typeVariables = arrayOf(responseDataTypeVar),
                     ).apply {
-                        addKdoc(
-                            "%L",
-                            "A base class for requests. This class is only used for serializing requests to the signald " +
-                                    "socket; the [${responseWrapperTypeVar.name}] type variable represents the response " +
-                                    "JSON structure."
-                        )
-
                         val responseWrapperSerializerProperty = createSerializerProperty(
-                            RESPONSE_WRAPPER_SERIALIZER_PROPERTY_NAME, responseWrapperTypeVar, override = false
+                            propertyName = RESPONSE_WRAPPER_SERIALIZER_PROPERTY_NAME,
+                            type = WildcardTypeName.producerOf(
+                                responseWrapperClassName.parameterizedBy(STAR /*responseBodySealedClassName*/)
+                            ),
+                            override = false
                         )
                         val responseDataSerializerProperty = createSerializerProperty(
-                            RESPONSE_DATA_SERIALIZER_PROPERTY_NAME, responseDataTypeVar, override = false
+                            propertyName = RESPONSE_DATA_SERIALIZER_PROPERTY_NAME,
+                            type = responseDataTypeVar,
+                            override = false
                         )
                         addProperty(responseWrapperSerializerProperty)
                         addProperty(responseDataSerializerProperty)
+
+                        addKdoc(
+                            "%L",
+                            "A base class for requests. This class is only used for serializing requests to the " +
+                                "signald socket; the type of the [${responseWrapperSerializerProperty.name}] " +
+                                "property represents the response JSON structure."
+                        )
 
                         val responseVerificationFunSpec = createResponseResolveFunSpec(
                             protocolVersion,
@@ -520,7 +525,7 @@ class ProtocolGenerator(
                                 .addCode(
                                     """
                                     val requestJson = try { 
-                                        %T.encodeToString(serializer(%L, %L), this)
+                                        %T.encodeToString(serializer(%L), this)
                                     } catch (e: %T) {
                                         throw %T(
                                             responseJsonString = null, 
@@ -531,7 +536,7 @@ class ProtocolGenerator(
                                     
                                 """.trimIndent(),
                                     signaldJsonClassName,
-                                    responseWrapperSerializerProperty.name, responseDataSerializerProperty.name,
+                                    responseDataSerializerProperty.name,
                                     SerializationException::class,
                                     requestFailedExceptionClassName
                                 )
@@ -687,7 +692,7 @@ class ProtocolGenerator(
                     }
 
                     superclass(jsonMsgWrapperClassName.parameterizedBy(responseClassName))
-                    addModifiers(KModifier.DATA)
+                    addModifiers(KModifier.DATA, KModifier.INTERNAL)
                     addAnnotation(Serializable::class)
                     addAnnotation(
                         AnnotationSpec.builder(SerialName::class)
@@ -763,10 +768,7 @@ class ProtocolGenerator(
                         responseActionInfo = requestTypes[structureTypeName]!!
                         val (actionWrapperType, actionResponseDataType, actionName) = responseActionInfo
                         superclass(
-                            version.getRequestSealedClassName(packageName).parameterizedBy(
-                                actionWrapperType,
-                                actionResponseDataType
-                            )
+                            version.getRequestSealedClassName(packageName).parameterizedBy(actionResponseDataType)
                         )
                         addProperty(
                             createSerializerProperty(
@@ -923,8 +925,10 @@ class ProtocolGenerator(
 
     private fun createSerializerProperty(propertyName: String, type: TypeName, override: Boolean): PropertySpec {
         return PropertySpec.builder(propertyName, KSerializer::class.asClassName().parameterizedBy(type)).apply {
-            addModifiers(KModifier.PROTECTED)
-            if (override) {
+            addModifiers(KModifier.INTERNAL)
+            if (!override) {
+                addModifiers(KModifier.ABSTRACT)
+            } else {
                 addModifiers(KModifier.OVERRIDE)
                 getter(
                     FunSpec.getterBuilder().apply {
@@ -949,8 +953,6 @@ class ProtocolGenerator(
                         }
                     }.build()
                 )
-            } else {
-                addModifiers(KModifier.ABSTRACT)
             }
         }.build()
     }
@@ -958,7 +960,6 @@ class ProtocolGenerator(
     data class JsonMessageWrapperInfo(
         val className: ClassName,
         val typeSpec: TypeSpec,
-        val responseWrapperTypeVar: TypeVariableName,
         val responseDataTypeVar: TypeVariableName,
     )
 
@@ -972,22 +973,23 @@ class ProtocolGenerator(
 
         data class ParamInfo(val typeSpec: TypeName, val isAbstract: Boolean)
 
-        val jsonMessageWrapperFieldsMap = mapOf(
-            "id" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
-            // omit `type` field, since it will be used by kotlinx.serialization to discriminate between subclasses
-            // TODO: Use @JsonClassDiscriminator in kotlinx.serialization 1.3.0 to make it more clear that the type
-            //  field is used as a discriminator.
-            "data" to ParamInfo(responseTypeVariable.copy(nullable = true), isAbstract = true),
-            "error" to ParamInfo(JsonObject::class.asClassName().copy(nullable = true), isAbstract = false),
-            "exception" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
-            "error_type" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
-            "version" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
-        )
         val jsonMessageWrapperTypeSpec = TypeSpec.classBuilder(jsonMessageWrapperClassName).apply {
             addTypeVariable(responseTypeVariable)
             addModifiers(KModifier.SEALED)
             addAnnotation(Serializable::class)
             addKdoc("%L", "Encapsulates the response schema from the signald socket.")
+
+            val jsonMessageWrapperFieldsMap = mapOf(
+                "id" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
+                // omit `type` field, since it will be used by kotlinx.serialization to discriminate between subclasses
+                // TODO: Use @JsonClassDiscriminator in kotlinx.serialization 1.3.0 to make it more clear that the type
+                //  field is used as a discriminator.
+                "data" to ParamInfo(responseTypeVariable.copy(nullable = true), isAbstract = true),
+                "error" to ParamInfo(JsonObject::class.asClassName().copy(nullable = true), isAbstract = false),
+                "exception" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
+                "error_type" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
+                "version" to ParamInfo(String::class.asClassName().copy(nullable = true), isAbstract = false),
+            )
 
             for ((fieldName, paramInfo) in jsonMessageWrapperFieldsMap) {
                 val propertyName = fieldName.snakeDashToCamelCase()
@@ -1023,14 +1025,9 @@ class ProtocolGenerator(
         }.build()
 
         val responseTypeVar = TypeVariableName("ResponseData")
-        val responseWrapperTypeVar = TypeVariableName(
-            "ResponseWrapper",
-            jsonMessageWrapperClassName.parameterizedBy(responseTypeVar)
-        )
         return JsonMessageWrapperInfo(
             jsonMessageWrapperClassName,
             jsonMessageWrapperTypeSpec,
-            responseWrapperTypeVar,
             responseTypeVar
         )
     }

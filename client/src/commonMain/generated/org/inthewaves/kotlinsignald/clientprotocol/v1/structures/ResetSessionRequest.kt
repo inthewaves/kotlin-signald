@@ -22,11 +22,11 @@ public data class ResetSessionRequest(
      */
     public val address: JsonAddress,
     public val timestamp: Long? = null
-) : SignaldRequestBodyV1<ResetSession, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<ResetSession>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<ResetSession>
         get() = ResetSession.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

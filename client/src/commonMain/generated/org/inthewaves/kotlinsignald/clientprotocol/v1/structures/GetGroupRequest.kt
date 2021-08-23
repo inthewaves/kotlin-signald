@@ -26,11 +26,11 @@ public data class GetGroupRequest(
      * the latest known revision, default value (-1) forces fetch from server
      */
     public val revision: Int? = null
-) : SignaldRequestBodyV1<GetGroup, JsonGroupV2Info>() {
-    protected override val responseWrapperSerializer: KSerializer<GetGroup>
+) : SignaldRequestBodyV1<JsonGroupV2Info>() {
+    internal override val responseWrapperSerializer: KSerializer<GetGroup>
         get() = GetGroup.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupV2Info>
+    internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

@@ -8,11 +8,11 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 
 @Serializable
 @SerialName("get_servers")
-public class GetServersRequest : SignaldRequestBodyV1<GetServers, ServerList>() {
-    protected override val responseWrapperSerializer: KSerializer<GetServers>
+public class GetServersRequest : SignaldRequestBodyV1<ServerList>() {
+    internal override val responseWrapperSerializer: KSerializer<GetServers>
         get() = GetServers.serializer()
 
-    protected override val responseDataSerializer: KSerializer<ServerList>
+    internal override val responseDataSerializer: KSerializer<ServerList>
         get() = ServerList.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): ServerList? =

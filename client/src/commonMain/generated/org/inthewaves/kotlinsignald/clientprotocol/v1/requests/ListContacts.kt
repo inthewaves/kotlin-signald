@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileList
  */
 @Serializable
 @SerialName("list_contacts")
-public data class ListContacts private constructor(
+internal data class ListContacts private constructor(
     public override val data: ProfileList? = null
 ) : JsonMessageWrapper<ProfileList>()

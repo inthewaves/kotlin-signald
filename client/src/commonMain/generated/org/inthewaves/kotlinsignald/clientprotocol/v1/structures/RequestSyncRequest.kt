@@ -33,11 +33,11 @@ public data class RequestSyncRequest(
      * request block list sync (default true)
      */
     public val blocked: Boolean? = null
-) : SignaldRequestBodyV1<RequestSync, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<RequestSync>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<RequestSync>
         get() = RequestSync.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

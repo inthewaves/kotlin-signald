@@ -21,11 +21,11 @@ public data class AcceptInvitationRequest(
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val groupID: String
-) : SignaldRequestBodyV1<AcceptInvitation, JsonGroupV2Info>() {
-    protected override val responseWrapperSerializer: KSerializer<AcceptInvitation>
+) : SignaldRequestBodyV1<JsonGroupV2Info>() {
+    internal override val responseWrapperSerializer: KSerializer<AcceptInvitation>
         get() = AcceptInvitation.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupV2Info>
+    internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

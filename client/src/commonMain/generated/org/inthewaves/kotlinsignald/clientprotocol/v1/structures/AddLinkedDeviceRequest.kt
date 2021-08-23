@@ -23,11 +23,11 @@ public data class AddLinkedDeviceRequest(
      * "tsdevice:/?uuid=jAaZ5lxLfh7zVw5WELd6-Q&pub_key=BfFbjSwmAgpVJBXUdfmSgf61eX3a%2Bq9AoxAVpl1HUap9"
      */
     public val uri: String
-) : SignaldRequestBodyV1<AddDevice, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<AddDevice>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<AddDevice>
         get() = AddDevice.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

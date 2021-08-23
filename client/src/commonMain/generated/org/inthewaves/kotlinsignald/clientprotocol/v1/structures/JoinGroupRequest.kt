@@ -24,11 +24,11 @@ public data class JoinGroupRequest(
      * "https://signal.group/#CjQKINH_GZhXhfifTcnBkaKTNRxW-hHKnGSq-cJNyPVqHRp8EhDUB7zjKNEl0NaULhsqJCX3"
      */
     public val uri: String
-) : SignaldRequestBodyV1<JoinGroup, JsonGroupJoinInfo>() {
-    protected override val responseWrapperSerializer: KSerializer<JoinGroup>
+) : SignaldRequestBodyV1<JsonGroupJoinInfo>() {
+    internal override val responseWrapperSerializer: KSerializer<JoinGroup>
         get() = JoinGroup.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupJoinInfo>
+    internal override val responseDataSerializer: KSerializer<JsonGroupJoinInfo>
         get() = JsonGroupJoinInfo.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

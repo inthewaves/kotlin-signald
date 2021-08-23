@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.EmptyResponse
  */
 @Serializable
 @SerialName("set_device_name")
-public data class SetDeviceName private constructor(
+internal data class SetDeviceName private constructor(
     public override val data: EmptyResponse? = null
 ) : JsonMessageWrapper<EmptyResponse>()

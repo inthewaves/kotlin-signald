@@ -24,11 +24,11 @@ public data class MarkReadRequest(
      */
     public val timestamps: List<Long>,
     public val `when`: Long? = null
-) : SignaldRequestBodyV1<MarkRead, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<MarkRead>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<MarkRead>
         get() = MarkRead.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

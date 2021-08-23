@@ -19,11 +19,11 @@ public data class LeaveGroupRequest(
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val groupID: String
-) : SignaldRequestBodyV1<LeaveGroup, GroupInfo>() {
-    protected override val responseWrapperSerializer: KSerializer<LeaveGroup>
+) : SignaldRequestBodyV1<GroupInfo>() {
+    internal override val responseWrapperSerializer: KSerializer<LeaveGroup>
         get() = LeaveGroup.serializer()
 
-    protected override val responseDataSerializer: KSerializer<GroupInfo>
+    internal override val responseDataSerializer: KSerializer<GroupInfo>
         get() = GroupInfo.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =

@@ -4,7 +4,6 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
-import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile
 
 @Serializable
 @SerialName("set_profile")
@@ -41,12 +40,12 @@ public data class SetProfile(
      */
     @SerialName("mobilecoin_address")
     public val mobilecoinAddress: String? = null
-) : SignaldRequestBodyV1<SetProfile, EmptyResponse>() {
-    protected override val responseWrapperSerializer:
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer:
         KSerializer<org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile>
             get() = org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

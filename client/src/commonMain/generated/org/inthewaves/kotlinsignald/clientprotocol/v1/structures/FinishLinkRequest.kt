@@ -18,11 +18,11 @@ public data class FinishLinkRequest(
     public val deviceName: String? = null,
     @SerialName("session_id")
     public val sessionId: String? = null
-) : SignaldRequestBodyV1<FinishLink, Account>() {
-    protected override val responseWrapperSerializer: KSerializer<FinishLink>
+) : SignaldRequestBodyV1<Account>() {
+    internal override val responseWrapperSerializer: KSerializer<FinishLink>
         get() = FinishLink.serializer()
 
-    protected override val responseDataSerializer: KSerializer<Account>
+    internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =

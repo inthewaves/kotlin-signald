@@ -15,11 +15,11 @@ public data class ListContactsRequest(
      * false (default), block until all pending profiles have been retrieved.
      */
     public val async: Boolean? = null
-) : SignaldRequestBodyV1<ListContacts, ProfileList>() {
-    protected override val responseWrapperSerializer: KSerializer<ListContacts>
+) : SignaldRequestBodyV1<ProfileList>() {
+    internal override val responseWrapperSerializer: KSerializer<ListContacts>
         get() = ListContacts.serializer()
 
-    protected override val responseDataSerializer: KSerializer<ProfileList>
+    internal override val responseDataSerializer: KSerializer<ProfileList>
         get() = ProfileList.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): ProfileList? =

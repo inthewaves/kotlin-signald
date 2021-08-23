@@ -27,11 +27,11 @@ public data class SendRequest(
     public val quote: JsonQuote? = null,
     public val timestamp: Long? = null,
     public val mentions: List<JsonMention> = emptyList()
-) : SignaldRequestBodyV1<Send, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<Send>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

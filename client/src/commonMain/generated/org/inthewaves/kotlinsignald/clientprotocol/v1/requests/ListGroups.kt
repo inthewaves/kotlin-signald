@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupList
  */
 @Serializable
 @SerialName("list_groups")
-public data class ListGroups private constructor(
+internal data class ListGroups private constructor(
     public override val data: GroupList? = null
 ) : JsonMessageWrapper<GroupList>()

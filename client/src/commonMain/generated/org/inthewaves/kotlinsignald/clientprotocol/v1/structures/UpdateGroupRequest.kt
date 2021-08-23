@@ -50,11 +50,11 @@ public data class UpdateGroupRequest(
      * regenerate the group link password, invalidating the old one
      */
     public val resetLink: Boolean? = null
-) : SignaldRequestBodyV1<UpdateGroup, GroupInfo>() {
-    protected override val responseWrapperSerializer: KSerializer<UpdateGroup>
+) : SignaldRequestBodyV1<GroupInfo>() {
+    internal override val responseWrapperSerializer: KSerializer<UpdateGroup>
         get() = UpdateGroup.serializer()
 
-    protected override val responseDataSerializer: KSerializer<GroupInfo>
+    internal override val responseDataSerializer: KSerializer<GroupInfo>
         get() = GroupInfo.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =

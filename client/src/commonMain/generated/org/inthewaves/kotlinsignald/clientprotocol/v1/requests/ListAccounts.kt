@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountList
  */
 @Serializable
 @SerialName("list_accounts")
-public data class ListAccounts private constructor(
+internal data class ListAccounts private constructor(
     public override val data: AccountList? = null
 ) : JsonMessageWrapper<AccountList>()

@@ -21,11 +21,11 @@ public data class UnsubscribeRequest(
      * Example: "+12024561414"
      */
     public val account: String
-) : SignaldRequestBodyV1<Unsubscribe, SubscriptionResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<Unsubscribe>
+) : SignaldRequestBodyV1<SubscriptionResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<Unsubscribe>
         get() = Unsubscribe.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SubscriptionResponse>
+    internal override val responseDataSerializer: KSerializer<SubscriptionResponse>
         get() = SubscriptionResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

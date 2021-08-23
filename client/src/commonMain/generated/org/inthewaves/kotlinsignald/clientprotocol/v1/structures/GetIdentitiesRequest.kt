@@ -21,11 +21,11 @@ public data class GetIdentitiesRequest(
      * address to get keys for
      */
     public val address: JsonAddress
-) : SignaldRequestBodyV1<GetIdentities, IdentityKeyList>() {
-    protected override val responseWrapperSerializer: KSerializer<GetIdentities>
+) : SignaldRequestBodyV1<IdentityKeyList>() {
+    internal override val responseWrapperSerializer: KSerializer<GetIdentities>
         get() = GetIdentities.serializer()
 
-    protected override val responseDataSerializer: KSerializer<IdentityKeyList>
+    internal override val responseDataSerializer: KSerializer<IdentityKeyList>
         get() = IdentityKeyList.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

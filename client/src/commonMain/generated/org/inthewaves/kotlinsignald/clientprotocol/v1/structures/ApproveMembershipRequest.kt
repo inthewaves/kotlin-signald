@@ -25,11 +25,11 @@ public data class ApproveMembershipRequest(
      * list of requesting members to approve
      */
     public val members: List<JsonAddress>
-) : SignaldRequestBodyV1<ApproveMembership, JsonGroupV2Info>() {
-    protected override val responseWrapperSerializer: KSerializer<ApproveMembership>
+) : SignaldRequestBodyV1<JsonGroupV2Info>() {
+    internal override val responseWrapperSerializer: KSerializer<ApproveMembership>
         get() = ApproveMembership.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupV2Info>
+    internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

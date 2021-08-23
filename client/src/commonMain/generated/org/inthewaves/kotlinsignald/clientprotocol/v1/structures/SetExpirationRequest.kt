@@ -27,11 +27,11 @@ public data class SetExpirationRequest(
      * Example: 604800
      */
     public val expiration: Int
-) : SignaldRequestBodyV1<SetExpiration, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<SetExpiration>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<SetExpiration>
         get() = SetExpiration.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

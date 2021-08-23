@@ -11,11 +11,11 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ListAccounts
  */
 @Serializable
 @SerialName("list_accounts")
-public class ListAccountsRequest : SignaldRequestBodyV1<ListAccounts, AccountList>() {
-    protected override val responseWrapperSerializer: KSerializer<ListAccounts>
+public class ListAccountsRequest : SignaldRequestBodyV1<AccountList>() {
+    internal override val responseWrapperSerializer: KSerializer<ListAccounts>
         get() = ListAccounts.serializer()
 
-    protected override val responseDataSerializer: KSerializer<AccountList>
+    internal override val responseDataSerializer: KSerializer<AccountList>
         get() = AccountList.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): AccountList? =

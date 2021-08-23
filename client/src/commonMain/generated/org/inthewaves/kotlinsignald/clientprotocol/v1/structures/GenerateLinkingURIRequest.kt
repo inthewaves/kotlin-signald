@@ -18,11 +18,11 @@ public data class GenerateLinkingURIRequest(
      * servers but configurable at build time)
      */
     public val server: String? = null
-) : SignaldRequestBodyV1<GenerateLinkingUri, LinkingURI>() {
-    protected override val responseWrapperSerializer: KSerializer<GenerateLinkingUri>
+) : SignaldRequestBodyV1<LinkingURI>() {
+    internal override val responseWrapperSerializer: KSerializer<GenerateLinkingUri>
         get() = GenerateLinkingUri.serializer()
 
-    protected override val responseDataSerializer: KSerializer<LinkingURI>
+    internal override val responseDataSerializer: KSerializer<LinkingURI>
         get() = LinkingURI.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): LinkingURI? =

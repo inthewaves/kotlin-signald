@@ -22,11 +22,11 @@ public data class DeleteAccountRequest(
      * delete account information from the server as well (default false)
      */
     public val server: Boolean? = null
-) : SignaldRequestBodyV1<DeleteAccount, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<DeleteAccount>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<DeleteAccount>
         get() = DeleteAccount.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMess
  */
 @Serializable
 @SerialName("version")
-public data class Version private constructor(
+internal data class Version private constructor(
     public override val data: JsonVersionMessage? = null
 ) : JsonMessageWrapper<JsonVersionMessage>()

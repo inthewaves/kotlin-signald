@@ -23,11 +23,11 @@ public data class SubscribeRequest(
      * Example: "+12024561414"
      */
     public val account: String
-) : SignaldRequestBodyV1<Subscribe, SubscriptionResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<Subscribe>
+) : SignaldRequestBodyV1<SubscriptionResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<Subscribe>
         get() = Subscribe.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SubscriptionResponse>
+    internal override val responseDataSerializer: KSerializer<SubscriptionResponse>
         get() = SubscriptionResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

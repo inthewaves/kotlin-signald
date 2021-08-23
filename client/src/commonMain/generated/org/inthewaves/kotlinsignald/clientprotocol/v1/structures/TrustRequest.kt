@@ -38,11 +38,11 @@ public data class TrustRequest(
      */
     @SerialName("trust_level")
     public val trustLevel: String? = null
-) : SignaldRequestBodyV1<Trust, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<Trust>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<Trust>
         get() = Trust.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

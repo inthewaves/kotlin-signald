@@ -22,11 +22,11 @@ public data class RemoveLinkedDeviceRequest(
      * Example: 3
      */
     public val deviceId: Long
-) : SignaldRequestBodyV1<RemoveLinkedDevice, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<RemoveLinkedDevice>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<RemoveLinkedDevice>
         get() = RemoveLinkedDevice.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

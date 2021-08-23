@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
  */
 @Serializable
 @SerialName("verify")
-public data class Verify private constructor(
+internal data class Verify private constructor(
     public override val data: Account? = null
 ) : JsonMessageWrapper<Account>()

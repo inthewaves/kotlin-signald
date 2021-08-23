@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
  */
 @Serializable
 @SerialName("leave_group")
-public data class LeaveGroup private constructor(
+internal data class LeaveGroup private constructor(
     public override val data: GroupInfo? = null
 ) : JsonMessageWrapper<GroupInfo>()

@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
  */
 @Serializable
 @SerialName("set_expiration")
-public data class SetExpiration private constructor(
+internal data class SetExpiration private constructor(
     public override val data: SendResponse? = null
 ) : JsonMessageWrapper<SendResponse>()

@@ -25,11 +25,11 @@ public data class GetProfileRequest(
      * the address to look up
      */
     public val address: JsonAddress
-) : SignaldRequestBodyV1<GetProfile, Profile>() {
-    protected override val responseWrapperSerializer: KSerializer<GetProfile>
+) : SignaldRequestBodyV1<Profile>() {
+    internal override val responseWrapperSerializer: KSerializer<GetProfile>
         get() = GetProfile.serializer()
 
-    protected override val responseDataSerializer: KSerializer<Profile>
+    internal override val responseDataSerializer: KSerializer<Profile>
         get() = Profile.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =

@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
  */
 @Serializable
 @SerialName("register")
-public data class Register private constructor(
+internal data class Register private constructor(
     public override val data: Account? = null
 ) : JsonMessageWrapper<Account>()

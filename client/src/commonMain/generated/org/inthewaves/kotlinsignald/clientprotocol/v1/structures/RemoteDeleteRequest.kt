@@ -29,11 +29,11 @@ public data class RemoteDeleteRequest(
      */
     public val group: String? = null,
     public val timestamp: Long
-) : SignaldRequestBodyV1<RemoteDelete, SendResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<RemoteDelete>
+) : SignaldRequestBodyV1<SendResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<RemoteDelete>
         get() = RemoteDelete.serializer()
 
-    protected override val responseDataSerializer: KSerializer<SendResponse>
+    internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

@@ -34,11 +34,11 @@ public data class CreateGroupRequest(
      */
     @SerialName("member_role")
     public val memberRole: String? = null
-) : SignaldRequestBodyV1<CreateGroup, JsonGroupV2Info>() {
-    protected override val responseWrapperSerializer: KSerializer<CreateGroup>
+) : SignaldRequestBodyV1<JsonGroupV2Info>() {
+    internal override val responseWrapperSerializer: KSerializer<CreateGroup>
         get() = CreateGroup.serializer()
 
-    protected override val responseDataSerializer: KSerializer<JsonGroupV2Info>
+    internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

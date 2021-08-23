@@ -23,11 +23,11 @@ public data class VerifyRequest(
      * Example: "555555"
      */
     public val code: String
-) : SignaldRequestBodyV1<Verify, Account>() {
-    protected override val responseWrapperSerializer: KSerializer<Verify>
+) : SignaldRequestBodyV1<Account>() {
+    internal override val responseWrapperSerializer: KSerializer<Verify>
         get() = Verify.serializer()
 
-    protected override val responseDataSerializer: KSerializer<Account>
+    internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =

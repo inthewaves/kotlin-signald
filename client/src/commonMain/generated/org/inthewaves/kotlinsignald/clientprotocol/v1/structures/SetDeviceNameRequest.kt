@@ -22,11 +22,11 @@ public data class SetDeviceNameRequest(
      */
     @SerialName("device_name")
     public val deviceName: String? = null
-) : SignaldRequestBodyV1<SetDeviceName, EmptyResponse>() {
-    protected override val responseWrapperSerializer: KSerializer<SetDeviceName>
+) : SignaldRequestBodyV1<EmptyResponse>() {
+    internal override val responseWrapperSerializer: KSerializer<SetDeviceName>
         get() = SetDeviceName.serializer()
 
-    protected override val responseDataSerializer: KSerializer<EmptyResponse>
+    internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):

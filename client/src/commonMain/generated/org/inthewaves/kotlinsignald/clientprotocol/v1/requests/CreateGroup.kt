@@ -11,6 +11,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
  */
 @Serializable
 @SerialName("create_group")
-public data class CreateGroup private constructor(
+internal data class CreateGroup private constructor(
     public override val data: JsonGroupV2Info? = null
 ) : JsonMessageWrapper<JsonGroupV2Info>()
