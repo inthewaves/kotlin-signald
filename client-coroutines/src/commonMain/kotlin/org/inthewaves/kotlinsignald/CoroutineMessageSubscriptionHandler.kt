@@ -1,77 +1,77 @@
 package org.inthewaves.kotlinsignald
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
- * Creates a coroutine-based message handler. Messages can be received by collecting from the [messages] flow.
- * Unsubscription and closing of the socket is handled by calling [close] or cancelling the given [coroutineScope].
- *
- * Note that the [messages] flow is hot.
- *
  * @param signal The [Signal] instance. Must be associated with an account registered with signald.
- * @param extraBufferCapacity Size of the buffer for emissions to the messages shared flow, allowing slow subscribers
- * to get values from the buffer without suspending emitters. The buffer space determines how much slow subscribers can
- * lag from the fast ones. (optional, cannot be negative, defaults to 25)
- * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine.
+ * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine. This is used to cancel
+ * the handler.
  */
-public class CoroutineMessageSubscriptionHandler(
+public abstract class CoroutineMessageSubscriptionHandler(
     signal: Signal,
-    private val coroutineScope: CoroutineScope,
-    extraBufferCapacity: Int = 25,
+    coroutineScope: CoroutineScope,
+    context: CoroutineContext = EmptyCoroutineContext,
 ) : MessageSubscriptionHandler(signal) {
 
-    private val _messages = MutableSharedFlow<ClientMessageWrapper>(extraBufferCapacity = extraBufferCapacity)
+    protected val emissionJob: Job = coroutineScope.launch(context) {
+        while (isActive) {
+            val newMessage: ClientMessageWrapper = try {
+                subscription.nextMessage()
+                    ?: run {
+                        cancel("Message receive socket is closed --- no more incoming messages")
+                        awaitCancellation()
+                    }
+            } catch (e: SignaldException) {
+                val exceptionMessage = if (e is RequestFailedException && e.responseJsonString != null) {
+                    "unable to serialize an incoming message " +
+                        "(exceptionName = ${e::class.simpleName}, message = ${e.message}): " +
+                        "${e.responseJsonString}"
+                } else {
+                    "unable to serialize an incoming message " +
+                        "(exceptionName = ${e::class.simpleName}, message = ${e.message})"
+                }
+
+                ExceptionWrapper(data = ExceptionWrapper.Data(message = exceptionMessage, unexpected = true))
+            }
+            if (!sendMessage(newMessage)) {
+                break
+            }
+        }
+    }.also {
+        it.invokeOnCompletion {
+            super.close()
+            onCompletion()
+        }
+    }
 
     /**
-     * A hot [SharedFlow] of incoming messages. As [ClientMessageWrapper] is a sealed type, using a `when` statement on
-     * the message will be exhaustive.
+     * Sends a message to subscribers and returns whether sending was successful. If false is returned, the
+     * emission job will finish.
      */
-    public val messages: SharedFlow<ClientMessageWrapper> = _messages.asSharedFlow()
+    protected abstract suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean
 
-    init {
-        coroutineScope.launch {
-            while (isActive) {
-                val newMessage: ClientMessageWrapper? = try {
-                    subscription.nextMessage()
-                } catch (e: SignaldException) {
-                    val exceptionMessage = if (e is RequestFailedException && e.responseJsonString != null) {
-                        "unable to serialize an incoming message " +
-                            "(exceptionName = ${e::class.simpleName}, message = ${e.message}): " +
-                            "${e.responseJsonString}"
-                    } else {
-                        "unable to serialize an incoming message " +
-                            "(exceptionName = ${e::class.simpleName}, message = ${e.message})"
-                    }
-                    _messages.emit(
-                        ExceptionWrapper(
-                            data = ExceptionWrapper.Data(message = exceptionMessage, unexpected = true)
-                        )
-                    )
-                    continue
-                }
-                if (newMessage == null) {
-                    cancel("Message receive socket is closed --- no more incoming messages")
-                    awaitCancellation()
-                }
-
-                _messages.emit(newMessage)
-            }
-        }.invokeOnCompletion { super.close() }
-    }
+    /**
+     * A handler function that is synchronously invoked once on completion of the message emission job.
+     */
+    protected abstract fun onCompletion()
 
     override fun close() {
         super.close()
-        coroutineScope.cancel(message = "Closing the message subscription handler")
+        emissionJob.cancel(message = "Closing the message subscription handler")
+    }
+
+    public companion object {
+        internal const val DEFAULT_BUFFER_CAPACITY = 25
     }
 }

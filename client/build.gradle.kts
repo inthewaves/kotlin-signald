@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
     id("kotlinx-atomicfu")
     id("org.jetbrains.dokka")
     id("org.inthewaves.kotlin-signald-protocolgen")

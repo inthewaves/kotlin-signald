@@ -3,14 +3,13 @@ import java.net.URI
 
 plugins {
     id("org.jetbrains.dokka") version "1.5.0"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.0"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.0" apply false
     `maven-publish`
     signing
 }
 
 buildscript {
     repositories {
-        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -33,7 +32,15 @@ allprojects {
 }
 
 subprojects {
-    afterEvaluate {
+    afterEvaluate setupPublish@{
+        if (name !in arrayOf("client", "client-coroutines")) {
+            return@setupPublish
+        }
+
+        tasks.withType<AbstractPublishToMaven> {
+            dependsOn(tasks.getByName("apiCheck"), tasks.getByName("allTests"))
+        }
+
         val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
             dependsOn(tasks.dokkaHtml)
             from(tasks.dokkaHtml.flatMap { it.outputDirectory })
@@ -101,14 +108,6 @@ subprojects {
                 useGpgCmd()
             }
             sign(publishing.publications)
-        }
-
-        tasks.withType<PublishToMavenRepository> {
-            dependsOn(tasks.getByName("apiCheck"), tasks.getByName("allTests"))
-        }
-
-        tasks.withType<PublishToMavenLocal> {
-            dependsOn(tasks.getByName("apiCheck"), tasks.getByName("allTests"))
         }
     }
 }

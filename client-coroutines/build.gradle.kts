@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
     `java-library`
     signing
@@ -47,7 +48,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":client"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
         val commonTest by getting {

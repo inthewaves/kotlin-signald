@@ -7,7 +7,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
  *
  * @constructor Creates a new handler by using the [signal] instance to subscribe via [Signal.subscribe].
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
- * @throws IllegalArgumentException if the [subscription]'s socket is already in use.
  */
 public abstract class MessageSubscriptionHandler @Throws(SignaldException::class) constructor(signal: Signal) {
     protected val subscription: Signal.Subscription = signal.subscribe()
