@@ -22,7 +22,7 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
     val socketPathToUse: Path = try {
         if (customPath != null) {
             customPath
-                .let { Path.of(it) }
+                .let { Paths.get(it) }
                 .takeIf(::isPathReadableAndWritable)
         } else {
             Paths.get(System.getenv("XDG_RUNTIME_DIR"), "signald/signald.sock")

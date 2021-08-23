@@ -9,7 +9,7 @@ and requests. The classes are generated from the signald protocol document
 
 The following platforms are supported:
 
-- JVM
+- JVM (JDK 1.8 or higher)
 
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.
@@ -19,6 +19,9 @@ Linux x64 and JavaScript (Node.js) support are incomplete.
 ## Usage
 
 > This library is experimental, with the API subject to breaking changes.
+
+This library is compatible with the signald version in the [protocol.json](./client/protocol.json) file, which
+is used to generate the data classes for requests and responses.
 
 This project comes with a client library for signald (the `client` module). There are also coroutine-based message
 subscription handlers, which is provided as optional module (`client-coroutines`) to accommodate cases where a custom

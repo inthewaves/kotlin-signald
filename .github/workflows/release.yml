@@ -9,22 +9,14 @@ jobs:
   publish_maven:
     runs-on: macos-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '8'
           distribution: 'adopt'
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Cache gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache: 'gradle'
       - name: Cache konan
         uses: actions/cache@v2
         with:
@@ -39,8 +31,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        # Use --no-daemon to allow caching of Gradle caches without running into locks.
-        run: ./gradlew --no-daemon publishAllPublicationsToSonatypeRepository
+        run: ./gradlew publishAllPublicationsToSonatypeRepository
 
 env:
   CI: true
