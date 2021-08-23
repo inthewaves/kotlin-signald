@@ -13,7 +13,9 @@ communicating with UNIX sockets, JVM and JavaScript are effectively limited to U
 
 > This library is experimental, with the API subject to breaking changes.
 
-This project comes with a client library and a coroutine-based message receiver.
+This project comes with a client library for signald (the `client` module). There is also a coroutine-based message
+subscription handler (the `client-coroutines` module), which is optional if a custom message subscription handler is
+desired.
 
 It's recommended to ensure that a message receiver is active at all times, because signald will not process incoming
 messages without any client subscriptions.
@@ -173,10 +175,6 @@ subscribers to the flow.
 
 Add `mavenCentral()` to the dependencies block if you haven't already done so.
 
-Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client` with
-`org.inthewaves.kotlin-signald:client-coroutines`, as the `client-coroutines` module has an API dependency scope on the
-`client` module, which means the `client` module will be added to the compile classpath.
-
 - In Kotlin Multiplatform projects, add a dependency to the `commonMain` source set dependencies
 
     ```kotlin
@@ -198,6 +196,27 @@ Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client`
         implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
     }
     ```
+
+Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client` with
+`org.inthewaves.kotlin-signald:client-coroutines`, as the `client-coroutines` module has an API dependency scope on the
+`client` module, which means the `client` module will be added to the compile classpath by transitivity.
+
+i.e., instead of doing
+
+```groovy
+dependencies {
+    implementation("org.inthewaves.kotlin-signald:client:<current version>")
+    implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
+}    
+```
+
+you can do this:
+
+```groovy
+dependencies {
+    implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
+}    
+```
 
 ## Development
 
