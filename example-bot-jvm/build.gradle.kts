@@ -1,17 +1,32 @@
 plugins {
-    kotlin("jvm")
+    kotlin("multiplatform")
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    application
 }
 
 version = "0.1.0-SNAPSHOT"
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(project(":client-coroutines"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-}
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
+    }
 
-application {
-    mainClass.set("org.inthewaves.examplejvmbot.ExampleBotMainKt")
+    linuxX64 {
+        binaries {
+            executable {
+                entryPoint = "main"
+            }
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(project(":client-coroutines"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                implementation("com.autodesk:coroutineworker:0.7.1")
+            }
+        }
+    }
 }
