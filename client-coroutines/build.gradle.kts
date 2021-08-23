@@ -6,7 +6,6 @@ plugins {
     signing
 }
 
-version = "0.5.0"
 description = "Coroutine-based message subscriptions"
 
 kotlin {
