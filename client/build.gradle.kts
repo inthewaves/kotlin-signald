@@ -41,7 +41,7 @@ kotlin {
         binaries.library()
     }
 
-    val nativeBaseName = "ktsignald"
+    val nativeBaseName = "kotlinsignald"
     linuxX64 {
         binaries {
             sharedLib {
