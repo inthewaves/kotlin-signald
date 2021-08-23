@@ -1,5 +1,6 @@
-package org.inthewaves.kotlinsignald
+package org.inthewaves.kotlinsignald.subscription
 
+import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 
 /**

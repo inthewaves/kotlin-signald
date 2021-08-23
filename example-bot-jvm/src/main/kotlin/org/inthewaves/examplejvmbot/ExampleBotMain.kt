@@ -12,8 +12,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
-import org.inthewaves.kotlinsignald.signalMessagesChannel
-import org.inthewaves.kotlinsignald.signalMessagesSharedFlow
+import org.inthewaves.kotlinsignald.subscription.signalMessagesChannel
+import org.inthewaves.kotlinsignald.subscription.signalMessagesSharedFlow
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess

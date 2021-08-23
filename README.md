@@ -177,7 +177,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
-import org.inthewaves.kotlinsignald.signalMessagesChannel
+import org.inthewaves.kotlinsignald.subscription.signalMessagesChannel
 
 suspend fun receiveMessages(signal: Signal) {
   coroutineScope {

@@ -5477,3 +5477,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ver
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public abstract class org/inthewaves/kotlinsignald/subscription/MessageSubscriptionHandler {
+	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
+	public fun close ()V
+	public final fun getInitialMessagesCount ()I
+	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/Signal$Subscription;
+}
+

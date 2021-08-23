@@ -1,10 +1,11 @@
-package org.inthewaves.kotlinsignald
+package org.inthewaves.kotlinsignald.subscription
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import kotlin.coroutines.CoroutineContext
@@ -77,7 +78,7 @@ public class FlowMessageSubscriptionHandler(
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
     replay: Int = DEFAULT_REPLAY,
-    extraBufferCapacity: Int = CoroutineMessageSubscriptionHandler.DEFAULT_BUFFER_CAPACITY,
+    extraBufferCapacity: Int = DEFAULT_BUFFER_CAPACITY,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
 ) : CoroutineMessageSubscriptionHandler(signal, coroutineScope, context) {
 
