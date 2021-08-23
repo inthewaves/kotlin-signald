@@ -75,7 +75,7 @@ public final class org/inthewaves/kotlinsignald/Signal {
 	public static synthetic fun updateContact$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)V
 	public final fun updateGroup (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/Signal$GroupUpdate;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
 	public final fun verify (Ljava/lang/String;)V
-	public final fun version (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public final fun version ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 }
 
 public abstract class org/inthewaves/kotlinsignald/Signal$AccessControlUpdate {

@@ -1089,7 +1089,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
-    public fun version(code: String): JsonVersionMessage = VersionRequest().submit(socketWrapper)
+    public fun version(): JsonVersionMessage = VersionRequest().submit(socketWrapper)
 
     /**
      * Contains information about an active message subscription with signald.
