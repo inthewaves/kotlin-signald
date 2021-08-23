@@ -1,7 +1,7 @@
 public abstract class org/inthewaves/kotlinsignald/MessageSubscriptionHandler {
 	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
 	public fun close ()V
-	public final fun getSignal ()Lorg/inthewaves/kotlinsignald/Signal;
+	public final fun getInitialMessagesCount ()I
 	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/Signal$Subscription;
 }
 
@@ -10,7 +10,7 @@ public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper : java/l
 	public fun <init> (Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/Version;
+	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 	public fun readLine ()Ljava/lang/String;
 	public fun submit (Ljava/lang/String;)Ljava/lang/String;
 }
@@ -24,7 +24,6 @@ public final class org/inthewaves/kotlinsignald/Signal {
 	public final fun approveMembership (Ljava/lang/String;Ljava/lang/Iterable;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun createGroup (Ljava/lang/Iterable;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public static synthetic fun createGroup$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/Iterable;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
-	public final fun createPersistentSocket ()Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
 	public final fun deleteAccount (Z)V
 	public final fun deleteServer (Ljava/lang/String;)V
 	public final fun finishLink (Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Account;
@@ -68,7 +67,6 @@ public final class org/inthewaves/kotlinsignald/Signal {
 	public final fun setDeviceName (Ljava/lang/String;)V
 	public final fun setExpiration (Lorg/inthewaves/kotlinsignald/Signal$Recipient;I)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun subscribe ()Lorg/inthewaves/kotlinsignald/Signal$Subscription;
 	public final fun trust (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Signal$Fingerprint;Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;)V
 	public static synthetic fun trust$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Signal$Fingerprint;Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;ILjava/lang/Object;)V
 	public final fun typing (Lorg/inthewaves/kotlinsignald/Signal$Recipient;ZJ)V
@@ -194,16 +192,11 @@ public final class org/inthewaves/kotlinsignald/Signal$Recipient$Individual : or
 }
 
 public final class org/inthewaves/kotlinsignald/Signal$Subscription {
-	public fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;Ljava/util/List;)V
+	public final fun close ()V
 	public final fun getAccountId ()Ljava/lang/String;
-	public final fun getInitialMessages ()Ljava/util/List;
-	public final fun getPersistentSocket ()Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
+	public final fun getInitialMessagesCount ()I
 	public final fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
 	public final fun unsubscribe ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$Subscription$SocketClosedException {
-	public fun <init> ()V
 }
 
 public final class org/inthewaves/kotlinsignald/Signal$TrustLevel : java/lang/Enum {
@@ -226,7 +219,7 @@ public final class org/inthewaves/kotlinsignald/SocketWrapper : org/inthewaves/k
 	public fun <init> (Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getActualSocketPath ()Ljava/lang/String;
-	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/Version;
+	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 	public fun readLine ()Ljava/lang/String;
 	public fun submit (Ljava/lang/String;)Ljava/lang/String;
 }

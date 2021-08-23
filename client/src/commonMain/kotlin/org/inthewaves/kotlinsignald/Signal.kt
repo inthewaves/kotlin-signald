@@ -1,5 +1,6 @@
 package org.inthewaves.kotlinsignald
 
+import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.datetime.Clock
 import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.Signal.Recipient.Group
@@ -1093,11 +1094,23 @@ public class Signal @Throws(SignaldException::class) constructor(
     @Throws(SignaldException::class)
     public fun version(code: String): JsonVersionMessage = VersionRequest().submit(socketWrapper)
 
-    public class Subscription(
+    /**
+     * Contains information about an active message subscription with signald.
+     */
+    public class Subscription internal constructor(
         public val accountId: String,
-        public val persistentSocket: PersistentSocketWrapper,
-        public val initialMessages: MutableList<ClientMessageWrapper>
+        private val persistentSocket: PersistentSocketWrapper,
+        initialMessages: Collection<ClientMessageWrapper>
     ) {
+        /**
+         * The number of messages sent while we were waiting for signald's response to the subscribe.
+         */
+        public val initialMessagesCount: Int = initialMessages.size
+
+        private var initialMessagesState = initialMessages
+            .ifEmpty { null }
+            ?.let { it.toMutableList() to SynchronizedObject() }
+
         /**
          * Parses an incoming message from the socket. If this returns null, then the socket is closed.
          *
@@ -1105,6 +1118,18 @@ public class Signal @Throws(SignaldException::class) constructor(
          * @throws SignaldException if an I/O error occurs when communicating with the socket.
          */
         public fun nextMessage(): ClientMessageWrapper? {
+            val msgState = initialMessagesState
+            if (msgState != null) {
+                kotlinx.atomicfu.locks.synchronized(msgState.second) {
+                    val message = msgState.first.removeFirstOrNull()
+                    if (message != null) {
+                        return message
+                    } else {
+                        initialMessagesState = null
+                    }
+                }
+            }
+
             val newJsonLine = persistentSocket.readLine() ?: return null
             return try {
                 SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), newJsonLine)
@@ -1121,34 +1146,25 @@ public class Signal @Throws(SignaldException::class) constructor(
             return UnsubscribeRequest(account = accountId).submit(persistentSocket)
         }
 
-        public class SocketClosedException
-    }
-
-    /**
-     * Creates a new persistent socket. This is used by the constructor of [MessageSubscriptionHandler].
-     *
-     * @throws SignaldException if the [accountId] is not registered with signald or an error occurs when creating
-     * the persistent socket wrapper.
-     */
-    public fun createPersistentSocket(): PersistentSocketWrapper {
-        withAccountOrThrow {
-            return PersistentSocketWrapper(socketWrapper.actualSocketPath)
+        public fun close() {
+            persistentSocket.close()
         }
     }
 
     /**
-     * Receive incoming messages. After making a subscribe request, incoming messages will be sent to the client
-     * encoded as [ClientMessageWrapper]. Send an unsubscribe request via [Subscription.unsubscribe] or disconnect
-     * from the socket via [PersistentSocketWrapper.close] to stop receiving messages.
+     * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
+     * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
+     * [Subscription.unsubscribe] or disconnect from the socket via [PersistentSocketWrapper.close] to stop receiving
+     * messages.
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    public fun subscribe(): Subscription {
+    internal fun subscribe(): Subscription {
         withAccountOrThrow {
             val persistentSocket = PersistentSocketWrapper(socketWrapper.actualSocketPath)
             val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
-            return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages.toMutableList())
+            return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
         }
     }
 
