@@ -1,10 +1,3 @@
-public abstract class org/inthewaves/kotlinsignald/MessageSubscriptionHandler {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
-	public fun close ()V
-	public final fun getInitialMessagesCount ()I
-	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/Signal$Subscription;
-}
-
 public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper : java/lang/AutoCloseable, org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;)V

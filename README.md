@@ -7,12 +7,25 @@ This library provides a type-safe way to communicate with a signald UNIX socket,
 and requests. The classes are generated from the signald protocol document
 (https://signald.org/articles/protocol-documentation/).
 
+## Supported platforms
+
+### `client` module
+
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
+- Linux x64
 
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.
+
+JavaScript (Node.js) support is incomplete.
+
+### `client-coroutines` module
+
+The following platforms are supported:
+
+- JVM (JDK 1.8 or higher)
 
 Linux x64 and JavaScript (Node.js) support are incomplete.
 
@@ -45,8 +58,7 @@ signald will handle these incoming messages, as long as there is a message subsc
 
 ### Client
 
-The `client` module has support for connecting to the UNIX socket and (de)serializing responses and requests. (Note:
-Currently, only JVM has a working socket implementation.)
+The `client` module has support for connecting to the UNIX socket and (de)serializing responses and requests.
 
 Ensure that signald is running and that the socket is available. The default socket paths of
 `$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock` will be tested if an explicit socket path is
@@ -58,8 +70,11 @@ This snippet provides an overview of the client (API inspired by [pysignald](htt
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 
 // Create an instance of the simple client tied to an accountID.
@@ -129,11 +144,18 @@ signal.send(
 // Subscribes to receive incoming messages.
 // This will block the thread when it waits for an incoming message,
 // which is not recommended if you need to do other stuff.
-// Use the client-coroutines module on JVM if you want coroutine support.
+// Use the client-coroutines module (on JVM) if you want coroutine support.
 signal.subscribeAndConsumeBlocking { message: ClientMessageWrapper ->
-  // ...
+  when (message) {
+    is ExceptionWrapper -> TODO()
+    is IncomingMessage -> TODO()
+    is ListenerState -> TODO()
+  }
 }
 ```
+
+Examples of echo bots can be found in the [`example-bot-jvm`](./example-bot-jvm) and
+[`example-bot-linuxX64`](./example-bot-linuxX64) modules.
 
 #### Gradle
 Add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
@@ -162,7 +184,9 @@ placeholders can be replaced by one of the versions from the
     }
     ```
 
-### Coroutine-based message receiver
+### Coroutine-based message receiver (JVM)
+
+Note that only JVM is supported for now.
 
 The `client-coroutines` module adds coroutine-based message subscription handlers via the `signalMessagesChannel` and
 `signalMessagesSharedFlow` functions. Each function is an extension function of `CoroutineScope` that creates a
@@ -203,33 +227,18 @@ suspend fun receiveMessages(signal: Signal) {
 ```
 
 See the [`example-bot-jvm`](./example-bot-jvm/src/main/kotlin/org/inthewaves/examplejvmbot/ExampleBotMain.kt) module for
-a full example of a bot that sends back messages that it receives.
+a full example of a bot that uses these coroutine functions.
 
 #### Gradle
 
 Add `mavenCentral()` to the dependencies block if you haven't already done so.
 
-- In Kotlin Multiplatform projects, add a dependency to the `commonMain` source set dependencies
+```groovy
+dependencies {
+    implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
+}
+```
 
-    ```kotlin
-    kotlin {
-        sourceSets {
-            commonMain {
-                 dependencies {
-                     implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
-                 }
-            }
-        }
-    }
-    ```
-
-- For single-platform projects such as JVM, add a dependency to the dependencies block.
-
-    ```groovy
-    dependencies {
-        implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
-    }
-    ```
 
 Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client` with
 `org.inthewaves.kotlin-signald:client-coroutines`, as the `client-coroutines` module has an API dependency scope on the

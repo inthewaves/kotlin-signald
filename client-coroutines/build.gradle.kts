@@ -26,6 +26,8 @@ kotlin {
         binaries.library()
     }
 
+    /*
+
     val nativeBaseName = "kotlinsignald"
 
     linuxX64 {
@@ -36,7 +38,6 @@ kotlin {
         }
     }
 
-    /*
     macosX64 {
         binaries {
             sharedLib {
