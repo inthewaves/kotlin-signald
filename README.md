@@ -7,8 +7,13 @@ This library provides a type-safe way to communicate with a signald UNIX socket,
 and requests. The classes are generated from the signald protocol document
 (https://signald.org/articles/protocol-documentation/).
 
-The following platforms are supported: JVM, Linux x64, macOS x64, and JavaScript. (Since signald currently works by
-communicating with UNIX sockets, JVM and JavaScript are effectively limited to UNIX environments supported by signald.)
+The following platforms are supported:
+
+- JVM
+- Linux x64
+
+Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
+supported by signald.
 
 ## Usage
 

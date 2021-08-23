@@ -51,6 +51,7 @@ kotlin {
         }
     }
 
+    /*
     macosX64 {
         binaries {
             sharedLib {
@@ -58,6 +59,7 @@ kotlin {
             }
         }
     }
+     */
 
     sourceSets {
         val commonMain by getting {
