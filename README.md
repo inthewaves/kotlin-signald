@@ -10,10 +10,11 @@ and requests. The classes are generated from the signald protocol document
 The following platforms are supported:
 
 - JVM
-- Linux x64
 
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.
+
+Linux x64 and JavaScript (NodeJS) support are incomplete.
 
 ## Usage
 
