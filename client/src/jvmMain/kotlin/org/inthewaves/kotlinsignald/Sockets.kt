@@ -6,6 +6,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Version
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import org.newsclub.net.unix.AFUNIXSocket
 import org.newsclub.net.unix.AFUNIXSocketAddress
 import java.io.BufferedReader
@@ -48,7 +49,7 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
 
 private fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null) {
     try {
-        SignaldJson.decodeFromString(JsonMessageWrapper.serializer(Version.serializer()), versionLine).data
+        SignaldJson.decodeFromString(JsonMessageWrapper.serializer(JsonVersionMessage.serializer()), versionLine).data
     } catch (e: SerializationException) {
         null
     }
@@ -59,6 +60,8 @@ private fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null)
 /**
  * A wrapper for a socket that creates a new socket connection for every request.
  *
+ * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
+ * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  * @throws SocketUnavailableException if unable to connect to the socket
  * @throws IOException if there is any I/O errors when communicating to the socket (it first returns the signald version
  * JSON as [Version]).
@@ -71,7 +74,7 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
     /**
      * Version of signald. This is sent when we connect to the socket.
      */
-    public val version: Version? = useSocket(skipVersion = false) { _, reader, _ ->
+    public val version: JsonVersionMessage? = useSocket(skipVersion = false) { _, reader, _ ->
         decodeVersionOrNull(reader.readLine())
     }
 
@@ -124,12 +127,7 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
     /**
      * Version of signald.
      */
-    public val version: Version?
-
-    init {
-        val versionLine = reader.readLine()
-        version = decodeVersionOrNull(versionLine)
-    }
+    public val version: JsonVersionMessage? = decodeVersionOrNull(reader.readLine())
 
     override fun submit(request: String): String {
         writer.println(request)

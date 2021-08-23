@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("kotlinx-atomicfu")
     id("org.jetbrains.dokka")
     id("org.inthewaves.kotlin-signald-protocolgen")
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
