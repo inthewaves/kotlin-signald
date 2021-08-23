@@ -73,17 +73,18 @@ signal.send(
 ```
 
 #### Gradle
-Add `mavenCentral()` to the dependencies block if you haven't already done so.
+Add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
+placeholders can be replaced by one of the versions from the
+[releases](https://github.com/inthewaves/kotlin-signald/releases)
 
 - In Kotlin Multiplatform projects, add a dependency to the `commonMain` source set dependencies
     
     ```kotlin
-    // Add this if you don't already have Maven Central as a repository
     kotlin {
         sourceSets {
             commonMain {
                  dependencies {
-                     implementation("org.inthewaves.kotlin-signald:client:0.3.0")
+                     implementation("org.inthewaves.kotlin-signald:client:<current version>")
                  }
             }
         }
@@ -94,7 +95,7 @@ Add `mavenCentral()` to the dependencies block if you haven't already done so.
 
     ```groovy
     dependencies {
-        implementation("org.inthewaves.kotlin-signald:client:0.3.0")
+        implementation("org.inthewaves.kotlin-signald:client:<current version>")
     }
     ```
 
@@ -146,7 +147,7 @@ Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client`
         sourceSets {
             commonMain {
                  dependencies {
-                     implementation("org.inthewaves.kotlin-signald:client-coroutines:0.6.0")
+                     implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
                  }
             }
         }
@@ -157,7 +158,7 @@ Note that you can replace dependencies on `org.inthewaves.kotlin-signald:client`
 
     ```groovy
     dependencies {
-        implementation("org.inthewaves.kotlin-signald:client-coroutines:0.6.0")
+        implementation("org.inthewaves.kotlin-signald:client-coroutines:<current version>")
     }
     ```
 
