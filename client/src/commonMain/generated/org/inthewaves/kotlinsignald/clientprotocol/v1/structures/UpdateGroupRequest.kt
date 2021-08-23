@@ -7,7 +7,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UpdateGroup
 
 /**
- * modify a group. Note that only one modification action may be preformed at once
+ * modify a group. Note that only one modification action may be performed at once
  */
 @Serializable
 @SerialName("update_group")
@@ -26,6 +26,11 @@ public data class UpdateGroupRequest(
      * Example: "Parkdale Run Club"
      */
     public val title: String? = null,
+    /**
+     * A new group description. Set to empty string to remove an existing description.
+     * Example: "A club for running in Parkdale"
+     */
+    public val description: String? = null,
     /**
      * Example: "/tmp/image.jpg"
      */

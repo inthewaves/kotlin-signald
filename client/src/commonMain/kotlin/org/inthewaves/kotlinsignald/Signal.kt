@@ -1023,14 +1023,11 @@ public class Signal @Throws(SignaldException::class) constructor(
                     groupID = groupID,
                     title = groupUpdate.newTitle
                 )
-                is GroupUpdate.Description -> {
-                    TODO("Wait until next update")
-                    // UpdateGroupRequest(
-                    //     account = accountId,
-                    //     groupID = groupID,
-                    //     description = groupUpdate.newDescription
-                    // )
-                }
+                is GroupUpdate.Description -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    description = groupUpdate.newDescription
+                )
                 is GroupUpdate.Avatar -> UpdateGroupRequest(
                     account = accountId,
                     groupID = groupID,
