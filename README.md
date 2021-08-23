@@ -57,6 +57,7 @@ This snippet provides an overview of the client (API inspired by [pysignald](htt
 ```kotlin
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
@@ -124,6 +125,14 @@ signal.send(
   recipient = Signal.Recipient.Group(groupID = "Enfw3fE4fUm7RcfSUhEA1c7KAGmbZC2ot4oicB0ZXuk="),
   messageBody = "Hello to another group"
 )
+
+// Subscribes to receive incoming messages.
+// This will block the thread when it waits for an incoming message,
+// which is not recommended if you need to do other stuff.
+// Use the client-coroutines module on JVM if you want coroutine support.
+signal.subscribeAndConsumeBlocking { message: ClientMessageWrapper ->
+  // ...
+}
 ```
 
 #### Gradle

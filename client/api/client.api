@@ -67,6 +67,7 @@ public final class org/inthewaves/kotlinsignald/Signal {
 	public final fun setDeviceName (Ljava/lang/String;)V
 	public final fun setExpiration (Lorg/inthewaves/kotlinsignald/Signal$Recipient;I)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun subscribeAndConsumeBlocking (Lkotlin/jvm/functions/Function1;)V
 	public final fun trust (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Signal$Fingerprint;Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;)V
 	public static synthetic fun trust$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Signal$Fingerprint;Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;ILjava/lang/Object;)V
 	public final fun typing (Lorg/inthewaves/kotlinsignald/Signal$Recipient;ZJ)V
@@ -5475,6 +5476,11 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ver
 
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/VersionRequest$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/subscription/BlockingMessageSubscriptionHandler : org/inthewaves/kotlinsignald/subscription/MessageSubscriptionHandler {
+	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
+	public final fun consumeEach (Lkotlin/jvm/functions/Function1;)V
 }
 
 public abstract class org/inthewaves/kotlinsignald/subscription/MessageSubscriptionHandler {

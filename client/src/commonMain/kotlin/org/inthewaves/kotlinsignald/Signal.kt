@@ -76,6 +76,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
+import org.inthewaves.kotlinsignald.subscription.BlockingMessageSubscriptionHandler
 
 /**
  * A signald client.
@@ -1117,8 +1118,9 @@ public class Signal @Throws(SignaldException::class) constructor(
         public fun nextMessage(): ClientMessageWrapper? {
             val msgState = initialMessagesState
             if (msgState != null) {
-                kotlinx.atomicfu.locks.synchronized(msgState.second) {
-                    val message = msgState.first.removeFirstOrNull()
+                val (list, lock) = msgState
+                kotlinx.atomicfu.locks.synchronized(lock) {
+                    val message = list.removeFirstOrNull()
                     if (message != null) {
                         return message
                     } else {
@@ -1162,6 +1164,25 @@ public class Signal @Throws(SignaldException::class) constructor(
             val persistentSocket = PersistentSocketWrapper(socketWrapper.actualSocketPath)
             val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
             return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
+        }
+    }
+
+    /**
+     * Subscribes to incoming messages and consumes them on the thread that called this function. This will open a
+     * dedicated, persistent socket connection for this function call. The current thread will be blocked when it waits
+     * for more messages. After this function executes, an unsubscribe request will be made and the persistent socket
+     * will be closed.
+     *
+     * @throws RequestFailedException if the subscribe request fails
+     * @throws SignaldException if an I/O error occurs when communicating to the socket
+     */
+    @Throws(SignaldException::class)
+    public fun subscribeAndConsumeBlocking(messageConsumer: (ClientMessageWrapper) -> Unit) {
+        val subscriptionHandler = BlockingMessageSubscriptionHandler(this)
+        try {
+            subscriptionHandler.consumeEach(messageConsumer)
+        } finally {
+            subscriptionHandler.close()
         }
     }
 
