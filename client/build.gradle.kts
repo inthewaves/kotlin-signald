@@ -37,10 +37,12 @@ kotlin {
         }
     }
 
+    /*
     js(IR) {
         nodejs {}
         binaries.library()
     }
+     */
 
     val nativeBaseName = "kotlinsignald"
     linuxX64 {
