@@ -1,6 +1,7 @@
 package org.inthewaves.kotlinsignald.subscription
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
@@ -15,9 +16,18 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
+ * An abstract incoming message subscription handler that uses a coroutine to handle the event loop for messages.
+ *
+ * The coroutine is the [emissionJob], which is started lazily. **Derived classes must start the [emissionJob]
+ * explicitly by calling `emissionJob.start()` in an init block to ensure that asynchronous work is only ready when the
+ * derived class is ready**. This is because of
+ * [derived class initialization order](https://kotlinlang.org/docs/inheritance.html#derived-class-initialization-order).
+ * Read more at [https://www.ibm.com/developerworks/java/library/j-jtp0618/index.html].
+ *
  * @param signal The [Signal] instance. Must be associated with an account registered with signald.
  * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine. This is used to cancel
  * the handler.
+ * @param context Additional coroutine context to the `coroutineScope`'s context.
  */
 public abstract class CoroutineMessageSubscriptionHandler(
     signal: Signal,
@@ -25,7 +35,7 @@ public abstract class CoroutineMessageSubscriptionHandler(
     context: CoroutineContext = EmptyCoroutineContext,
 ) : MessageSubscriptionHandler(signal) {
 
-    protected val emissionJob: Job = coroutineScope.launch(context) {
+    protected val emissionJob: Job = coroutineScope.launch(context, start = CoroutineStart.LAZY) {
         while (isActive) {
             val newMessage: ClientMessageWrapper = try {
                 subscription.nextMessage()
@@ -45,25 +55,34 @@ public abstract class CoroutineMessageSubscriptionHandler(
 
                 ExceptionWrapper(data = ExceptionWrapper.Data(message = exceptionMessage, unexpected = true))
             }
-            if (!sendMessage(newMessage)) {
-                break
-            }
+            sendMessage(newMessage)
         }
-    }.also {
-        it.invokeOnCompletion {
+    }.also { job ->
+        job.invokeOnCompletion {
             super.close()
             onCompletion()
         }
     }
 
+    /*
+    // Derived classes need to call this after they're ready because of derived class initialization order.
+    // The base class will be initialized first.
+    init {
+        emissionJob.start()
+    }
+     */
+
     /**
      * Sends a message to subscribers and returns whether sending was successful. If false is returned, the
-     * emission job will finish.
+     * emission job will finish normally.
      */
     protected abstract suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean
 
     /**
-     * A handler function that is synchronously invoked once on completion of the message emission job.
+     * A handler function that is synchronously invoked on completion of the message emission job.
+     * This should not throw any exceptions.
+     *
+     * @see [Job.invokeOnCompletion]
      */
     protected abstract fun onCompletion()
 

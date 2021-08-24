@@ -19,6 +19,9 @@ import kotlin.coroutines.EmptyCoroutineContext
  *
  * Cancellation of the scope or cancelling the channel will unsubscribe from incoming messages and close the socket.
  *
+ * It's recommended that this function is called from a coroutine context that can handle blocking IO calls such as
+ * `Dispatchers.IO` on JVM or using a new single-threaded context.
+ *
  * @see [ChannelMessageSubscriptionHandler]
  * @param signal The [Signal] instance. Must be associated with an account registered with signald.
  * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to 25)
@@ -52,6 +55,7 @@ public fun CoroutineScope.signalMessagesChannel(
  *
  * @param signal The [Signal] instance. Must be associated with an account registered with signald.
  * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine.
+ * @param context An additional [CoroutineContext] that will be added to the given `coroutineScope`'s context.
  * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to 25)
  * @param onBufferOverflow configures an action on buffer overflow (optional, defaults to a suspending attempt to send a
  * value, supported only when `capacity >= 0` or `capacity == Channel.BUFFERED`, implicitly creates a channel with at
@@ -81,12 +85,18 @@ public class ChannelMessageSubscriptionHandler(
      */
     public val messages: ReceiveChannel<ClientMessageWrapper> = _messages
 
+    init {
+        // needs to be done because of derived class initialization order, otherwise _messages can be null
+        emissionJob.start()
+    }
+
     override suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean {
-        if (_messages.isClosedForSend) {
-            return false
+        return if (_messages.isClosedForSend) {
+            false
+        } else {
+            _messages.send(newMessage)
+            true
         }
-        _messages.send(newMessage)
-        return true
     }
 
     override fun onCompletion() {

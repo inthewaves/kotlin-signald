@@ -1110,7 +1110,8 @@ public class Signal @Throws(SignaldException::class) constructor(
             ?.let { it.toMutableList() to SynchronizedObject() }
 
         /**
-         * Parses an incoming message from the socket. If this returns null, then the socket is closed.
+         * Parses an incoming message from the socket. If this returns null, then the socket is closed / reached EOF.
+         * This will block the current thread if it has to wait for messages.
          *
          * @throws RequestFailedException if an incoming message can't be serialized (subclass of [SignaldException])
          * @throws SignaldException if an I/O error occurs when communicating with the socket.

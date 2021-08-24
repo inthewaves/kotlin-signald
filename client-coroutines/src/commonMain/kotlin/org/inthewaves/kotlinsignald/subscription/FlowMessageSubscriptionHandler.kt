@@ -94,6 +94,11 @@ public class FlowMessageSubscriptionHandler(
      */
     public val messages: SharedFlow<ClientMessageWrapper> = _messages.asSharedFlow()
 
+    init {
+        // needs to be done because of derived class initialization order
+        emissionJob.start()
+    }
+
     override suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean {
         _messages.emit(newMessage)
         return true
