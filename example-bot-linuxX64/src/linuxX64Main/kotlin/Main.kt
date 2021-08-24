@@ -9,13 +9,15 @@ import platform.posix.fputs
 import platform.posix.stderr
 import kotlin.system.exitProcess
 
-private const val USAGE = "usage: pass in account ID registered with signald (E.164 format)"
+private const val USAGE = "usage: pass in account ID registered with signald (E.164 format)\n" +
+    "e.g.\n" +
+    "    ./example-bot-linuxX64.kexe +1234568901"
 
 /**
  * A bot that responds back with the message sent iff the message is in a 1-1 conversation (i.e. not a group chat).
  */
 fun main(args: Array<String>) {
-    if (args.size !in 1..2) {
+    if (args.size != 1) {
         println(USAGE)
         exitProcess(1)
     }

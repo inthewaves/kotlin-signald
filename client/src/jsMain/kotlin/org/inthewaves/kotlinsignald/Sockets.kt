@@ -27,3 +27,7 @@ public actual class SocketWrapper actual constructor(socketPath: String?) : Sock
         TODO("Not yet implemented")
     }
 }
+
+internal actual fun getEnvVariable(envVarName: String): String? {
+    TODO("https://github.com/Kotlin/kotlinx-nodejs?")
+}

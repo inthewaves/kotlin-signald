@@ -12,40 +12,48 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.nio.file.Files
 import java.nio.file.InvalidPathException
-import java.nio.file.Path
 import java.nio.file.Paths
 
-private fun isPathReadableAndWritable(path: Path) =
-    Files.exists(path) && Files.isReadable(path) && Files.isWritable(path)
-
 private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
-    val socketPathToUse: Path = try {
-        if (customPath != null) {
-            customPath
-                .let { Paths.get(it) }
-                .takeIf(::isPathReadableAndWritable)
-        } else {
-            Paths.get(System.getenv("XDG_RUNTIME_DIR"), "signald/signald.sock")
-                .takeIf(::isPathReadableAndWritable)
-                ?: Paths.get("/var/run/signald/signald.sock")
-                    .takeIf(::isPathReadableAndWritable)
+    val socketPathsToTry = if (customPath != null) sequenceOf(customPath) else getDefaultSocketPaths()
+
+    return socketPathsToTry
+        .map {
+            try {
+                Paths.get(it)
+            } catch (e: InvalidPathException) {
+                null
+            }
         }
-    } catch (e: SecurityException) {
-        throw SocketUnavailableException("failed to test socket due to SecurityException", e)
-    } catch (e: InvalidPathException) {
-        throw SocketUnavailableException("bad socket path ${e.input} (${e.reason})", e)
-    } ?: throw SocketUnavailableException(
-        if (customPath != null) {
-            "tried $customPath but it doesn't exist"
-        } else {
-            "tried default paths but they don't exist"
+        .filterNotNull()
+        .filter {
+            try {
+                Files.exists(it) && Files.isReadable(it) && Files.isWritable(it)
+            } catch (e: SecurityException) {
+                false
+            }
         }
-    )
-    return AFUNIXSocketAddress.of(socketPathToUse.toFile())
+        .map { path ->
+            try {
+                AFUNIXSocketAddress.of(path)
+            } catch (e: IOException) {
+                null
+            }
+        }
+        .filterNotNull()
+        .firstOrNull()
+        ?: throw SocketUnavailableException(
+            if (customPath != null) {
+                "unable to connect to signald socket at $customPath"
+            } else {
+                "unable to connect to default signald socket paths"
+            }
+        )
 }
 
 /**
- * A wrapper for a socket that creates a new socket connection for every request.
+ * A wrapper for a socket that makes new socket connections for every request and closes the connection after a request,
+ * making it thread safe.
  *
  * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
  * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
@@ -61,7 +69,7 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
     /**
      * Version of signald. This is sent when we connect to the socket.
      */
-    public val version: JsonVersionMessage? = useSocket(skipVersion = false) { _, reader, _ ->
+    public val version: JsonVersionMessage? = useNewSocketConnection(skipVersion = false) { reader, _ ->
         decodeVersionOrNull(reader.readLine())
     }
 
@@ -69,7 +77,7 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         get() = socketAddress.path
 
     override fun submit(request: String): String {
-        useSocket { _, reader, writer ->
+        useNewSocketConnection { reader, writer ->
             writer.println(request)
             return reader.readLine() ?: throw SignaldException("end of socket stream has been reached")
         }
@@ -79,9 +87,9 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         throw UnsupportedOperationException("this implementation only supports a single socket")
     }
 
-    private inline fun <T> useSocket(
+    private inline fun <T> useNewSocketConnection(
         skipVersion: Boolean = true,
-        socketBlock: (socket: AFUNIXSocket, reader: BufferedReader, writer: PrintWriter) -> T
+        socketBlock: (reader: BufferedReader, writer: PrintWriter) -> T
     ): T {
         val socket: AFUNIXSocket = try {
             AFUNIXSocket.connectTo(socketAddress)
@@ -93,7 +101,7 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         if (skipVersion) {
             reader.readLine()
         }
-        return socket.use { socketBlock(it, reader, writer) }
+        return socket.use { socketBlock(reader, writer) }
     }
 }
 
@@ -127,3 +135,5 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
         socket.close()
     }
 }
+
+internal actual fun getEnvVariable(envVarName: String): String? = System.getenv(envVarName)

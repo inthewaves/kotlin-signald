@@ -29,8 +29,18 @@ public class SocketUnavailableException : SignaldException {
     public constructor(cause: Throwable?) : super(cause)
 }
 
+internal expect fun getEnvVariable(envVarName: String): String?
+
+internal fun getDefaultSocketPaths(): Sequence<String> =
+    sequenceOf(
+        getEnvVariable("XDG_RUNTIME_DIR")?.let { "$it/signald/signald.sock" },
+        "/var/run/signald/signald.sock"
+    ).filterNotNull()
+
 /**
- * A wrapper for a socket that creates a new socket connection for every request.
+ * A wrapper for a socket that makes new socket connections for every request and closes the connection after a request.
+ * making it thread safe.
+ *
  * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
  * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */

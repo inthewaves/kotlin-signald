@@ -14,7 +14,8 @@ and requests. The client protocol classes are generated from the signald protoco
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
-- Linux x64
+- Linux x64 (there is a known issue causing RuntimeExceptions in release executables; see issue
+  [#5](https://github.com/inthewaves/kotlin-signald/issues/5))
 
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.
@@ -64,7 +65,7 @@ Ensure that signald is running and that the socket is available. The default soc
 `$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock` will be tested if an explicit socket path is
 not provided.
 
-This snippet provides an overview of the client (API inspired by [pysignald](https://pypi.org/project/pysignald)).
+This snippet provides an overview of the `Signal` class (API inspired by [pysignald](https://pypi.org/project/pysignald)).
 
 ```kotlin
 import org.inthewaves.kotlinsignald.Signal
@@ -97,12 +98,18 @@ val signalWithCustomSocketPath = Signal(
 // in with the SocketExceptions).
 try {
   signal.register()
-} catch (e: RequestFailedException) {
-  if (e.exception == "CaptchaRequired") {
+} catch (e: SignaldException) {
+  // e can be of type RequestFailedException, which contains
+  // specific information if signald sent back an error response.
+  // Otherwise, the SignaldException can also be an I/O error from
+  // the socket.
+  if (e is RequestFailedException && e.exception == "CaptchaRequired") {
     // https://signald.org/articles/captcha/
     //
     // Get a captcha token. It might be better to just
-    // have an account setup with signald beforehand.
+    // have an account setup with signald beforehand, as
+    // a captcha would have to mean using a browser to get the
+    // token.
     //
     signal.register(captcha = myCaptchaToken)
   }
@@ -156,6 +163,28 @@ signal.subscribeAndConsumeBlocking { message: ClientMessageWrapper ->
 
 Examples of echo bots can be found in the [`example-bot-jvm`](./example-bot-jvm) and
 [`example-bot-linuxX64`](./example-bot-linuxX64) modules.
+
+The raw client protocol models are also available for use. Mirroring the
+[example on the signald site](https://signald.org/articles/getting-started/#message-sending):
+
+```kotlin
+val socketWrapper = SocketWrapper()
+
+val request = SendRequest(
+  username = "+12025555555", 
+  messageBody = "hello, joe", 
+  recipientAddress =  JsonAddress(number = "+12026666666"),
+)
+
+val response: SendResponse = try { 
+  request.submit(socketWrapper)
+} catch (e: SignaldException) {
+  // e can be of type RequestFailedException, which contains
+  // specific information if signald sent back an error response.
+  // Otherwise, the SignaldException can also be an I/O error from
+  // the socket
+}
+```
 
 #### Gradle
 Add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`

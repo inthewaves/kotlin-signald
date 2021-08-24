@@ -17,8 +17,10 @@ import org.inthewaves.kotlinsignald.subscription.signalMessagesSharedFlow
 import java.io.IOException
 import kotlin.system.exitProcess
 
-private const val USAGE = "usage: pass in account ID registered with signald (E.164 format), and " +
-    "optionally one of \"flow\" or \"channel\""
+private val USAGE = "usage: pass in account ID registered with signald (E.164 format), and " +
+    "optionally one of ${ReceiverType.values().joinToString { it.name.lowercase() }}\n" +
+    "e.g. \n" +
+    "    java -jar path/to/jar.jar +123456778 blocking"
 
 enum class ReceiverType {
     CHANNEL, FLOW, BLOCKING

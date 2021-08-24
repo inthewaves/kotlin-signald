@@ -31,7 +31,7 @@ import platform.posix.strcpy
 import platform.posix.strerror
 import platform.posix.write
 
-private fun getSocketFdOrNull(socketPath: String): Int? {
+private fun makeNewSocketConnection(socketPath: String): Int? {
     val socketFd = socket(AF_UNIX, SOCK_STREAM, 0)
     if (socketFd == -1) {
         return null
@@ -44,12 +44,13 @@ private fun getSocketFdOrNull(socketPath: String): Int? {
         }
 
         @Suppress("UNCHECKED_CAST")
-        val un = remoteAddr.ptr as CPointer<sockaddr>
-        if (connect(socketFd, un, remoteAddr.readValue().size.convert()) != -1) {
+        val remoteAddrAsSockAddr = remoteAddr.ptr as CPointer<sockaddr>
+        return if (connect(socketFd, remoteAddrAsSockAddr, remoteAddr.readValue().size.convert()) != -1) {
             return socketFd
+        } else {
+            null
         }
     }
-    return null
 }
 
 /**
@@ -66,7 +67,7 @@ private fun readLineFromSocket(socketFd: Int): String? {
                         continue
                     } else {
                         throw SignaldException(
-                            "error while reading from socket: errno ${strerror(posix_errno())?.toKString()}"
+                            "error while reading from socket: ${strerror(posix_errno())?.toKString()}"
                         )
                     }
                 } else if (numRead == 0L) { // EOF
@@ -89,15 +90,11 @@ private fun readLineFromSocket(socketFd: Int): String? {
 }
 
 private fun getValidPathAndFdOrNull(socketPath: String?): Pair<String, Int>? {
-    val socketPathsToTry: Sequence<String> = socketPath?.let { sequenceOf(it) }
-        ?: sequenceOf(
-            getenv("XDG_RUNTIME_DIR")?.toKStringFromUtf8(),
-            "/var/run/signald/signald.sock"
-        ).filterNotNull()
+    val socketPathsToTry = if (socketPath != null) sequenceOf(socketPath) else getDefaultSocketPaths()
 
     @Suppress("UNCHECKED_CAST")
     return socketPathsToTry
-        .map { it to getSocketFdOrNull(it) }
+        .map { it to makeNewSocketConnection(it) }
         .firstOrNull { it.second != null } as Pair<String, Int>?
 }
 
@@ -120,7 +117,8 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) act
     }
 
     override fun submit(request: String): String {
-        val socketFd = getSocketFdOrNull(actualSocketPath) ?: throw SocketUnavailableException("unable to get socket")
+        val socketFd = makeNewSocketConnection(actualSocketPath)
+            ?: throw SocketUnavailableException("unable to get socket")
         try {
             // ignore version line from reconnecting
             readLineFromSocket(socketFd)
@@ -158,3 +156,5 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
         // arena.clear()
     }
 }
+
+internal actual fun getEnvVariable(envVarName: String): String? = getenv(envVarName)?.toKStringFromUtf8()
