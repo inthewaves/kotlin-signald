@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":client:dokkaHtmlPartial/commonMain":[],":client:dokkaHtmlPartial/jvmMain":[":client:dokkaHtmlPartial/commonMain"],":client:dokkaHtmlPartial/linuxX64Main":[":client:dokkaHtmlPartial/commonMain"],":client-coroutines:dokkaHtmlPartial/commonMain":[],":client-coroutines:dokkaHtmlPartial/jvmMain":[":client-coroutines:dokkaHtmlPartial/commonMain"]}'

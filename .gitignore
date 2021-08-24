@@ -1,6 +1,0 @@
-.gradle
-build
-/gradle.properties
-
-**/.idea/*
-!/.idea/vcs.xml
