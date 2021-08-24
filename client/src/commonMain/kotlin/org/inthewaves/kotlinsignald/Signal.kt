@@ -1163,8 +1163,17 @@ public class Signal @Throws(SignaldException::class) constructor(
     internal fun subscribe(): Subscription {
         withAccountOrThrow {
             val persistentSocket = PersistentSocketWrapper(socketWrapper.actualSocketPath)
-            val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
-            return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
+            try {
+                val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
+                return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
+            } catch (e: Throwable) {
+                try {
+                    persistentSocket.close()
+                } catch (closeError: Throwable) {
+                    e.addSuppressed(closeError)
+                }
+                throw e
+            }
         }
     }
 
