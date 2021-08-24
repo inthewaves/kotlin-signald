@@ -1,0 +1,19 @@
+name: Publish Dokka to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./gradlew dokkaHtmlMultiModule
+      - uses: JamesIves/github-pages-deploy-action@5dc1d5a192aeb5ab5b7d5a77b7d36aea4a7f5c92 # 4.1.4
+        with:
+          branch: gh-pages
+          folder: build/dokka/htmlMultiModule
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"

@@ -7,6 +7,8 @@ This library provides a type-safe way to communicate with a signald UNIX socket,
 and requests. The client protocol classes are generated from the signald protocol document
 (https://signald.org/articles/protocol-documentation/).
 
+Documentation for the library is available at https://inthewaves.github.io/kotlin-signald/
+
 ## Supported platforms
 
 ### `client` module
@@ -187,9 +189,9 @@ val response: SendResponse = try {
 ```
 
 #### Gradle
-Add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
+First add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
 placeholders can be replaced by one of the versions from the
-[releases](https://github.com/inthewaves/kotlin-signald/releases)
+[releases](https://github.com/inthewaves/kotlin-signald/releases).
 
 - In Kotlin Multiplatform projects, add a dependency to the `commonMain` source set dependencies
     
@@ -260,7 +262,7 @@ a full example of a bot that uses these coroutine functions.
 
 #### Gradle
 
-Add `mavenCentral()` to the dependencies block if you haven't already done so.
+Add `mavenCentral()` to the dependencies block if you haven't already done so. Then, add:
 
 ```groovy
 dependencies {
