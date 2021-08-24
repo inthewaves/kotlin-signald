@@ -4,7 +4,7 @@ A Kotlin Multiplatform library for communicating with signald. For more informat
 https://signald.org.
 
 This library provides a type-safe way to communicate with a signald UNIX socket, handling (de)serialization of responses
-and requests. The classes are generated from the signald protocol document
+and requests. The client protocol classes are generated from the signald protocol document
 (https://signald.org/articles/protocol-documentation/).
 
 ## Supported platforms
@@ -198,7 +198,7 @@ socket is closed.
   [`Channel`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html).
   This is best for when only one subscriber for incoming messages is needed.
 - `signalMessagesSharedFlow` has incoming messages emitted through a
-  [`SharedFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/))
+  [`SharedFlow`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/).
   `SharedFlow`s support multiple subscribers, so this approach is good for broadcasting incoming messages using one shared
   socket connection.
 
