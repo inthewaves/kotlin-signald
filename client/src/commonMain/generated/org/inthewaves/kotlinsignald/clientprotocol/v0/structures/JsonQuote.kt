@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * A quote is a reply to a previous message. ID is the sent time of the message being replied to
  */
 @Serializable
-@Deprecated("Will be removed on Sat, 1 Jan 2022 09:01:01 GMT")
+@Deprecated("Will be removed after Sat, 1 Jan 2022 09:01:01 GMT")
 public data class JsonQuote(
     /**
      * the client timestamp of the message being quoted

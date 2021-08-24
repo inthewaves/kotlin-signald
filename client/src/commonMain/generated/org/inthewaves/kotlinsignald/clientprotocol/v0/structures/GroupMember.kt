@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Deprecated("Will be removed on Sat, 1 Jan 2022 09:01:01 GMT")
+@Deprecated("Will be removed after Sat, 1 Jan 2022 09:01:01 GMT")
 public data class GroupMember(
     /**
      * Example: "aeed01f0-a234-478e-8cf7-261c283151e7"

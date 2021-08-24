@@ -804,7 +804,7 @@ class ProtocolGenerator(
                             .format(DateTimeFormatter.RFC_1123_DATE_TIME)
                         addAnnotation(
                             AnnotationSpec.builder(Deprecated::class)
-                                .addMember("\"Will be removed on $date\"")
+                                .addMember("\"Will be removed after $date\"")
                                 .build()
                         )
                     }
