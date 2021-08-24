@@ -26,7 +26,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-konan-
       - name: Validate binary compatibility of API
-        # Use --no-daemon to allow caching of Gradle caches without running into locks.
         run: ./gradlew apiCheck
       - name: Run all tests
         run: ./gradlew allTests
