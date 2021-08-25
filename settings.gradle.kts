@@ -1,4 +1,5 @@
 rootProject.name = "kotlin-signald"
+include("clientprotocol")
 include("client")
 include("client-coroutines")
 include("example-bot-jvm")

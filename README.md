@@ -11,7 +11,24 @@ Documentation for the library is available at https://inthewaves.github.io/kotli
 
 ## Supported platforms
 
+### `clientprotocol` module
+
+This module contains the model classes for signald, as well as support for serializing them into JSON strings.
+
+The following platforms are supported:
+
+- JVM (JDK 1.8 or higher)
+- Linux x64
+- macOS x64
+- JavaScript (Node.js)
+
+Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
+supported by signald.
+
 ### `client` module
+
+This module contains a simple client API for communicating with signald. It depends on the `clientprotocol` model and
+makes it easier to use the `clientprotocol` classes (e.g., it will automatically add the account ID to each request).
 
 The following platforms are supported:
 
@@ -24,6 +41,9 @@ supported by signald.
 JavaScript (Node.js) support is incomplete.
 
 ### `client-coroutines` module
+
+This module adds coroutine extensions for receiving messages, where incoming messages can be communicated through a
+Channel or a SharedFlow.
 
 The following platforms are supported:
 
@@ -57,6 +77,37 @@ Incoming messages are not limited to text messages sent by a user. They can also
 * and other implicit message types.
 
 signald will handle these incoming messages, as long as there is a message subscription.
+
+### Client protocol
+
+The `clientprotocol` model contains the generated model classes from signald.
+
+#### Gradle
+First add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
+placeholders can be replaced by one of the versions from the
+[releases](https://github.com/inthewaves/kotlin-signald/releases).
+
+- In Kotlin Multiplatform projects, add a dependency to the `commonMain` source set dependencies
+
+    ```kotlin
+    kotlin {
+        sourceSets {
+            commonMain {
+                 dependencies {
+                     implementation("org.inthewaves.kotlin-signald:clientprotocol:<current version>")
+                 }
+            }
+        }
+    }
+    ```
+
+- For single-platform projects such as JVM, add a dependency to the dependencies block.
+
+    ```groovy
+    dependencies {
+        implementation("org.inthewaves.kotlin-signald:clientprotocol:<current version>")
+    }
+    ```
 
 ### Client
 

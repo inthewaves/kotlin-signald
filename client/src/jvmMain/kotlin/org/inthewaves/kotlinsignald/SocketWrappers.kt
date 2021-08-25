@@ -1,7 +1,6 @@
 import org.inthewaves.kotlinsignald.SocketUnavailableException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
-import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Version
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import org.inthewaves.kotlinsignald.decodeVersionOrNull
 import org.inthewaves.kotlinsignald.getSocketAddressOrThrow
@@ -72,7 +71,7 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
          * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
          * @throws SocketUnavailableException if unable to connect to the socket
          * @throws IOException if there is any I/O errors when communicating to the socket (signald first returns the
-         * signald version JSON as [Version]).
+         * signald version JSON as [JsonVersionMessage]).
          */
         @JvmStatic
         @Throws(IOException::class)

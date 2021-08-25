@@ -1037,7 +1037,7 @@ class ProtocolGenerator(
 
         val jsonMessageWrapperTypeSpec = TypeSpec.classBuilder(jsonMessageWrapperClassName).apply {
             addTypeVariable(responseTypeVariable)
-            addModifiers(KModifier.SEALED, KModifier.INTERNAL)
+            addModifiers(KModifier.SEALED)
             addAnnotation(Serializable::class)
             addKdoc("%L", "Encapsulates the response schema from the signald socket.")
 

@@ -4,6 +4,7 @@ import java.net.URI
 plugins {
     id("org.jetbrains.dokka") version "1.5.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.1" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0" apply false
     `maven-publish`
     signing
 }
@@ -33,7 +34,7 @@ allprojects {
 
 subprojects {
     afterEvaluate setupPublish@{
-        if (name !in arrayOf("client", "client-coroutines")) {
+        if (name !in arrayOf("client", "clientprotocol", "client-coroutines")) {
             return@setupPublish
         }
 
