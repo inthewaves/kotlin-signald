@@ -8,7 +8,7 @@ import kotlinx.serialization.json.JsonObject
  * Encapsulates the response schema from the signald socket.
  */
 @Serializable
-public sealed class JsonMessageWrapper<out Response> {
+internal sealed class JsonMessageWrapper<out Response> {
     public open val id: String? = null
 
     public abstract val data: Response?

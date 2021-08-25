@@ -14,11 +14,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.RemoveLinkedDevic
 public data class RemoveLinkedDeviceRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * the ID of the device to unlink
+     *
      * Example: 3
      */
     public val deviceId: Long
@@ -29,7 +31,7 @@ public data class RemoveLinkedDeviceRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is RemoveLinkedDevice && responseWrapper.data is
         EmptyResponse
     ) {

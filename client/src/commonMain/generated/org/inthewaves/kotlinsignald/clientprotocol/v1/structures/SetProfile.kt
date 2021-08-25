@@ -10,16 +10,19 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class SetProfile(
     /**
      * The phone number of the account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * New profile name. Set to empty string for no profile name
+     *
      * Example: "signald user"
      */
     public val name: String,
     /**
      * Path to new profile avatar file. If unset or null, unset the profile avatar
+     *
      * Example: "/tmp/image.jpg"
      */
     public val avatarFile: String? = null,
@@ -48,7 +51,7 @@ public data class SetProfile(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is
         org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile &&
         responseWrapper.data is EmptyResponse

@@ -13,6 +13,7 @@ public data class GroupAccessControl(
      * UNSATISFIABLE when the group link is disabled, ADMINISTRATOR when the group link is enabled
      * but an administrator must approve new members, ANY when the group link is enabled and no
      * approval is required
+     *
      * Example: "ANY"
      */
     public val link: String? = null,

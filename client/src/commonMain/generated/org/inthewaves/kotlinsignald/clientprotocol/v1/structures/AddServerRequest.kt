@@ -21,10 +21,10 @@ public data class AddServerRequest(
     internal override val responseDataSerializer: KSerializer<String>
         get() = String.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): String? = if
-    (responseWrapper is AddServer && responseWrapper.data is String) {
-        responseWrapper.data
-    } else {
-        null
-    }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): String? =
+        if (responseWrapper is AddServer && responseWrapper.data is String) {
+            responseWrapper.data
+        } else {
+            null
+        }
 }

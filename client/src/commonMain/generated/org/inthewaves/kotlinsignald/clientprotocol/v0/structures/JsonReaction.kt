@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 public data class JsonReaction(
     /**
      * the emoji to react with
+     *
      * Example: "👍"
      */
     public val emoji: String? = null,
@@ -20,6 +21,7 @@ public data class JsonReaction(
     public val targetAuthor: JsonAddress? = null,
     /**
      * the client timestamp of the message being reacted to
+     *
      * Example: 1615576442475
      */
     public val targetSentTimestamp: Long? = null

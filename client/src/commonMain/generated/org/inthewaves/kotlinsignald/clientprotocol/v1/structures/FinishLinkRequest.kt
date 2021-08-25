@@ -25,7 +25,7 @@ public data class FinishLinkRequest(
     internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
         if (responseWrapper is FinishLink && responseWrapper.data is Account) {
             responseWrapper.data
         } else {

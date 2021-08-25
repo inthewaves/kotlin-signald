@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class GetLinkedDevicesRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String
@@ -24,7 +25,7 @@ public data class GetLinkedDevicesRequest(
     internal override val responseDataSerializer: KSerializer<LinkedDevices>
         get() = LinkedDevices.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         LinkedDevices? = if (responseWrapper is GetLinkedDevices && responseWrapper.data is
         LinkedDevices
     ) {

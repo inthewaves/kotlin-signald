@@ -34,7 +34,7 @@ public data class SendRequest(
     internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SendResponse? = if (responseWrapper is Send && responseWrapper.data is SendResponse) {
         responseWrapper.data
     } else {

@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Trust
 public data class TrustRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -23,6 +24,7 @@ public data class TrustRequest(
     public val address: JsonAddress,
     /**
      * required if qr_code_data is absent
+     *
      * Example: "373453558586758076680580548714989751943247272727416091564451"
      */
     @SerialName("safety_number")
@@ -34,6 +36,7 @@ public data class TrustRequest(
     public val qrCodeData: String? = null,
     /**
      * One of TRUSTED_UNVERIFIED, TRUSTED_VERIFIED or UNTRUSTED. Default is TRUSTED_VERIFIED
+     *
      * Example: "TRUSTED_VERIFIED"
      */
     @SerialName("trust_level")
@@ -45,7 +48,7 @@ public data class TrustRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is Trust && responseWrapper.data is EmptyResponse) {
         responseWrapper.data
     } else {

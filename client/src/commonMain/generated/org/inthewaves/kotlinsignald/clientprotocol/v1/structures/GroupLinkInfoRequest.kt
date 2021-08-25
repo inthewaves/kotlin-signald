@@ -14,11 +14,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class GroupLinkInfoRequest(
     /**
      * The account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * the signald.group link
+     *
      * Example:
      * "https://signal.group/#CjQKINH_GZhXhfifTcnBkaKTNRxW-hHKnGSq-cJNyPVqHRp8EhDUB7zjKNEl0NaULhsqJCX3"
      */
@@ -30,7 +32,7 @@ public data class GroupLinkInfoRequest(
     internal override val responseDataSerializer: KSerializer<JsonGroupJoinInfo>
         get() = JsonGroupJoinInfo.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         JsonGroupJoinInfo? = if (responseWrapper is GroupLinkInfo && responseWrapper.data is
         JsonGroupJoinInfo
     ) {

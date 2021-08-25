@@ -20,6 +20,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Subscribe
 public data class SubscribeRequest(
     /**
      * The account to subscribe to incoming message for
+     *
      * Example: "+12024561414"
      */
     public val account: String
@@ -30,7 +31,7 @@ public data class SubscribeRequest(
     internal override val responseDataSerializer: KSerializer<SubscriptionResponse>
         get() = SubscriptionResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SubscriptionResponse? = if (responseWrapper is Subscribe && responseWrapper.data is
         SubscriptionResponse
     ) {

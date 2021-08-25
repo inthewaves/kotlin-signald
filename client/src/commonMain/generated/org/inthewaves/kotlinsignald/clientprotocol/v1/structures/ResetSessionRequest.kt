@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ResetSession
 public data class ResetSessionRequest(
     /**
      * The account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -29,7 +30,7 @@ public data class ResetSessionRequest(
     internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SendResponse? = if (responseWrapper is ResetSession && responseWrapper.data is
         SendResponse
     ) {

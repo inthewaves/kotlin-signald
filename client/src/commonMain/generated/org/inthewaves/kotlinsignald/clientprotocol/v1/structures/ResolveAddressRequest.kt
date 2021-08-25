@@ -16,6 +16,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ResolveAddress
 public data class ResolveAddressRequest(
     /**
      * The signal account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -30,10 +31,12 @@ public data class ResolveAddressRequest(
     internal override val responseDataSerializer: KSerializer<JsonAddress>
         get() = JsonAddress.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): JsonAddress? =
-        if (responseWrapper is ResolveAddress && responseWrapper.data is JsonAddress) {
-            responseWrapper.data
-        } else {
-            null
-        }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+        JsonAddress? = if (responseWrapper is ResolveAddress && responseWrapper.data is
+        JsonAddress
+    ) {
+        responseWrapper.data
+    } else {
+        null
+    }
 }

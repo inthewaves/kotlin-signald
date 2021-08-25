@@ -12,6 +12,7 @@ public data class JsonDataMessage(
     /**
      * the timestamp that the message was sent at, according to the sender's device. This is used to
      * uniquely identify this message for things like reactions and quotes.
+     *
      * Example: 1615576442475
      */
     public val timestamp: Long? = null,
@@ -21,6 +22,7 @@ public data class JsonDataMessage(
     public val attachments: List<JsonAttachment> = emptyList(),
     /**
      * the text body of the incoming message.
+     *
      * Example: "hello"
      */
     public val body: String? = null,

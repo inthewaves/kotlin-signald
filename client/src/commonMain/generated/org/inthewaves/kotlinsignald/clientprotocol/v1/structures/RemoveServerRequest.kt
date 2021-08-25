@@ -17,7 +17,7 @@ public data class RemoveServerRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is DeleteServer && responseWrapper.data is
         EmptyResponse
     ) {

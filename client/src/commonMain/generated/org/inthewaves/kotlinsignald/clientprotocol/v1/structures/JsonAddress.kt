@@ -7,6 +7,7 @@ public data class JsonAddress(
     /**
      * An e164 phone number, starting with +. Currently the only available user-facing Signal
      * identifier.
+     *
      * Example: "+13215551234"
      */
     public val number: String? = null,

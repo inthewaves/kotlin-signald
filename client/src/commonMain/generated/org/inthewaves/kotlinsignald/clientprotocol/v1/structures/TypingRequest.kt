@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Typing
 public data class TypingRequest(
     /**
      * The account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -34,7 +35,7 @@ public data class TypingRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is Typing && responseWrapper.data is EmptyResponse) {
         responseWrapper.data
     } else {

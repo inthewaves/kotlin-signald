@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class ApproveMembershipRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -32,7 +33,7 @@ public data class ApproveMembershipRequest(
     internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         JsonGroupV2Info? = if (responseWrapper is ApproveMembership && responseWrapper.data is
         JsonGroupV2Info
     ) {

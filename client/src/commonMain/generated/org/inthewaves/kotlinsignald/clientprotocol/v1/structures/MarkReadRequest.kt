@@ -11,6 +11,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.MarkRead
 public data class MarkReadRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -20,6 +21,7 @@ public data class MarkReadRequest(
     public val to: JsonAddress,
     /**
      * List of messages to mark as read
+     *
      * Example: 1615576442475
      */
     public val timestamps: List<Long>,
@@ -31,7 +33,7 @@ public data class MarkReadRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is MarkRead && responseWrapper.data is
         EmptyResponse
     ) {

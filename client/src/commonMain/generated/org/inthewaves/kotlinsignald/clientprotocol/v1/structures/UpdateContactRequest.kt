@@ -25,7 +25,7 @@ public data class UpdateContactRequest(
     internal override val responseDataSerializer: KSerializer<Profile>
         get() = Profile.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =
         if (responseWrapper is UpdateContact && responseWrapper.data is Profile) {
             responseWrapper.data
         } else {

@@ -749,10 +749,6 @@ class ProtocolGenerator(
             for ((structureTypeName: SignaldType, structureDetails: Structure) in sequence) {
                 val className = ClassName(structurePackage, structureTypeName.name)
                 val typeSpec = TypeSpec.classBuilder(className).apply {
-                    val isDataClass = structureDetails.fields.isNotEmpty()
-                    if (isDataClass) {
-                        addModifiers(KModifier.DATA)
-                    }
                     addAnnotation(Serializable::class)
 
                     check(structureTypeName !in responseTypes || structureTypeName !in requestTypes) {
@@ -810,8 +806,10 @@ class ProtocolGenerator(
                     }
 
                     val constructorBuilder: FunSpec.Builder?
-                    if (isDataClass) {
+                    if (structureDetails.fields.isNotEmpty()) {
+                        addModifiers(KModifier.DATA)
                         constructorBuilder = FunSpec.constructorBuilder()
+
                         for ((fieldName, fieldDetail) in structureDetails.fields) {
                             val propertyName = fieldName.snakeDashToCamelCase()
                             val type = fieldDetail
@@ -842,6 +840,7 @@ class ProtocolGenerator(
                                     }
                                     if (fieldDetail.example != null) {
                                         if (length != 0) {
+                                            appendLine()
                                             appendLine()
                                         }
                                         append("Example: ")
@@ -888,7 +887,9 @@ class ProtocolGenerator(
         responseDataType: TypeName,
         funCreationParams: ResponseResolveFunCreationParams,
     ): FunSpec {
-        return FunSpec.builder(RESPONSE_RESOLVE_FUN_NAME).apply {
+        return FunSpec.builder(RESPONSE_VERIFY_FUN_NAME).apply {
+            addModifiers(KModifier.INTERNAL)
+
             val jsonMessageWrapperInfo = createJsonMessageWrapperInfo(version)
             val funParam =
                 ParameterSpec.builder("responseWrapper", jsonMessageWrapperInfo.className.parameterizedBy(STAR))
@@ -968,14 +969,15 @@ class ProtocolGenerator(
      * https://github.com/thefinn93/signald/blob/488fc612a2cd29f29920cc5ff21011c758182377/src/main/java/io/finn/signald/JsonMessageWrapper.java
      */
     private fun createJsonMessageWrapperInfo(version: SignaldProtocolVersion): JsonMessageWrapperInfo {
-        val jsonMessageWrapperClassName = ClassName(GenUtil.getRequestsPackage(packageName, version), "JsonMessageWrapper")
+        val jsonMessageWrapperClassName =
+            ClassName(GenUtil.getRequestsPackage(packageName, version), "JsonMessageWrapper")
         val responseTypeVariable = TypeVariableName("Response", KModifier.OUT)
 
         data class ParamInfo(val typeSpec: TypeName, val isAbstract: Boolean)
 
         val jsonMessageWrapperTypeSpec = TypeSpec.classBuilder(jsonMessageWrapperClassName).apply {
             addTypeVariable(responseTypeVariable)
-            addModifiers(KModifier.SEALED)
+            addModifiers(KModifier.SEALED, KModifier.INTERNAL)
             addAnnotation(Serializable::class)
             addKdoc("%L", "Encapsulates the response schema from the signald socket.")
 
@@ -1148,7 +1150,7 @@ class ProtocolGenerator(
                                         cause = secondException
                                     )
                                 }
-                                if (nextResponse.id == id && $RESPONSE_RESOLVE_FUN_NAME(nextResponse) != null) {
+                                if (nextResponse.id == id && $RESPONSE_VERIFY_FUN_NAME(nextResponse) != null) {
                                     return %T(pendingChatMessages)
                                 }
                                 throw RequestFailedException(
@@ -1260,7 +1262,7 @@ class ProtocolGenerator(
         .apply { typeVariables.forEach(::addTypeVariable) }
 
     companion object {
-        const val RESPONSE_RESOLVE_FUN_NAME = "getTypedResponseOrNull"
+        const val RESPONSE_VERIFY_FUN_NAME = "getTypedResponseOrNull"
         const val RESPONSE_WRAPPER_SERIALIZER_PROPERTY_NAME = "responseWrapperSerializer"
         const val RESPONSE_DATA_SERIALIZER_PROPERTY_NAME = "responseDataSerializer"
         const val SOCKET_COMM_SUBMIT_FUN_NAME = "submit"

@@ -22,6 +22,7 @@ public data class JsonGroupV2Info(
     public val description: String? = null,
     /**
      * path to the group's avatar on local disk, if available
+     *
      * Example: "/var/lib/signald/avatars/group-EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val avatar: String? = null,

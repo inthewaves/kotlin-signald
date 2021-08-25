@@ -13,6 +13,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class GetAllIdentities(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String
@@ -25,7 +26,7 @@ public data class GetAllIdentities(
     internal override val responseDataSerializer: KSerializer<AllIdentityKeyList>
         get() = AllIdentityKeyList.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         AllIdentityKeyList? = if (responseWrapper is
         org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetAllIdentities &&
         responseWrapper.data is AllIdentityKeyList

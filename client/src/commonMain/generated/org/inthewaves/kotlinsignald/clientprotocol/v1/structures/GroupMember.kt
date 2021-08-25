@@ -11,6 +11,7 @@ public data class GroupMember(
     public val uuid: String? = null,
     /**
      * possible values are: UNKNOWN, DEFAULT, ADMINISTRATOR and UNRECOGNIZED
+     *
      * Example: "DEFAULT"
      */
     public val role: String? = null,

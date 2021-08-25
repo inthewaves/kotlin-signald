@@ -14,11 +14,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UpdateGroup
 public data class UpdateGroupRequest(
     /**
      * The identifier of the account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * the ID of the group to update
+     *
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val groupID: String,
@@ -28,6 +30,7 @@ public data class UpdateGroupRequest(
     public val title: String? = null,
     /**
      * A new group description. Set to empty string to remove an existing description.
+     *
      * Example: "A club for running in Parkdale"
      */
     public val description: String? = null,
@@ -57,7 +60,7 @@ public data class UpdateGroupRequest(
     internal override val responseDataSerializer: KSerializer<GroupInfo>
         get() = GroupInfo.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =
         if (responseWrapper is UpdateGroup && responseWrapper.data is GroupInfo) {
             responseWrapper.data
         } else {

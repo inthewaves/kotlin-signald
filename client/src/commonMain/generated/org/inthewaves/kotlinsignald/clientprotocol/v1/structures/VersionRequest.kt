@@ -15,7 +15,7 @@ public class VersionRequest : SignaldRequestBodyV1<JsonVersionMessage>() {
     internal override val responseDataSerializer: KSerializer<JsonVersionMessage>
         get() = JsonVersionMessage.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         JsonVersionMessage? = if (responseWrapper is Version && responseWrapper.data is
         JsonVersionMessage
     ) {

@@ -25,10 +25,12 @@ public data class GenerateLinkingURIRequest(
     internal override val responseDataSerializer: KSerializer<LinkingURI>
         get() = LinkingURI.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): LinkingURI? =
-        if (responseWrapper is GenerateLinkingUri && responseWrapper.data is LinkingURI) {
-            responseWrapper.data
-        } else {
-            null
-        }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+        LinkingURI? = if (responseWrapper is GenerateLinkingUri && responseWrapper.data is
+        LinkingURI
+    ) {
+        responseWrapper.data
+    } else {
+        null
+    }
 }

@@ -11,11 +11,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.LeaveGroup
 public data class LeaveGroupRequest(
     /**
      * The account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * The group to leave
+     *
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val groupID: String
@@ -26,7 +28,7 @@ public data class LeaveGroupRequest(
     internal override val responseDataSerializer: KSerializer<GroupInfo>
         get() = GroupInfo.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupInfo? =
         if (responseWrapper is LeaveGroup && responseWrapper.data is GroupInfo) {
             responseWrapper.data
         } else {

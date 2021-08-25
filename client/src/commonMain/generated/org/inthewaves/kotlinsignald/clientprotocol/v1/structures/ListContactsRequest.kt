@@ -22,10 +22,12 @@ public data class ListContactsRequest(
     internal override val responseDataSerializer: KSerializer<ProfileList>
         get() = ProfileList.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): ProfileList? =
-        if (responseWrapper is ListContacts && responseWrapper.data is ProfileList) {
-            responseWrapper.data
-        } else {
-            null
-        }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+        ProfileList? = if (responseWrapper is ListContacts && responseWrapper.data is
+        ProfileList
+    ) {
+        responseWrapper.data
+    } else {
+        null
+    }
 }

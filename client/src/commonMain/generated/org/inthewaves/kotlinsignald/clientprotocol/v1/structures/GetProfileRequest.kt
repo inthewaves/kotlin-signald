@@ -32,7 +32,7 @@ public data class GetProfileRequest(
     internal override val responseDataSerializer: KSerializer<Profile>
         get() = Profile.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Profile? =
         if (responseWrapper is GetProfile && responseWrapper.data is Profile) {
             responseWrapper.data
         } else {

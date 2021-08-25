@@ -15,6 +15,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Register
 public data class RegisterRequest(
     /**
      * the e164 phone number to register with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -38,7 +39,7 @@ public data class RegisterRequest(
     internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
         if (responseWrapper is Register && responseWrapper.data is Account) {
             responseWrapper.data
         } else {

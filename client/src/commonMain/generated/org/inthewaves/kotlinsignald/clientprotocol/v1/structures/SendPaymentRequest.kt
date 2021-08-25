@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SendPayment
 public data class SendPaymentRequest(
     /**
      * the account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -30,7 +31,7 @@ public data class SendPaymentRequest(
     internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SendResponse? = if (responseWrapper is SendPayment && responseWrapper.data is
         SendResponse
     ) {

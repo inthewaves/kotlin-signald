@@ -18,6 +18,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Unsubscribe
 public data class UnsubscribeRequest(
     /**
      * The account to unsubscribe from
+     *
      * Example: "+12024561414"
      */
     public val account: String
@@ -28,7 +29,7 @@ public data class UnsubscribeRequest(
     internal override val responseDataSerializer: KSerializer<SubscriptionResponse>
         get() = SubscriptionResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SubscriptionResponse? = if (responseWrapper is Unsubscribe && responseWrapper.data is
         SubscriptionResponse
     ) {

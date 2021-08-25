@@ -30,7 +30,7 @@ public data class ReactRequest(
     internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SendResponse? = if (responseWrapper is React && responseWrapper.data is SendResponse) {
         responseWrapper.data
     } else {

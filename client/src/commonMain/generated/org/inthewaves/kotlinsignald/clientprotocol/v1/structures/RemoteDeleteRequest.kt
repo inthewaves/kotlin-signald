@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.RemoteDelete
 public data class RemoteDeleteRequest(
     /**
      * the account to use
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -25,6 +26,7 @@ public data class RemoteDeleteRequest(
     /**
      * the group to send the delete message to. should match group the message to be deleted was
      * sent to. required if address is not set.
+     *
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     public val group: String? = null,
@@ -36,7 +38,7 @@ public data class RemoteDeleteRequest(
     internal override val responseDataSerializer: KSerializer<SendResponse>
         get() = SendResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         SendResponse? = if (responseWrapper is RemoteDelete && responseWrapper.data is
         SendResponse
     ) {

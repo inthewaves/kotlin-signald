@@ -18,10 +18,12 @@ public class ListAccountsRequest : SignaldRequestBodyV1<AccountList>() {
     internal override val responseDataSerializer: KSerializer<AccountList>
         get() = AccountList.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): AccountList? =
-        if (responseWrapper is ListAccounts && responseWrapper.data is AccountList) {
-            responseWrapper.data
-        } else {
-            null
-        }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+        AccountList? = if (responseWrapper is ListAccounts && responseWrapper.data is
+        AccountList
+    ) {
+        responseWrapper.data
+    } else {
+        null
+    }
 }

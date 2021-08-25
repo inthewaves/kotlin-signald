@@ -10,6 +10,7 @@ import kotlinx.serialization.Serializable
 public data class JsonQuote(
     /**
      * the client timestamp of the message being quoted
+     *
      * Example: 1615576442475
      */
     public val id: Long? = null,
@@ -19,6 +20,7 @@ public data class JsonQuote(
     public val author: JsonAddress? = null,
     /**
      * the body of the message being quoted
+     *
      * Example: "hey ￼ what's up?"
      */
     public val text: String? = null,

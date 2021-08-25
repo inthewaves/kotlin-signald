@@ -11,6 +11,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class CreateGroupRequest(
     /**
      * The account to interact with
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -30,6 +31,7 @@ public data class CreateGroupRequest(
     /**
      * The role of all members other than the group creator. Options are ADMINISTRATOR or DEFAULT
      * (case insensitive)
+     *
      * Example: "ADMINISTRATOR"
      */
     @SerialName("member_role")
@@ -41,7 +43,7 @@ public data class CreateGroupRequest(
     internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         JsonGroupV2Info? = if (responseWrapper is CreateGroup && responseWrapper.data is
         JsonGroupV2Info
     ) {

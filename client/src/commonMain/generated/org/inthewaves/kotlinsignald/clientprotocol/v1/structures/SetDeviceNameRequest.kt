@@ -14,6 +14,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetDeviceName
 public data class SetDeviceNameRequest(
     /**
      * The account to set the device name of
+     *
      * Example: "+12024561414"
      */
     public val account: String,
@@ -29,7 +30,7 @@ public data class SetDeviceNameRequest(
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         EmptyResponse? = if (responseWrapper is SetDeviceName && responseWrapper.data is
         EmptyResponse
     ) {

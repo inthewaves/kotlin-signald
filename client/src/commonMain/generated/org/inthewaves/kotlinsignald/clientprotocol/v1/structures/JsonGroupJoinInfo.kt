@@ -33,6 +33,7 @@ public data class JsonGroupJoinInfo(
      * The Group V2 revision. This is incremented by clients whenever they update group information,
      * and it is often used by clients to determine if the local group state is out-of-date with the
      * server's revision.
+     *
      * Example: 5
      */
     public val revision: Int? = null,

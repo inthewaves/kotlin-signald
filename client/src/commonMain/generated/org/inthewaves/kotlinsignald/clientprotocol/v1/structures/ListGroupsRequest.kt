@@ -17,7 +17,7 @@ public data class ListGroupsRequest(
     internal override val responseDataSerializer: KSerializer<GroupList>
         get() = GroupList.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupList? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): GroupList? =
         if (responseWrapper is ListGroups && responseWrapper.data is GroupList) {
             responseWrapper.data
         } else {

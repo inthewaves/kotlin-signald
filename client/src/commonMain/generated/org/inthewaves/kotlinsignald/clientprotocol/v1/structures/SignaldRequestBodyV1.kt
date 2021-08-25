@@ -40,7 +40,7 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
      * non-null value iff the wrapper and data is the right type. This is desirable due to type
      * erasure.
      */
-    public abstract fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+    internal abstract fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
         ResponseData?
 
     /**

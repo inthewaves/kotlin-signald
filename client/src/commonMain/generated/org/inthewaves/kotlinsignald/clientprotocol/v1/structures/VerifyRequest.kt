@@ -15,11 +15,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Verify
 public data class VerifyRequest(
     /**
      * the e164 phone number being verified
+     *
      * Example: "+12024561414"
      */
     public val account: String,
     /**
      * the verification code, dash (-) optional
+     *
      * Example: "555555"
      */
     public val code: String
@@ -30,7 +32,7 @@ public data class VerifyRequest(
     internal override val responseDataSerializer: KSerializer<Account>
         get() = Account.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): Account? =
         if (responseWrapper is Verify && responseWrapper.data is Account) {
             responseWrapper.data
         } else {

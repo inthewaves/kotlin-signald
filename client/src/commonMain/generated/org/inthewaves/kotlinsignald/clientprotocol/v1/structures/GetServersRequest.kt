@@ -15,10 +15,11 @@ public class GetServersRequest : SignaldRequestBodyV1<ServerList>() {
     internal override val responseDataSerializer: KSerializer<ServerList>
         get() = ServerList.serializer()
 
-    public override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>): ServerList? =
-        if (responseWrapper is GetServers && responseWrapper.data is ServerList) {
-            responseWrapper.data
-        } else {
-            null
-        }
+    internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
+        ServerList? = if (responseWrapper is GetServers && responseWrapper.data is ServerList) {
+
+        responseWrapper.data
+    } else {
+        null
+    }
 }
