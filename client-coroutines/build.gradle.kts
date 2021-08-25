@@ -51,7 +51,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(":client"))
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
             }
         }
@@ -59,6 +58,16 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
             }
+        }
+
+        val synchronousClientMain by creating {
+            dependsOn(commonMain)
+            dependencies {
+                api(project(":client"))
+            }
+        }
+        val jvmMain by getting {
+            dependsOn(synchronousClientMain)
         }
     }
 }
