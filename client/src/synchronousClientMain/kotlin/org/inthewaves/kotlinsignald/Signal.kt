@@ -3,8 +3,6 @@ package org.inthewaves.kotlinsignald
 import PersistentSocketWrapper
 import SocketWrapper
 import kotlinx.datetime.Clock
-import org.inthewaves.kotlinsignald.Signal.Recipient.Group
-import org.inthewaves.kotlinsignald.Signal.Recipient.Individual
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
@@ -26,11 +24,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetIdentitiesRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetLinkedDevicesRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetProfileRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetServersRequest
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupAccessControl
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkInfoRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupList
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupMember
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JoinGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
@@ -810,25 +806,6 @@ public class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
-     * Used with the [trust] function.
-     */
-    public enum class TrustLevel {
-        TRUSTED_UNVERIFIED, TRUSTED_VERIFIED, UNTRUSTED
-    }
-
-    /**
-     * Used with the [trust] function.
-     */
-    public sealed class Fingerprint {
-        public class SafetyNumber(public val safetyNumber: String) : Fingerprint()
-
-        /**
-         * @param qrCodeData base64-encoded QR code data.
-         */
-        public class QrCodeData(public val qrCodeData: String) : Fingerprint()
-    }
-
-    /**
      * Trust another user's safety number using either the QR code data or the safety number text
      *
      * @param address The user to trust
@@ -923,85 +900,6 @@ public class Signal @Throws(SignaldException::class) constructor(
                 inboxPosition = inboxPosition
             ).submit(socketWrapper)
         }
-    }
-
-    /**
-     * Used with the [updateGroup] function.
-     *
-     * Derived from
-     * [https://github.com/signalapp/Signal-Android/blob/c615b14c512d3b0fffec3da93f8e2e3607ed6ab4/libsignal/service/src/main/proto/Groups.proto#L49]
-     */
-    public enum class AccessRequired(public val value: Int) {
-        UNRECOGNIZED(-1),
-        UNKNOWN(0),
-        ANY(1),
-        MEMBER(2),
-        ADMINISTRATOR(3),
-        UNSATISFIABLE(4),
-    }
-
-    /**
-     * Used with the [updateGroup] function.
-     */
-    public enum class GroupLinkStatus {
-        OFF, ON_NO_ADMIN_APPROVAL, ON_WITH_ADMIN_APPROVAL
-    }
-
-    /**
-     * Used with the [updateGroup] function. class to enforce that only one of the group attributes are updated at once.
-     */
-    public sealed interface GroupUpdate {
-        public class Title(public val newTitle: String) : GroupUpdate
-        public class Description(public val newDescription: String) : GroupUpdate
-        public class Avatar(public val newAvatarPath: String) : GroupUpdate
-        /**
-         * @property newTimerSeconds The new disappearing message timer in seconds. Set to 0 to disable
-         */
-        public class UpdateExpirationTimer(public val newTimerSeconds: Int) : GroupUpdate
-        public class AddMembers(public val membersToAdd: Iterable<JsonAddress>) : GroupUpdate
-        public class RemoveMembers(public val membersToRemove: Iterable<JsonAddress>) : GroupUpdate
-        public class UpdateRole(public val memberWithUpdatedRole: GroupMember) : GroupUpdate
-        public class UpdateAccessControl(update: AccessControlUpdate) : GroupUpdate {
-            public val groupAccessControl: GroupAccessControl = update.groupAccessControlBody
-        }
-        public object ResetLink : GroupUpdate
-    }
-
-    /**
-     * Used with the [updateGroup] function inside of [GroupUpdate]. A class to enforce that only one of the access
-     * controls are updated at once.
-     */
-    public sealed class AccessControlUpdate {
-        internal abstract val accessRequired: AccessRequired
-
-        /**
-         * The body of the [GroupAccessControl] to perform the change.
-         */
-        public val groupAccessControlBody: GroupAccessControl
-            get() = when (this) {
-                is GroupLink -> GroupAccessControl(link = accessRequired.name)
-                is Attributes -> GroupAccessControl(attributes = accessRequired.name)
-                is Members -> GroupAccessControl(attributes = accessRequired.name)
-            }
-
-        /**
-         * Edit the group link status.
-         */
-        public class GroupLink(newGroupLinkStatus: GroupLinkStatus) : AccessControlUpdate() {
-            override val accessRequired: AccessRequired = when (newGroupLinkStatus) {
-                GroupLinkStatus.OFF -> AccessRequired.UNSATISFIABLE
-                GroupLinkStatus.ON_NO_ADMIN_APPROVAL -> AccessRequired.ANY
-                GroupLinkStatus.ON_WITH_ADMIN_APPROVAL -> AccessRequired.ADMINISTRATOR
-            }
-        }
-        /**
-         * Edit the access required to edit group information.
-         */
-        public class Attributes(public override val accessRequired: AccessRequired) : AccessControlUpdate()
-        /**
-         * Edit the access required to add new members.
-         */
-        public class Members(public override val accessRequired: AccessRequired) : AccessControlUpdate()
     }
 
     /**
@@ -1133,21 +1031,5 @@ public class Signal @Throws(SignaldException::class) constructor(
         } finally {
             subscriptionHandler.close()
         }
-    }
-
-    /**
-     * Specifies a recipient type for functions that can send to either type (e.g., [react], [remoteDelete], [send],
-     * [setExpiration], [typing]). Recipients are either to a [Group] or an [Individual].
-     */
-    public sealed class Recipient {
-        /**
-         * A group as the recipient, using the base64-encoded [groupID] as the identifier. [groupID]s can be retrieved
-         * with [listGroups] or by reading the responses from [joinGroup] or [getGroupLinkInfo].
-         */
-        public class Group(public val groupID: String) : Recipient()
-        /**
-         * A Signal user as the recipient.
-         */
-        public class Individual(public val address: JsonAddress) : Recipient()
     }
 }

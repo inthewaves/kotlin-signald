@@ -39,7 +39,7 @@ class What {
 suspend fun main() {
     println(greeting("nosejs-test"))
 
-    val socketWrapper = SocketWrapper.createAsync("/var/run/signald/signald.sock")
+    val socketWrapper = SocketWrapper.createSuspend("/var/run/signald/signald.sock")
 
     println("Sending version request:")
 

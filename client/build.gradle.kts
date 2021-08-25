@@ -66,7 +66,6 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            kotlin.setSrcDirs(listOf("src/commonMain/kotlin", "src/commonMain/generated"))
             dependencies {
                 api(project(":clientprotocol"))
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")

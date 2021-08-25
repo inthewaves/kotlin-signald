@@ -5,6 +5,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
+import org.inthewaves.kotlinsignald.Recipient
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
@@ -136,7 +137,7 @@ private fun handleMessage(
             }
 
             val sendResponse = signal.send(
-                recipient = Signal.Recipient.Individual(source),
+                recipient = Recipient.Individual(source),
                 messageBody = "You sent me this message:\n$body",
                 quote = JsonQuote(
                     id = data.timestamp!!,
