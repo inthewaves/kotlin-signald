@@ -104,7 +104,7 @@ private fun sendLineAndReadLineToSocket(socketFd: Int, request: String): String 
     return readLineFromSocket(socketFd) ?: throw SignaldException("socket EOF")
 }
 
-public actual class SocketWrapper @Throws(SocketUnavailableException::class) private actual constructor(
+public actual class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
     socketPath: String?
 ) : SuspendSocketCommunicator {
     public val version: JsonVersionMessage?
@@ -146,7 +146,7 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
     }
 }
 
-public actual class PersistentSocketWrapper private actual constructor(
+public actual class PersistentSocketWrapper private constructor(
     socketPath: String?
 ) : SuspendSocketCommunicator {
     public val version: JsonVersionMessage?

@@ -62,7 +62,7 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
  * @throws IOException if there is any I/O errors when communicating to the socket (it first returns the signald version
  * JSON as [Version]).
  */
-public actual class SocketWrapper @Throws(SocketUnavailableException::class) private actual constructor(
+public actual class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
     socketPath: String?
 ) : SuspendSocketCommunicator {
     private val socketAddress: AFUNIXSocketAddress = getSocketAddressOrThrow(socketPath)
@@ -131,7 +131,7 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
  * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
  * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
-public actual class PersistentSocketWrapper private actual constructor(
+public actual class PersistentSocketWrapper private constructor(
     socketPath: String?
 ) : SuspendSocketCommunicator, AutoCloseable {
     private val socket: AFUNIXSocket = AFUNIXSocket.connectTo(getSocketAddressOrThrow(socketPath))

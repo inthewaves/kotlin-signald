@@ -41,13 +41,8 @@ internal fun getDefaultSocketPaths(): Sequence<String> =
 /**
  * A wrapper for a socket that makes new socket connections for every request and closes the connection after a request.
  * making it thread safe.
- *
- * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
- * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
-public expect class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
-    socketPath: String? = null
-) : SuspendSocketCommunicator {
+public expect class SocketWrapper : SuspendSocketCommunicator {
     public val actualSocketPath: String
 
     public companion object {
@@ -60,9 +55,7 @@ public expect class SocketWrapper @Throws(SocketUnavailableException::class) pri
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
  * after a subscribe request.
  */
-public expect class PersistentSocketWrapper @Throws(SocketUnavailableException::class) private constructor(
-    socketPath: String? = null
-) : SuspendSocketCommunicator {
+public expect class PersistentSocketWrapper : SuspendSocketCommunicator {
     public fun close()
 
     public companion object {
