@@ -86,7 +86,7 @@ public abstract class CoroutineMessageSubscriptionHandler(
      */
     protected abstract fun onCompletion()
 
-    public override fun close() {
+    override fun close() {
         super.close()
         emissionJob.cancel(message = "Closing the message subscription handler")
     }
