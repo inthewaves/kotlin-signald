@@ -1,6 +1,7 @@
 package org.inthewaves.kotlinsignald.subscription
 
 import org.inthewaves.kotlinsignald.Signal
+import org.inthewaves.kotlinsignald.Subscription
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 
 /**
@@ -10,7 +11,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
  */
 public abstract class MessageSubscriptionHandler @Throws(SignaldException::class) constructor(signal: Signal) {
-    protected val subscription: Signal.Subscription = signal.subscribe()
+    protected val subscription: Subscription = signal.subscribe()
 
     /**
      * The number of messages sent while we were waiting for signald's response to the subscribe request.

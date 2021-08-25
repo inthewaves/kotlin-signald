@@ -177,6 +177,8 @@ class ProtocolGenerator(
 
     private val socketCommunicatorClassName = ClassName(clientProtocolPackage, "SocketCommunicator")
 
+    private val suspendSocketCommunicatorClassName = ClassName(clientProtocolPackage, "SuspendSocketCommunicator")
+
     private val signaldExceptionClassName = ClassName(clientProtocolPackage, "SignaldException")
 
     private val requestFailedExceptionClassName = ClassName(clientProtocolPackage, "RequestFailedException")
@@ -330,62 +332,96 @@ class ProtocolGenerator(
         }.build()
         writeTypeSpecFile(requestFailedExceptionClassName, requestFailedExceptionTypeSpec, genFilesDir)
 
-        val socketCommunicatorTypeSpec = TypeSpec.interfaceBuilder(socketCommunicatorClassName)
-            .addKdoc(
-                "%L",
-                "An interface to facilitate communication with signald socket. The implementation might close socket " +
-                    "connections after making a request, in which case, the [$SOCKET_COMM_READLINE_FUN_NAME] " +
-                    "function will not be supported."
-            )
-            .addFunction(
-                FunSpec.builder(SOCKET_COMM_SUBMIT_FUN_NAME)
-                    .addModifiers(KModifier.ABSTRACT)
-                    .addKdoc(
-                        "%L",
-                        "Sends the [request] to the socket as a single line of JSON (line terminated with \\n), and " +
+        fun createSocketCommunicatorTypeSpec(isForSuspend: Boolean): TypeSpec {
+            val className = if (isForSuspend) suspendSocketCommunicatorClassName else socketCommunicatorClassName
+            return TypeSpec.interfaceBuilder(className).apply {
+                if (isForSuspend) {
+                    addSuperinterface(socketCommunicatorClassName)
+                }
+
+                addKdoc(
+                    "%L",
+                    "An interface to facilitate communication with signald socket. The implementation might close " +
+                        "socket connections after making a request, in which case, the " +
+                        "[$SOCKET_COMM_READLINE_FUN_NAME] function will not be supported."
+                )
+
+                val functionModifiers =
+                    if (isForSuspend) listOf(KModifier.ABSTRACT, KModifier.SUSPEND) else listOf(KModifier.ABSTRACT)
+
+                val submitFunName = if (isForSuspend) {
+                    SOCKET_COMM_SUBMIT_SUSPEND_FUN_NAME
+                } else {
+                    SOCKET_COMM_SUBMIT_FUN_NAME
+                }
+
+                val readLineFunName = if (isForSuspend) {
+                    SOCKET_COMM_READLINE_SUSPEND_FUN_NAME
+                } else {
+                    SOCKET_COMM_READLINE_FUN_NAME
+                }
+
+                addFunction(
+                    FunSpec.builder(submitFunName).apply {
+                        addModifiers(functionModifiers)
+                        addKdoc(
+                            "%L",
+                            "Sends the [request] to the socket as a single line of JSON (line terminated with \\n), and " +
                                 "returns the JSON response from signald."
-                    )
-                    .addKdoc(
-                        "\n\n%L",
-                        "@throws [${signaldExceptionClassName.simpleName}] if an " +
-                            "I/O error occurs during socket communication")
-                    .addAnnotation(
-                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                            .addMember("%T::class", signaldExceptionClassName)
-                            .build()
-                    )
-                    .addParameter("request", String::class)
-                    .returns(String::class)
-                    .build()
-            )
-            .addFunction(
-                FunSpec.builder(SOCKET_COMM_READLINE_FUN_NAME)
-                    .addModifiers(KModifier.ABSTRACT)
-                    .addKdoc(
-                        "%L",
-                        "Reads a JSON message from the socket, blocking until a message is received or " +
+                        )
+                        addKdoc(
+                            "\n\n%L",
+                            "@throws [${signaldExceptionClassName.simpleName}] if an " +
+                                "I/O error occurs during socket communication"
+                        )
+                        if (!isForSuspend) {
+                            addAnnotation(
+                                AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                    .addMember("%T::class", signaldExceptionClassName)
+                                    .build()
+                            )
+                        }
+                        addParameter("request", String::class)
+                        returns(String::class)
+                    }.build()
+                )
+                addFunction(
+                    FunSpec.builder(readLineFunName).apply {
+                        addModifiers(functionModifiers)
+                        addKdoc(
+                            "%L",
+                            "Reads a JSON message from the socket, blocking until a message is received or " +
                                 "returning null if the socket closes. Might not be supported by the implementation."
-                    )
-                    .addKdoc(
-                        "\n%L",
-                        "@throws [${signaldExceptionClassName.simpleName}] if an " +
-                            "I/O error occurs during socket communication"
-                    )
-                    .addKdoc(
-                        "\n%L",
-                        "@throws [${UnsupportedOperationException::class.simpleName}] the communicator " +
-                            "doesn't support this operation (can happen if the communicator closes connections after " +
-                            "a request is handled).")
-                    .addAnnotation(
-                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                            .addMember("%T::class", signaldExceptionClassName)
-                            .build()
-                    )
-                    .returns(String::class.asClassName().copy(nullable = true))
-                    .build()
-            )
-            .build()
+                        )
+                        addKdoc(
+                            "\n%L",
+                            "@throws [${signaldExceptionClassName.simpleName}] if an " +
+                                "I/O error occurs during socket communication"
+                        )
+                        addKdoc(
+                            "\n%L",
+                            "@throws [${UnsupportedOperationException::class.simpleName}] the communicator " +
+                                "doesn't support this operation (can happen if the communicator closes connections after " +
+                                "a request is handled)."
+                        )
+                        if (!isForSuspend) {
+                            addAnnotation(
+                                AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                    .addMember("%T::class", signaldExceptionClassName)
+                                    .build()
+                            )
+                        }
+                        returns(String::class.asClassName().copy(nullable = true))
+                    }.build()
+                )
+            }.build()
+        }
+
+        val socketCommunicatorTypeSpec = createSocketCommunicatorTypeSpec(isForSuspend = false)
         writeTypeSpecFile(socketCommunicatorClassName, socketCommunicatorTypeSpec, genFilesDir)
+        val suspendSocketCommunicatorTypeSpec = createSocketCommunicatorTypeSpec(isForSuspend = true)
+        writeTypeSpecFile(suspendSocketCommunicatorClassName, suspendSocketCommunicatorTypeSpec, genFilesDir)
+
 
         val protocolVersions: Set<SignaldProtocolVersion> = protocolDoc.types.keys
             .asSequence()
@@ -474,55 +510,70 @@ class ProtocolGenerator(
                             )
                             .defaultValue("this.%N", idPropertySpec)
                             .build()
-                        addFunction(
-                            FunSpec.builder(BASE_RESPONSE_SUBMIT_FUN_NAME)
-                                .returns(responseDataTypeVar)
-                                .addParameter("socketCommunicator", socketCommunicatorClassName)
-                                .addAnnotation(
-                                    AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                                        .addMember("%T::class", signaldExceptionClassName)
-                                        .build()
-                                )
-                                .addKdoc(
+
+                        fun createSubmitFunSpecsForInterface(isForSuspend: Boolean): List<FunSpec> {
+                            val (funName, socketCommClassName) = if (isForSuspend) {
+                                BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME to suspendSocketCommunicatorClassName
+                            } else {
+                                BASE_RESPONSE_SUBMIT_FUN_NAME to socketCommunicatorClassName
+                            }
+
+                            val publicSubmitFun = FunSpec.builder(funName).apply {
+                                returns(responseDataTypeVar)
+                                addParameter("socketCommunicator", socketCommClassName)
+                                if (isForSuspend) {
+                                    addModifiers(KModifier.SUSPEND)
+                                } else {
+                                    addAnnotation(
+                                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                            .addMember("%T::class", signaldExceptionClassName)
+                                            .build()
+                                    )
+                                }
+                                addKdoc(
                                     "%L",
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
-                                            "sends a bad or error response, or unable to serialize our request"
+                                        "sends a bad or error response, or unable to serialize our request"
                                 )
-                                .addKdoc(
+                                addKdoc(
                                     "\n%L",
                                     "@throws ${signaldExceptionClassName.simpleName} if an I/O error occurs during " +
                                         "socket communication"
                                 )
-                                .addStatement("return $BASE_RESPONSE_SUBMIT_FUN_NAME(socketCommunicator, id)")
-                                .build()
-                        )
-                        addFunction(
-                            FunSpec.builder(BASE_RESPONSE_SUBMIT_FUN_NAME)
-                                .addModifiers(KModifier.OPEN, KModifier.INTERNAL)
-                                .returns(responseDataTypeVar)
-                                .addAnnotation(
-                                    AnnotationSpec.builder(ClassName("kotlin", "Throws"))
-                                        .addMember("%T::class", signaldExceptionClassName)
-                                        .build()
-                                )
-                                .addKdoc(
+                                addStatement("return $funName(socketCommunicator, id)")
+                            }.build()
+
+                            val internalSubmitFun = FunSpec.builder(funName).apply {
+                                addModifiers(KModifier.OPEN, KModifier.INTERNAL)
+                                if (isForSuspend) {
+                                    addModifiers(KModifier.SUSPEND)
+                                }
+                                returns(responseDataTypeVar)
+                                if (!isForSuspend) {
+                                    addAnnotation(
+                                        AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                            .addMember("%T::class", signaldExceptionClassName)
+                                            .build()
+                                    )
+                                }
+                                addParameter("socketCommunicator", socketCommClassName)
+                                addParameter(idParameterSpec)
+                                addKdoc(
                                     "%L",
                                     "Marked as internal so tests can access. Normal API consumers should use " +
-                                            "the one-parameter overload."
+                                        "the one-parameter overload."
                                 )
-                                .addKdoc(
+                                addKdoc(
                                     "\n\n%L",
                                     "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
-                                            "sends a bad or error response, or unable to serialize our request"
+                                        "sends a bad or error response, or unable to serialize our request"
                                 )
-                                .addKdoc(
+                                addKdoc(
                                     "\n%L",
                                     "@throws ${signaldExceptionClassName.simpleName} if an I/O error occurs during " +
                                         "socket communication"
                                 )
-                                .addParameter("socketCommunicator", socketCommunicatorClassName)
-                                .addParameter(idParameterSpec)
-                                .addCode(
+                                addCode(
                                     """
                                     val requestJson = try { 
                                         %T.encodeToString(serializer(%L), this)
@@ -542,7 +593,12 @@ class ProtocolGenerator(
                                 )
                                 // Use * as the type variable since the server can send an error (and types are erased
                                 // anyway)
-                                .addCode(
+                                val submitFunName = if (isForSuspend) {
+                                    SOCKET_COMM_SUBMIT_SUSPEND_FUN_NAME
+                                } else {
+                                    SOCKET_COMM_SUBMIT_FUN_NAME
+                                }
+                                addCode(
                                     """
                                     val responseJson = socketCommunicator.%L(requestJson)
                                     val response: %T<%T> = try {
@@ -552,7 +608,7 @@ class ProtocolGenerator(
                                     }
                                     
                                 """.trimIndent(),
-                                    SOCKET_COMM_SUBMIT_FUN_NAME,
+                                    submitFunName,
                                     // val response: %T<%T> = try {
                                     responseWrapperClassName, STAR,
                                     signaldJsonClassName, responseWrapperClassName, responseDataSerializerProperty.name,
@@ -560,58 +616,62 @@ class ProtocolGenerator(
                                     SerializationException::class,
                                     requestFailedExceptionClassName
                                 )
-                                .beginControlFlow(
+                                beginControlFlow(
                                     "if (response is %T)",
                                     UNEXPECTED_ERROR_ACTION_NAME.asClassName(packageName, protocolVersion)
                                 )
-                                .addStatement(
+                                addStatement(
                                     "throw %T(responseJsonString = responseJson," +
-                                            " errorBody = response.data," +
-                                            " errorType = response.errorType," +
-                                            " exception = response.exception," +
-                                            " extraMessage = %S)",
+                                        " errorBody = response.data," +
+                                        " errorType = response.errorType," +
+                                        " exception = response.exception," +
+                                        " extraMessage = %S)",
                                     requestFailedExceptionClassName,
                                     "unexpected error"
                                 )
-                                .endControlFlow()
-                                .beginControlFlow("if (response.id != %N)", idParameterSpec)
-                                .addStatement(
+                                endControlFlow()
+                                beginControlFlow("if (response.id != %N)", idParameterSpec)
+                                addStatement(
                                     "throw %T(responseJsonString = responseJson, extraMessage = %P)",
                                     requestFailedExceptionClassName,
                                     "response has unexpected ID: \${response.id} (expected \$${idParameterSpec.name})"
                                 )
-                                .endControlFlow()
-                                .beginControlFlow(
+                                endControlFlow()
+                                beginControlFlow(
                                     "if (response.version != null && response.version != %N)",
                                     versionPropertySpec
                                 )
-                                .addStatement(
+                                addStatement(
                                     "throw %T(responseJsonString = responseJson, extraMessage = %P)",
                                     requestFailedExceptionClassName,
                                     "response has unexpected version: " +
-                                            "\${response.version} (expected \$${versionPropertySpec.name})"
+                                        "\${response.version} (expected \$${versionPropertySpec.name})"
                                 )
-                                .endControlFlow()
-                                .beginControlFlow("if (!response.isSuccessful)")
-                                .addStatement(
+                                endControlFlow()
+                                beginControlFlow("if (!response.isSuccessful)")
+                                addStatement(
                                     "throw %T(responseJsonString = responseJson," +
-                                            " errorBody = response.error," +
-                                            " errorType = response.errorType," +
-                                            " exception = response.exception)",
+                                        " errorBody = response.error," +
+                                        " errorType = response.errorType," +
+                                        " exception = response.exception)",
                                     requestFailedExceptionClassName
                                 )
-                                .endControlFlow()
-                                .addCode("return %N(response) ?: ", responseVerificationFunSpec)
-                                .addCode(
+                                endControlFlow()
+                                addCode("return %N(response) ?: ", responseVerificationFunSpec)
+                                addCode(
                                     "throw %T(responseJsonString = %L, extraMessage = %P)",
                                     requestFailedExceptionClassName,
                                     "responseJson",
                                     "response failed verification " +
-                                            "(wrapper type: \${response::class.simpleName}, " +
-                                            "data type: \${response.data!!::class.simpleName})"
+                                        "(wrapper type: \${response::class.simpleName}, " +
+                                        "data type: \${response.data!!::class.simpleName})"
                                 )
-                                .build()
-                        )
+                            }.build()
+                            return listOf(publicSubmitFun, internalSubmitFun)
+                        }
+
+                        addFunctions(createSubmitFunSpecsForInterface(isForSuspend = false))
+                        addFunctions(createSubmitFunSpecsForInterface(isForSuspend = true))
                     }.build(),
                     genFilesDir
                 )
@@ -1113,19 +1173,38 @@ class ProtocolGenerator(
             ->
             require(actionInfo != null)
 
-            addFunction(
-                FunSpec.builder(BASE_RESPONSE_SUBMIT_FUN_NAME).apply {
+            fun createSubscriptionSubmitOverrides(isForSuspend: Boolean): FunSpec {
+                val baseSubmitFunName = if (isForSuspend) {
+                    BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME
+                } else {
+                    BASE_RESPONSE_SUBMIT_FUN_NAME
+                }
+                return FunSpec.builder(baseSubmitFunName).apply {
                     addModifiers(KModifier.OVERRIDE)
-                    addParameter("socketCommunicator", socketCommunicatorClassName)
+                    val socketCommClassName =
+                        if (isForSuspend) {
+                            addModifiers(KModifier.SUSPEND)
+                            suspendSocketCommunicatorClassName
+                        } else {
+                            socketCommunicatorClassName
+                        }
+
+                    addParameter("socketCommunicator", socketCommClassName)
                     addParameter("id", String::class)
                     returns(getSubscriptionResponseClassName(version))
                     beginControlFlow("try")
-                    addStatement("return super.${BASE_RESPONSE_SUBMIT_FUN_NAME}(socketCommunicator, id)")
+                    addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
                     endControlFlow()
                     beginControlFlow("catch (originalException: %T)", requestFailedExceptionClassName)
                     addComment("Because of race conditions where an incoming message can be sent / broadcasted through")
                     addComment("the socket before we receive the ${actionInfo.actionName} acknowledgement message,")
                     addComment("we parse and store all incoming messages until we get the ack.")
+
+                    val readLineFunName = if (isForSuspend) {
+                        SOCKET_COMM_READLINE_SUSPEND_FUN_NAME
+                    } else {
+                        SOCKET_COMM_READLINE_FUN_NAME
+                    }
                     addCode(
                         """
                         if (originalException.cause !is %T) {
@@ -1160,7 +1239,7 @@ class ProtocolGenerator(
                                 )
                             }
                             pendingChatMessages.add(incomingMessage)
-                            rawJsonResponse = socketCommunicator.${SOCKET_COMM_READLINE_FUN_NAME}() 
+                            rawJsonResponse = socketCommunicator.${readLineFunName}() 
                                 ?: throw %T(extraMessage = %S, cause = originalException)
                         }
 
@@ -1189,7 +1268,9 @@ class ProtocolGenerator(
                     )
                     endControlFlow()
                 }.build()
-            )
+            }
+            addFunction(createSubscriptionSubmitOverrides(isForSuspend = false))
+            addFunction(createSubscriptionSubmitOverrides(isForSuspend = true))
         }
 
         return mapOf(
@@ -1266,8 +1347,11 @@ class ProtocolGenerator(
         const val RESPONSE_WRAPPER_SERIALIZER_PROPERTY_NAME = "responseWrapperSerializer"
         const val RESPONSE_DATA_SERIALIZER_PROPERTY_NAME = "responseDataSerializer"
         const val SOCKET_COMM_SUBMIT_FUN_NAME = "submit"
+        const val SOCKET_COMM_SUBMIT_SUSPEND_FUN_NAME = "submitSuspend"
         const val SOCKET_COMM_READLINE_FUN_NAME = "readLine"
+        const val SOCKET_COMM_READLINE_SUSPEND_FUN_NAME = "readLineSuspend"
         const val BASE_RESPONSE_SUBMIT_FUN_NAME = "submit"
+        const val BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME = "submitSuspend"
         val UNEXPECTED_ERROR_ACTION_NAME = SignaldActionName("unexpected_error")
     }
 }

@@ -4,10 +4,11 @@ package org.inthewaves.kotlinsignald
 import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
-import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import kotlin.jvm.JvmName
+import kotlin.jvm.JvmStatic
 
 internal fun decodeVersionOrNull(versionLine: String?) = if (versionLine != null) {
     try {
@@ -44,18 +45,28 @@ internal fun getDefaultSocketPaths(): Sequence<String> =
  * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
  * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
-public expect class SocketWrapper @Throws(SocketUnavailableException::class) constructor(
+public expect class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
     socketPath: String? = null
-) : SocketCommunicator {
+) : SuspendSocketCommunicator {
     public val actualSocketPath: String
+
+    public companion object {
+        @JvmStatic
+        public fun create(socketPath: String?): SocketWrapper
+    }
 }
 
 /**
  * A wrapper for a socket that maintains a socket connection for every request, ideal for receiving chat messages
  * after a subscribe request.
  */
-public expect class PersistentSocketWrapper @Throws(SocketUnavailableException::class) constructor(
+public expect class PersistentSocketWrapper @Throws(SocketUnavailableException::class) private constructor(
     socketPath: String? = null
-) : SocketCommunicator {
+) : SuspendSocketCommunicator {
     public fun close()
+
+    public companion object {
+        @JvmStatic
+        public fun create(socketPath: String?): PersistentSocketWrapper
+    }
 }

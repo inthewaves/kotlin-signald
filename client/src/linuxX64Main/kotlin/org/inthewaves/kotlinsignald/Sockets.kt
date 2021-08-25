@@ -13,7 +13,7 @@ import kotlinx.cinterop.toKStringFromUtf8
 import kotlinx.cinterop.usePinned
 import kotlinx.cinterop.value
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import platform.linux.sockaddr_un
 import platform.posix.AF_UNIX
@@ -104,9 +104,9 @@ private fun sendLineAndReadLineToSocket(socketFd: Int, request: String): String 
     return readLineFromSocket(socketFd) ?: throw SignaldException("socket EOF")
 }
 
-public actual class SocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+public actual class SocketWrapper @Throws(SocketUnavailableException::class) private actual constructor(
     socketPath: String?
-) : SocketCommunicator {
+) : SuspendSocketCommunicator {
     public val version: JsonVersionMessage?
     public actual val actualSocketPath: String
 
@@ -115,6 +115,10 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) act
         actualSocketPath = result.first
         version = decodeVersionOrNull(readLineFromSocket(result.second))
     }
+
+    override suspend fun submitSuspend(request: String): String = submit(request)
+
+    override suspend fun readLineSuspend(): String? = readLine()
 
     override fun submit(request: String): String {
         val socketFd = makeNewSocketConnection(actualSocketPath)
@@ -131,11 +135,16 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) act
     override fun readLine(): String? {
         throw UnsupportedOperationException("wrong SocketWrapper type")
     }
+
+    public actual companion object {
+        @Throws(SocketUnavailableException::class)
+        public actual fun create(socketPath: String?): SocketWrapper = SocketWrapper(socketPath)
+    }
 }
 
-public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+public actual class PersistentSocketWrapper private actual constructor(
     socketPath: String?
-) : SocketCommunicator {
+) : SuspendSocketCommunicator {
     public val version: JsonVersionMessage?
     // private val arena = Arena()
     private val socketFd: Int
@@ -147,6 +156,14 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
         version = decodeVersionOrNull(readLineFromSocket(socketFd))
     }
 
+    override suspend fun submitSuspend(request: String): String {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun readLineSuspend(): String? {
+        TODO("Not yet implemented")
+    }
+
     override fun submit(request: String): String = sendLineAndReadLineToSocket(socketFd, request)
 
     override fun readLine(): String? = readLineFromSocket(socketFd)
@@ -154,6 +171,11 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
     public actual fun close() {
         close(socketFd)
         // arena.clear()
+    }
+
+    public actual companion object {
+        @Throws(SocketUnavailableException::class)
+        public actual fun create(socketPath: String?): PersistentSocketWrapper = PersistentSocketWrapper(socketPath)
     }
 }
 

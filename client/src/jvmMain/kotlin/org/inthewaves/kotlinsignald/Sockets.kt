@@ -1,7 +1,7 @@
 package org.inthewaves.kotlinsignald
 
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Version
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import org.newsclub.net.unix.AFUNIXSocket
@@ -14,6 +14,7 @@ import java.nio.file.Files
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
+@Throws(SocketUnavailableException::class)
 private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
     val socketPathsToTry = if (customPath != null) sequenceOf(customPath) else getDefaultSocketPaths()
 
@@ -61,9 +62,9 @@ private fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
  * @throws IOException if there is any I/O errors when communicating to the socket (it first returns the signald version
  * JSON as [Version]).
  */
-public actual class SocketWrapper @Throws(IOException::class) actual constructor(
+public actual class SocketWrapper @Throws(SocketUnavailableException::class) private actual constructor(
     socketPath: String?
-) : SocketCommunicator {
+) : SuspendSocketCommunicator {
     private val socketAddress: AFUNIXSocketAddress = getSocketAddressOrThrow(socketPath)
 
     /**
@@ -76,6 +77,10 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
     public actual val actualSocketPath: String
         get() = socketAddress.path
 
+    override suspend fun submitSuspend(request: String): String = submit(request)
+
+    override suspend fun readLineSuspend(): String? = readLine()
+
     override fun submit(request: String): String {
         useNewSocketConnection { reader, writer ->
             writer.println(request)
@@ -87,6 +92,7 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         throw UnsupportedOperationException("this implementation only supports a single socket")
     }
 
+    @Throws(IOException::class)
     private inline fun <T> useNewSocketConnection(
         skipVersion: Boolean = true,
         socketBlock: (reader: BufferedReader, writer: PrintWriter) -> T
@@ -103,6 +109,19 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
         }
         return socket.use { socketBlock(reader, writer) }
     }
+
+    public actual companion object {
+        /**
+         * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
+         * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
+         * @throws SocketUnavailableException if unable to connect to the socket
+         * @throws IOException if there is any I/O errors when communicating to the socket (signald first returns the
+         * signald version JSON as [Version]).
+         */
+        @JvmStatic
+        @Throws(IOException::class)
+        public actual fun create(socketPath: String?): SocketWrapper = SocketWrapper(socketPath)
+    }
 }
 
 /**
@@ -112,9 +131,9 @@ public actual class SocketWrapper @Throws(IOException::class) actual constructor
  * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
  * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
  */
-public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::class) actual constructor(
+public actual class PersistentSocketWrapper private actual constructor(
     socketPath: String?
-) : SocketCommunicator, AutoCloseable {
+) : SuspendSocketCommunicator, AutoCloseable {
     private val socket: AFUNIXSocket = AFUNIXSocket.connectTo(getSocketAddressOrThrow(socketPath))
     private val writer: PrintWriter = PrintWriter(socket.outputStream, true)
     private val reader: BufferedReader = socket.inputStream.bufferedReader()
@@ -123,6 +142,10 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
      * Version of signald.
      */
     public val version: JsonVersionMessage? = decodeVersionOrNull(reader.readLine())
+
+    override suspend fun submitSuspend(request: String): String = submit(request)
+
+    override suspend fun readLineSuspend(): String? = readLine()
 
     override fun submit(request: String): String {
         writer.println(request)
@@ -133,6 +156,16 @@ public actual class PersistentSocketWrapper @Throws(SocketUnavailableException::
 
     public actual override fun close() {
         socket.close()
+    }
+
+    public actual companion object {
+        /**
+         * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
+         * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
+         */
+        @JvmStatic
+        @Throws(SocketUnavailableException::class)
+        public actual fun create(socketPath: String?): PersistentSocketWrapper = PersistentSocketWrapper(socketPath)
     }
 }
 

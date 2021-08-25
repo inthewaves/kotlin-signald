@@ -7,6 +7,7 @@ import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Subscribe
 
@@ -81,6 +82,63 @@ public data class SubscribeRequest(
                 }
                 pendingChatMessages.add(incomingMessage)
                 rawJsonResponse = socketCommunicator.readLine()
+                    ?: throw RequestFailedException(
+                        extraMessage =
+                        "unable to read line from socket",
+                        cause = originalException
+                    )
+            }
+
+            throw RequestFailedException(
+                extraMessage = "too many messages; didn't see subscribe acknowledgement",
+                cause = originalException
+            )
+        }
+    }
+
+    public override suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String
+    ): SubscriptionResponse {
+        try {
+            return super.submitSuspend(socketCommunicator, id)
+        } catch (originalException: RequestFailedException) {
+            // Because of race conditions where an incoming message can be sent / broadcasted through
+            // the socket before we receive the subscribe acknowledgement message,
+            // we parse and store all incoming messages until we get the ack.
+            if (originalException.cause !is SerializationException) {
+                throw originalException
+            }
+            var rawJsonResponse = originalException.responseJsonString ?: throw originalException
+            val pendingChatMessages = mutableListOf<ClientMessageWrapper>()
+
+            for (i in 0 until 25) {
+                val incomingMessage: ClientMessageWrapper = try {
+                    SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
+                } catch (e: SerializationException) {
+                    val nextResponse: JsonMessageWrapper<*> = try {
+                        SignaldJson.decodeFromString(
+                            JsonMessageWrapper.serializer(responseDataSerializer),
+                            rawJsonResponse
+                        )
+                    } catch (secondException: SerializationException) {
+                        throw RequestFailedException(
+                            responseJsonString = rawJsonResponse,
+                            extraMessage = "failed to get incoming messages during subscribe",
+                            cause = secondException
+                        )
+                    }
+                    if (nextResponse.id == id && getTypedResponseOrNull(nextResponse) != null) {
+                        return SubscriptionResponse(pendingChatMessages)
+                    }
+                    throw RequestFailedException(
+                        responseJsonString = rawJsonResponse,
+                        extraMessage = "failed to get incoming messages during subscribe",
+                        cause = e
+                    )
+                }
+                pendingChatMessages.add(incomingMessage)
+                rawJsonResponse = socketCommunicator.readLineSuspend()
                     ?: throw RequestFailedException(
                         extraMessage =
                         "unable to read line from socket",

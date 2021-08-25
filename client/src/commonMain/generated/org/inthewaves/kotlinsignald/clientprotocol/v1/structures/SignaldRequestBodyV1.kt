@@ -9,6 +9,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UnexpectedError
 
@@ -75,6 +76,85 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
             )
         }
         val responseJson = socketCommunicator.submit(requestJson)
+        val response: JsonMessageWrapper<*> = try {
+            SignaldJson.decodeFromString(
+                JsonMessageWrapper.serializer(responseDataSerializer),
+                responseJson
+            )
+        } catch (e: SerializationException) {
+            throw RequestFailedException(responseJsonString = responseJson, cause = e)
+        }
+        if (response is UnexpectedError) {
+            throw RequestFailedException(
+                responseJsonString = responseJson,
+                errorBody =
+                response.data,
+                errorType = response.errorType, exception = response.exception,
+                extraMessage = "unexpected error"
+            )
+        }
+        if (response.id != id) {
+            throw RequestFailedException(
+                responseJsonString = responseJson,
+                extraMessage =
+                """response has unexpected ID: ${response.id} (expected $id)"""
+            )
+        }
+        if (response.version != null && response.version != version) {
+            throw RequestFailedException(
+                responseJsonString = responseJson,
+                extraMessage =
+                """response has unexpected version: ${response.version} (expected $version)"""
+            )
+        }
+        if (!response.isSuccessful) {
+            throw RequestFailedException(
+                responseJsonString = responseJson,
+                errorBody =
+                response.error,
+                errorType = response.errorType, exception = response.exception
+            )
+        }
+        return getTypedResponseOrNull(response) ?: throw RequestFailedException(
+            responseJsonString =
+            responseJson,
+            extraMessage =
+            """response failed verification (wrapper type: ${response::class.simpleName}, data type: ${response.data!!::class.simpleName})"""
+        )
+    }
+
+    /**
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws SignaldException if an I/O error occurs during socket communication
+     */
+    public suspend fun submitSuspend(socketCommunicator: SuspendSocketCommunicator): ResponseData =
+        submitSuspend(socketCommunicator, id)
+
+    /**
+     * Marked as internal so tests can access. Normal API consumers should use the one-parameter
+     * overload.
+     *
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws SignaldException if an I/O error occurs during socket communication
+     * @param id The id to include in the request. This is expected to be present in the response
+     * JSON
+     */
+    internal open suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String = this.id
+    ): ResponseData {
+        val requestJson = try {
+            SignaldJson.encodeToString(serializer(responseDataSerializer), this)
+        } catch (e: SerializationException) {
+            throw RequestFailedException(
+                responseJsonString = null,
+                cause = e,
+                extraMessage = "failed to serialize our request"
+            )
+        }
+        val responseJson = socketCommunicator.submitSuspend(requestJson)
         val response: JsonMessageWrapper<*> = try {
             SignaldJson.decodeFromString(
                 JsonMessageWrapper.serializer(responseDataSerializer),

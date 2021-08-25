@@ -1,13 +1,10 @@
 package org.inthewaves.kotlinsignald
 
-import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.datetime.Clock
-import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.Signal.Recipient.Group
 import org.inthewaves.kotlinsignald.Signal.Recipient.Individual
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AcceptInvitationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
@@ -68,10 +65,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscriptionResponse
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
@@ -96,7 +91,7 @@ public class Signal @Throws(SignaldException::class) constructor(
     public val accountId: String,
     socketPath: String? = null
 ) {
-    private val socketWrapper = SocketWrapper(socketPath)
+    private val socketWrapper = SocketWrapper.create(socketPath)
 
     /**
      * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
@@ -1093,65 +1088,6 @@ public class Signal @Throws(SignaldException::class) constructor(
     public fun version(): JsonVersionMessage = VersionRequest().submit(socketWrapper)
 
     /**
-     * Contains information about an active message subscription with signald.
-     */
-    public class Subscription internal constructor(
-        public val accountId: String,
-        private val persistentSocket: PersistentSocketWrapper,
-        initialMessages: Collection<ClientMessageWrapper>
-    ) {
-        /**
-         * The number of messages sent while we were waiting for signald's response to the subscribe.
-         */
-        public val initialMessagesCount: Int = initialMessages.size
-
-        private var initialMessagesState = initialMessages
-            .ifEmpty { null }
-            ?.let { it.toMutableList() to SynchronizedObject() }
-
-        /**
-         * Parses an incoming message from the socket. If this returns null, then the socket is closed / reached EOF.
-         * This will block the current thread if it has to wait for messages.
-         *
-         * @throws RequestFailedException if an incoming message can't be serialized (subclass of [SignaldException])
-         * @throws SignaldException if an I/O error occurs when communicating with the socket.
-         */
-        public fun nextMessage(): ClientMessageWrapper? {
-            val msgState = initialMessagesState
-            if (msgState != null) {
-                val (list, lock) = msgState
-                kotlinx.atomicfu.locks.synchronized(lock) {
-                    val message = list.removeFirstOrNull()
-                    if (message != null) {
-                        return message
-                    } else {
-                        initialMessagesState = null
-                    }
-                }
-            }
-
-            val newJsonLine = persistentSocket.readLine() ?: return null
-            return try {
-                SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), newJsonLine)
-            } catch (e: SerializationException) {
-                throw RequestFailedException(
-                    responseJsonString = newJsonLine,
-                    extraMessage = "failed to parse incoming message",
-                    cause = e,
-                )
-            }
-        }
-
-        public fun unsubscribe(): SubscriptionResponse {
-            return UnsubscribeRequest(account = accountId).submit(persistentSocket)
-        }
-
-        public fun close() {
-            persistentSocket.close()
-        }
-    }
-
-    /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
      * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
      * [Subscription.unsubscribe] or disconnect from the socket via [PersistentSocketWrapper.close] to stop receiving
@@ -1162,7 +1098,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      */
     internal fun subscribe(): Subscription {
         withAccountOrThrow {
-            val persistentSocket = PersistentSocketWrapper(socketWrapper.actualSocketPath)
+            val persistentSocket = PersistentSocketWrapper.create(socketWrapper.actualSocketPath)
             try {
                 val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
                 return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
