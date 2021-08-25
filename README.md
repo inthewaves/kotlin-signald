@@ -16,8 +16,7 @@ Documentation for the library is available at https://inthewaves.github.io/kotli
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
-- Linux x64 (there is a known issue causing RuntimeExceptions in release executables; see issue
-  [#5](https://github.com/inthewaves/kotlin-signald/issues/5))
+- Linux x64
 
 Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
 supported by signald.

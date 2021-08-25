@@ -8,6 +8,8 @@ This bot requires signald to be installed with an account that's already registe
 
 From the root project directory,
 
-- Run `./gradlew :example-bot-linuxX64:linkDebugExecutableLinuxX64`
-- Inside of `example-bot-linuxX64/build/bin/linuxX64/debugExecutable` is `example-bot-linuxX64.kexe`, which is an
-  executable. To run the bot, run `./example-bot-linuxX64.kexe +<accountID>`
+- Run `./gradlew :example-bot-linuxX64:linkReleaseExecutableLinuxX64`
+- Inside of `example-bot-linuxX64/build/bin/linuxX64/releaseExecutable` is `example-bot-linuxX64.kexe`, which is an
+  executable. 
+
+  To run the bot, run `./example-bot-linuxX64.kexe +<number>`
