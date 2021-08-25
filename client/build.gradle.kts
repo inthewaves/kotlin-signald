@@ -25,6 +25,14 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configur
     }
 }
 
+repositories {
+    jcenter {
+        content {
+            includeModule("org.jetbrains.kotlinx", "kotlinx-nodejs")
+        }
+    }
+}
+
 kotlin {
     explicitApi()
 
@@ -37,12 +45,11 @@ kotlin {
         }
     }
 
-    /*
     js(IR) {
         nodejs {}
         binaries.library()
+        useCommonJs()
     }
-     */
 
     val nativeBaseName = "kotlinsignald"
     linuxX64 {
@@ -80,6 +87,12 @@ kotlin {
             dependencies {
                 implementation("com.kohlschutter.junixsocket:junixsocket-common:2.4.0")
                 implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.4.0")
+            }
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.5.1")
             }
         }
     }
