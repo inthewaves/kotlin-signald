@@ -1,10 +1,14 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:org.inthewaves.kotlinsignald/PersistentSocketWrapper/readLine/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-persistent-socket-wrapper/[linux-x64]read-line.html
+$dokka.location:org.inthewaves.kotlinsignald/PersistentSocketWrapper/readLineSuspend/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-persistent-socket-wrapper/[linux-x64]read-line-suspend.html
 $dokka.location:org.inthewaves.kotlinsignald/PersistentSocketWrapper/submit/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-persistent-socket-wrapper/[linux-x64]submit.html
+$dokka.location:org.inthewaves.kotlinsignald/PersistentSocketWrapper/submitSuspend/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-persistent-socket-wrapper/[linux-x64]submit-suspend.html
 $dokka.location:org.inthewaves.kotlinsignald/PersistentSocketWrapper/version/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-persistent-socket-wrapper/[linux-x64]version.html
 $dokka.location:org.inthewaves.kotlinsignald/SocketWrapper/readLine/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-socket-wrapper/[linux-x64]read-line.html
+$dokka.location:org.inthewaves.kotlinsignald/SocketWrapper/readLineSuspend/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-socket-wrapper/[linux-x64]read-line-suspend.html
 $dokka.location:org.inthewaves.kotlinsignald/SocketWrapper/submit/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-socket-wrapper/[linux-x64]submit.html
+$dokka.location:org.inthewaves.kotlinsignald/SocketWrapper/submitSuspend/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-socket-wrapper/[linux-x64]submit-suspend.html
 $dokka.location:org.inthewaves.kotlinsignald/SocketWrapper/version/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-socket-wrapper/[linux-x64]version.html
 module:client
 org.inthewaves.kotlinsignald
