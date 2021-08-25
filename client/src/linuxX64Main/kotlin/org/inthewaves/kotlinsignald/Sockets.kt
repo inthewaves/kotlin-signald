@@ -111,9 +111,13 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
     public actual val actualSocketPath: String
 
     init {
-        val result = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
-        actualSocketPath = result.first
-        version = decodeVersionOrNull(readLineFromSocket(result.second))
+        val (path, socketFd) = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
+        actualSocketPath = path
+        try {
+            version = decodeVersionOrNull(readLineFromSocket(socketFd))
+        } finally {
+            close(socketFd)
+        }
     }
 
     override suspend fun submitSuspend(request: String): String = submit(request)
@@ -150,10 +154,10 @@ public actual class PersistentSocketWrapper private actual constructor(
     private val socketFd: Int
 
     init {
-        val result = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
-        socketFd = result.second
+        val (_, validSocketFd) = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
+        socketFd = validSocketFd
         // Skip the version line
-        version = decodeVersionOrNull(readLineFromSocket(socketFd))
+        version = decodeVersionOrNull(readLineFromSocket(validSocketFd))
     }
 
     override suspend fun submitSuspend(request: String): String {
