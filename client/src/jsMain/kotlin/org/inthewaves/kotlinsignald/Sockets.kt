@@ -104,8 +104,8 @@ private class NodeSocket private constructor(private val rawSocket: Socket, val 
     }
 }
 
-public actual class SocketWrapper private constructor(
-    public actual val actualSocketPath: String
+public class SocketWrapper private constructor(
+    public val actualSocketPath: String
 ) : SuspendSocketCommunicator {
     override suspend fun submitSuspend(request: String): String = useNewSocketConnection { socket ->
         socket.writeAndReadReply(request)
@@ -130,8 +130,8 @@ public actual class SocketWrapper private constructor(
         }
     }
 
-    public actual companion object {
-        public actual fun create(socketPath: String?): SocketWrapper {
+    public companion object {
+        public fun create(socketPath: String?): SocketWrapper {
             throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
         }
 
@@ -143,7 +143,7 @@ public actual class SocketWrapper private constructor(
     }
 }
 
-public actual class PersistentSocketWrapper private constructor(
+public class PersistentSocketWrapper private constructor(
     private val socket: NodeSocket
 ) : SuspendSocketCommunicator {
     override suspend fun submitSuspend(request: String): String = socket.writeAndReadReply(request)
@@ -158,12 +158,12 @@ public actual class PersistentSocketWrapper private constructor(
         throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
     }
 
-    public actual fun close() {
+    public fun close() {
         socket.close()
     }
 
-    public actual companion object {
-        public actual fun create(socketPath: String?): PersistentSocketWrapper {
+    public companion object {
+        public fun create(socketPath: String?): PersistentSocketWrapper {
             throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
         }
 

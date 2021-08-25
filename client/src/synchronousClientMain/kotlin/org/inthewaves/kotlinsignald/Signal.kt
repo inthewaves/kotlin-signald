@@ -1,5 +1,7 @@
 package org.inthewaves.kotlinsignald
 
+import PersistentSocketWrapper
+import SocketWrapper
 import kotlinx.datetime.Clock
 import org.inthewaves.kotlinsignald.Signal.Recipient.Group
 import org.inthewaves.kotlinsignald.Signal.Recipient.Individual
@@ -74,7 +76,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
 import org.inthewaves.kotlinsignald.subscription.BlockingMessageSubscriptionHandler
 
 /**
- * A signald client.
+ * A synchronous signald client, for use with V1 of the signald protocol. Note that the functions and the constructor
+ * can block the thread tbat called the function / constructor, since it reads and writes responses from a UNIX socket.
  *
  * @constructor Creates a [Signal] instance for a particular account. A connection with the signald socket with be
  * attempted, throwing an exception if unable to connect to the socket.

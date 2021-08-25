@@ -83,12 +83,21 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+
+        val synchronousClientMain by creating {
+            dependsOn(commonMain)
+        }
         val jvmMain by getting {
+            dependsOn(synchronousClientMain)
             dependencies {
                 implementation("com.kohlschutter.junixsocket:junixsocket-common:2.4.0")
                 implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.4.0")
             }
         }
+        val linuxX64Main by getting {
+            dependsOn(synchronousClientMain)
+        }
+
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")

@@ -1,17 +1,29 @@
-public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper : java/lang/AutoCloseable, org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator {
-	public static final field Companion Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper$Companion;
+public final class PersistentSocketWrapper : java/lang/AutoCloseable, org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+	public static final field Companion LPersistentSocketWrapper$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public static final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
+	public static final fun create (Ljava/lang/String;)LPersistentSocketWrapper;
 	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 	public fun readLine ()Ljava/lang/String;
-	public fun readLineSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun submit (Ljava/lang/String;)Ljava/lang/String;
-	public fun submitSuspend (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper$Companion {
-	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
+public final class PersistentSocketWrapper$Companion {
+	public final fun create (Ljava/lang/String;)LPersistentSocketWrapper;
+}
+
+public final class SocketWrapper : org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+	public static final field Companion LSocketWrapper$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun create (Ljava/lang/String;)LSocketWrapper;
+	public final fun getActualSocketPath ()Ljava/lang/String;
+	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public fun readLine ()Ljava/lang/String;
+	public fun submit (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class SocketWrapper$Companion {
+	public final fun create (Ljava/lang/String;)LSocketWrapper;
 }
 
 public final class org/inthewaves/kotlinsignald/Signal {
@@ -204,22 +216,6 @@ public final class org/inthewaves/kotlinsignald/SocketUnavailableException : jav
 	public fun <init> (Ljava/lang/String;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun <init> (Ljava/lang/Throwable;)V
-}
-
-public final class org/inthewaves/kotlinsignald/SocketWrapper : org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator {
-	public static final field Companion Lorg/inthewaves/kotlinsignald/SocketWrapper$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public static final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
-	public final fun getActualSocketPath ()Ljava/lang/String;
-	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
-	public fun readLine ()Ljava/lang/String;
-	public fun readLineSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun submit (Ljava/lang/String;)Ljava/lang/String;
-	public fun submitSuspend (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class org/inthewaves/kotlinsignald/SocketWrapper$Companion {
-	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
 }
 
 public final class org/inthewaves/kotlinsignald/Subscription {

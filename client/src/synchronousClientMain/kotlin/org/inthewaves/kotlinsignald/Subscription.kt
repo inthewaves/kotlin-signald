@@ -1,5 +1,6 @@
 package org.inthewaves.kotlinsignald
 
+import PersistentSocketWrapper
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
