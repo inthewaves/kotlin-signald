@@ -217,140 +217,11 @@ public final class org/inthewaves/kotlinsignald/Signal {
 	public final fun version ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 }
 
-public abstract class org/inthewaves/kotlinsignald/Signal$AccessControlUpdate {
-	public final fun getGroupAccessControlBody ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$AccessControlUpdate$Attributes : org/inthewaves/kotlinsignald/Signal$AccessControlUpdate {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;)V
-	public fun getAccessRequired ()Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public synthetic fun getAccessRequired$client ()Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$AccessControlUpdate$GroupLink : org/inthewaves/kotlinsignald/Signal$AccessControlUpdate {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;)V
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$AccessControlUpdate$Members : org/inthewaves/kotlinsignald/Signal$AccessControlUpdate {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;)V
-	public fun getAccessRequired ()Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public synthetic fun getAccessRequired$client ()Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$AccessRequired : java/lang/Enum {
-	public static final field ADMINISTRATOR Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static final field ANY Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static final field MEMBER Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static final field UNKNOWN Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static final field UNRECOGNIZED Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static final field UNSATISFIABLE Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public final fun getValue ()I
-	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-	public static fun values ()[Lorg/inthewaves/kotlinsignald/Signal$AccessRequired;
-}
-
-public abstract class org/inthewaves/kotlinsignald/Signal$Fingerprint {
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$Fingerprint$QrCodeData : org/inthewaves/kotlinsignald/Signal$Fingerprint {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getQrCodeData ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$Fingerprint$SafetyNumber : org/inthewaves/kotlinsignald/Signal$Fingerprint {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getSafetyNumber ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupLinkStatus : java/lang/Enum {
-	public static final field OFF Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;
-	public static final field ON_NO_ADMIN_APPROVAL Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;
-	public static final field ON_WITH_ADMIN_APPROVAL Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;
-	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;
-	public static fun values ()[Lorg/inthewaves/kotlinsignald/Signal$GroupLinkStatus;
-}
-
-public abstract interface class org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$AddMembers : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Ljava/lang/Iterable;)V
-	public final fun getMembersToAdd ()Ljava/lang/Iterable;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$Avatar : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getNewAvatarPath ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$Description : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getNewDescription ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$RemoveMembers : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Ljava/lang/Iterable;)V
-	public final fun getMembersToRemove ()Ljava/lang/Iterable;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$ResetLink : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/Signal$GroupUpdate$ResetLink;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$Title : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getNewTitle ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$UpdateAccessControl : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal$AccessControlUpdate;)V
-	public final fun getGroupAccessControl ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupAccessControl;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$UpdateExpirationTimer : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (I)V
-	public final fun getNewTimerSeconds ()I
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$GroupUpdate$UpdateRole : org/inthewaves/kotlinsignald/Signal$GroupUpdate {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;)V
-	public final fun getMemberWithUpdatedRole ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
-}
-
-public abstract class org/inthewaves/kotlinsignald/Signal$Recipient {
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$Recipient$Group : org/inthewaves/kotlinsignald/Signal$Recipient {
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getGroupID ()Ljava/lang/String;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$Recipient$Individual : org/inthewaves/kotlinsignald/Signal$Recipient {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)V
-	public final fun getAddress ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
-}
-
-public final class org/inthewaves/kotlinsignald/Signal$TrustLevel : java/lang/Enum {
-	public static final field TRUSTED_UNVERIFIED Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;
-	public static final field TRUSTED_VERIFIED Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;
-	public static final field UNTRUSTED Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;
-	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;
-	public static fun values ()[Lorg/inthewaves/kotlinsignald/Signal$TrustLevel;
-}
-
 public final class org/inthewaves/kotlinsignald/SocketUnavailableException : java/io/IOException {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun <init> (Ljava/lang/Throwable;)V
-}
-
-public final class org/inthewaves/kotlinsignald/Subscription {
-	public final fun close ()V
-	public final fun getAccountId ()Ljava/lang/String;
-	public final fun getInitialMessagesCount ()I
-	public final fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
-	public final fun unsubscribe ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
 }
 
 public final class org/inthewaves/kotlinsignald/TrustLevel : java/lang/Enum {
@@ -370,6 +241,14 @@ public abstract class org/inthewaves/kotlinsignald/subscription/MessageSubscript
 	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
 	public fun close ()V
 	public final fun getInitialMessagesCount ()I
-	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/Subscription;
+	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/subscription/Subscription;
+}
+
+public final class org/inthewaves/kotlinsignald/subscription/Subscription {
+	public final fun close ()V
+	public final fun getAccountId ()Ljava/lang/String;
+	public final fun getInitialMessagesCount ()I
+	public final fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
+	public final fun unsubscribe ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
 }
 

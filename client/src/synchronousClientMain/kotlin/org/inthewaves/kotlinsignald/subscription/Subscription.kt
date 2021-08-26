@@ -1,4 +1,4 @@
-package org.inthewaves.kotlinsignald
+package org.inthewaves.kotlinsignald.subscription
 
 import PersistentSocketWrapper
 import kotlinx.atomicfu.locks.SynchronizedObject
@@ -10,7 +10,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscriptionRes
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequest
 
 /**
- * Contains information about an active message subscription with signald.
+ * Contains information about an active incoming message subscription with signald.
  */
 public class Subscription internal constructor(
     public val accountId: String,

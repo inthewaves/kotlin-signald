@@ -1,8 +1,7 @@
 package org.inthewaves.kotlinsignald
 
-import PersistentSocketWrapper
-import SocketWrapper
 import kotlinx.datetime.Clock
+import org.inthewaves.kotlinsignald.Signal.Companion.create
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
@@ -13,7 +12,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddLinkedDevice
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddServerRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AllIdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ApproveMembershipRequest
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CreateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.DeleteAccountRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FinishLinkRequest
@@ -62,37 +60,31 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
-import org.inthewaves.kotlinsignald.subscription.BlockingMessageSubscriptionHandler
-import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
- * A synchronous signald client, for use with V1 of the signald protocol. Note that the functions and the constructor
- * can block the thread tbat called the function / constructor, since it reads and writes responses from a UNIX socket.
+ * An asynchronous signald client, for use with V1 of the signald protocol. Use the [create] function to create an
+ * instance.
  *
- * @constructor Creates a [Signal] instance for a particular account. A connection with the signald socket with be
- * attempted, throwing an exception if unable to connect to the socket.
  * @throws SocketUnavailableException if unable to connect to the socket
  * @throws SignaldException if unable to get list of accounts to cache current account data if already registered.
  * @param accountId See [accountId].
  * @param socketPath An optional path to the signald socket.
  */
-public class Signal @Throws(SignaldException::class) constructor(
+public class Signal private constructor(
     /**
      * The ID of account corresponding to the signald account to use. As of the current version, this is
      * a phone number in E.164 format starting with a + character.
      */
     public val accountId: String,
+    private val socketWrapper: SocketWrapper,
     socketPath: String? = null
 ) {
-    private val socketWrapper = SocketWrapper.create(socketPath)
-
     /**
      * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
      * If this is null, getting the account info will attempt a request to the signald socket.
@@ -100,18 +92,19 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming account list is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    public var accountInfo: Account? = getAccountOrNull()
+    public var accountInfo: Account? = null
         private set
-        get() {
-            if (field != null) {
-                return field
-            }
-            val account = getAccountOrNull()
-            if (account?.accountId == accountId) {
-                field = account
-            }
-            return field
+
+    public suspend fun getAccountInfo(forceUpdate: Boolean = false): Account? {
+        val accountInfoNow = accountInfo
+        if (accountInfoNow != null && !forceUpdate) {
+            return accountInfoNow
         }
+
+        val newAccountInfo = getAccountOrNull()
+        accountInfo = newAccountInfo
+        return newAccountInfo
+    }
 
     /**
      * Whether the [accountId] of this [Signal] instance is registered with signald. This will do a check with the
@@ -124,27 +117,13 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    public val isRegisteredWithSignald: Boolean
-        get() {
-            if (accountInfo == null) {
-                return false
-            }
+    public suspend fun isRegisteredWithSignald(): Boolean = getAccountInfo(forceUpdate = true) != null
 
-            val newAccount = getAccountOrNull()
-            return if (newAccount != null) {
-                accountInfo = newAccount
-                true
-            } else {
-                accountInfo = null
-                false
-            }
-        }
+    private suspend fun getAccountOrNull() =
+        ListAccountsRequest().submitSuspend(socketWrapper).accounts.find { it.accountId == accountId }
 
-    private fun getAccountOrNull() =
-        ListAccountsRequest().submit(socketWrapper).accounts.find { it.accountId == accountId }
-
-    private inline fun <T> withAccountOrThrow(block: (account: Account) -> T): T {
-        val account = accountInfo
+    private suspend inline fun <T> withAccountOrThrow(block: (account: Account) -> T): T {
+        val account = getAccountInfo(forceUpdate = false)
         if (account?.accountId == null) {
             throw SignaldException("$accountId is not registered with signald")
         }
@@ -158,15 +137,14 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun acceptInvitation(
+    public suspend fun acceptInvitation(
         groupID: String
     ): JsonGroupV2Info {
         withAccountOrThrow {
             return AcceptInvitationRequest(
                 account = accountId,
                 groupID = groupID
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -178,13 +156,12 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun addDevice(uri: String) {
+    public suspend fun addDevice(uri: String) {
         withAccountOrThrow {
             AddLinkedDeviceRequest(
                 account = accountId,
                 uri = uri
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -194,9 +171,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun addServer(server: Server): String {
-        return AddServerRequest(server).submit(socketWrapper)
+    public suspend fun addServer(server: Server): String {
+        return AddServerRequest(server).submitSuspend(socketWrapper)
     }
 
     /**
@@ -205,14 +181,13 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun approveMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
+    public suspend fun approveMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
         withAccountOrThrow {
             return ApproveMembershipRequest(
                 account = accountId,
                 groupID = groupID,
                 members = members.toList()
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -228,8 +203,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun createGroup(
+    public suspend fun createGroup(
         members: Iterable<JsonAddress>,
         title: String,
         avatar: String? = null,
@@ -244,7 +218,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 avatar = avatar,
                 timer = timer,
                 memberRole = memberRole
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -255,13 +229,12 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun deleteAccount(alsoDeleteAccountOnServer: Boolean) {
+    public suspend fun deleteAccount(alsoDeleteAccountOnServer: Boolean) {
         withAccountOrThrow {
             DeleteAccountRequest(
                 account = accountId,
                 server = alsoDeleteAccountOnServer
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -271,10 +244,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun deleteServer(serverUuid: String) {
+    public suspend fun deleteServer(serverUuid: String) {
         withAccountOrThrow {
-            RemoveServerRequest(uuid = serverUuid).submit(socketWrapper)
+            RemoveServerRequest(uuid = serverUuid).submitSuspend(socketWrapper)
         }
     }
 
@@ -286,10 +258,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun finishLink(deviceName: String, sessionId: String): Account {
+    public suspend fun finishLink(deviceName: String, sessionId: String): Account {
         withAccountOrThrow {
-            return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submit(socketWrapper)
+            return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submitSuspend(socketWrapper)
         }
     }
 
@@ -302,10 +273,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
+    public suspend fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
         withAccountOrThrow {
-            return GenerateLinkingURIRequest(server = serverUuid).submit(socketWrapper)
+            return GenerateLinkingURIRequest(server = serverUuid).submitSuspend(socketWrapper)
         }
     }
 
@@ -315,10 +285,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getAllIdentities(): AllIdentityKeyList {
+    public suspend fun getAllIdentities(): AllIdentityKeyList {
         withAccountOrThrow {
-            return GetAllIdentities(account = accountId).submit(socketWrapper)
+            return GetAllIdentities(account = accountId).submitSuspend(socketWrapper)
         }
     }
 
@@ -331,10 +300,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
+    public suspend fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
         withAccountOrThrow {
-            return GetGroupRequest(account = accountId, groupID = groupID, revision = revision).submit(socketWrapper)
+            return GetGroupRequest(account = accountId, groupID = groupID, revision = revision).submitSuspend(socketWrapper)
         }
     }
 
@@ -344,10 +312,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getIdentities(address: JsonAddress): IdentityKeyList {
+    public suspend fun getIdentities(address: JsonAddress): IdentityKeyList {
         withAccountOrThrow {
-            return GetIdentitiesRequest(account = accountId, address = address).submit(socketWrapper)
+            return GetIdentitiesRequest(account = accountId, address = address).submitSuspend(socketWrapper)
         }
     }
 
@@ -357,10 +324,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getLinkedDevices(): LinkedDevices {
+    public suspend fun getLinkedDevices(): LinkedDevices {
         withAccountOrThrow {
-            return GetLinkedDevicesRequest(account = accountId).submit(socketWrapper)
+            return GetLinkedDevicesRequest(account = accountId).submitSuspend(socketWrapper)
         }
     }
 
@@ -371,10 +337,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @param async If true, return results from local store immediately, refreshing from server in the
      * background if needed. If false (default), block until profile can be retrieved from server
      */
-    @Throws(SignaldException::class)
-    public fun getProfile(address: JsonAddress, async: Boolean = false): Profile {
+    public suspend fun getProfile(address: JsonAddress, async: Boolean = false): Profile {
         withAccountOrThrow {
-            return GetProfileRequest(account = accountId, async = async, address = address).submit(socketWrapper)
+            return GetProfileRequest(account = accountId, async = async, address = address).submitSuspend(socketWrapper)
         }
     }
 
@@ -384,8 +349,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getServers(): ServerList = GetServersRequest().submit(socketWrapper)
+    public suspend fun getServers(): ServerList = GetServersRequest().submitSuspend(socketWrapper)
 
     /**
      * Get information about a group from a `signal.group` [groupLink].
@@ -393,10 +357,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun getGroupLinkInfo(groupLink: String): JsonGroupJoinInfo {
+    public suspend fun getGroupLinkInfo(groupLink: String): JsonGroupJoinInfo {
         withAccountOrThrow {
-            return GroupLinkInfoRequest(account = accountId, uri = groupLink).submit(socketWrapper)
+            return GroupLinkInfoRequest(account = accountId, uri = groupLink).submitSuspend(socketWrapper)
         }
     }
 
@@ -406,10 +369,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun joinGroup(groupLink: String): JsonGroupJoinInfo {
+    public suspend fun joinGroup(groupLink: String): JsonGroupJoinInfo {
         withAccountOrThrow {
-            return JoinGroupRequest(account = accountId, uri = groupLink).submit(socketWrapper)
+            return JoinGroupRequest(account = accountId, uri = groupLink).submitSuspend(socketWrapper)
         }
     }
 
@@ -419,10 +381,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun leaveGroup(groupID: String): GroupInfo {
+    public suspend fun leaveGroup(groupID: String): GroupInfo {
         withAccountOrThrow {
-            return LeaveGroupRequest(account = accountId, groupID = groupID).submit(socketWrapper)
+            return LeaveGroupRequest(account = accountId, groupID = groupID).submitSuspend(socketWrapper)
         }
     }
 
@@ -432,9 +393,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun listAccounts(): AccountList {
-        return ListAccountsRequest().submit(socketWrapper)
+    public suspend fun listAccounts(): AccountList {
+        return ListAccountsRequest().submitSuspend(socketWrapper)
     }
 
     /**
@@ -445,10 +405,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun listContacts(async: Boolean? = null): ProfileList {
+    public suspend fun listContacts(async: Boolean? = null): ProfileList {
         withAccountOrThrow {
-            return ListContactsRequest(account = accountId, async = async).submit(socketWrapper)
+            return ListContactsRequest(account = accountId, async = async).submitSuspend(socketWrapper)
         }
     }
 
@@ -458,10 +417,9 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun listGroups(): GroupList {
+    public suspend fun listGroups(): GroupList {
         withAccountOrThrow {
-            return ListGroupsRequest(account = accountId).submit(socketWrapper)
+            return ListGroupsRequest(account = accountId).submitSuspend(socketWrapper)
         }
     }
 
@@ -475,8 +433,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun markRead(
+    public suspend fun markRead(
         to: JsonAddress,
         timestamps: Iterable<Long>,
         `when`: Long = Clock.System.now().toEpochMilliseconds()
@@ -487,7 +444,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 to = to,
                 timestamps = timestamps.toList(),
                 `when` = `when`
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -497,8 +454,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun react(
+    public suspend fun react(
         recipient: Recipient,
         reaction: JsonReaction,
         timestamp: Long = Clock.System.now().toEpochMilliseconds()
@@ -518,7 +474,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     timestamp = timestamp
                 )
             }
-            return request.submit(socketWrapper)
+            return request.submitSuspend(socketWrapper)
         }
     }
 
@@ -529,13 +485,12 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun register(voice: Boolean = false, captcha: String? = null) {
+    public suspend fun register(voice: Boolean = false, captcha: String? = null) {
         RegisterRequest(
             account = accountId,
             voice = voice,
             captcha = captcha
-        ).submit(socketWrapper)
+        ).submitSuspend(socketWrapper)
     }
 
     /**
@@ -549,8 +504,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
+    public suspend fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
         withAccountOrThrow {
             val request = when (recipient) {
                 is Recipient.Group -> RemoteDeleteRequest(
@@ -564,7 +518,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     timestamp = timestampOfTarget
                 )
             }
-            return request.submit(socketWrapper)
+            return request.submitSuspend(socketWrapper)
         }
     }
 
@@ -574,14 +528,13 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun removeLinkedDevice(deviceId: Long) {
+    public suspend fun removeLinkedDevice(deviceId: Long) {
         withAccountOrThrow {
             // we could check the account here and bail out earlier
             RemoveLinkedDeviceRequest(
                 account = accountId,
                 deviceId = deviceId
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -595,8 +548,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun requestSync(
+    public suspend fun requestSync(
         groups: Boolean = true,
         configuration: Boolean = true,
         contacts: Boolean = true,
@@ -609,7 +561,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 configuration = configuration,
                 contacts = contacts,
                 blocked = blocked,
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -621,8 +573,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun resetSession(
+    public suspend fun resetSession(
         address: JsonAddress,
         timestamp: Long = Clock.System.now().toEpochMilliseconds(),
     ): SendResponse {
@@ -631,7 +582,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 account = accountId,
                 address = address,
                 timestamp = timestamp
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -643,13 +594,12 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun resolveAddress(partial: JsonAddress): JsonAddress {
+    public suspend fun resolveAddress(partial: JsonAddress): JsonAddress {
         withAccountOrThrow {
             return ResolveAddressRequest(
                 account = accountId,
                 partial = partial,
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -667,8 +617,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun send(
+    public suspend fun send(
         recipient: Recipient,
         messageBody: String,
         attachments: Iterable<JsonAttachment> = emptyList(),
@@ -697,7 +646,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     mentions = mentions.toList(),
                 )
             }
-            return request.submit(socketWrapper)
+            return request.submitSuspend(socketWrapper)
         }
     }
 
@@ -710,8 +659,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun sendPayment(
+    public suspend fun sendPayment(
         recipientAddress: JsonAddress,
         payment: Payment,
         `when`: Long = Clock.System.now().toEpochMilliseconds(),
@@ -722,7 +670,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 address = recipientAddress,
                 payment = payment,
                 `when` = `when`
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -732,13 +680,12 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun setDeviceName(deviceName: String) {
+    public suspend fun setDeviceName(deviceName: String) {
         withAccountOrThrow {
             SetDeviceNameRequest(
                 account = accountId,
                 deviceName = deviceName
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -751,8 +698,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
+    public suspend fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
         withAccountOrThrow {
             val request = when (recipient) {
                 is Recipient.Group -> SetExpirationRequest(
@@ -766,7 +712,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     expiration = expiration,
                 )
             }
-            return request.submit(socketWrapper)
+            return request.submitSuspend(socketWrapper)
         }
     }
 
@@ -786,8 +732,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun setProfile(
+    public suspend fun setProfile(
         name: String,
         avatarFile: String?,
         about: String?,
@@ -802,7 +747,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 about = about,
                 emoji = emoji,
                 mobilecoinAddress = mobileCoinAddress
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -816,8 +761,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun trust(
+    public suspend fun trust(
         address: JsonAddress,
         fingerprint: Fingerprint,
         trustLevel: TrustLevel = TrustLevel.TRUSTED_VERIFIED
@@ -837,7 +781,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     trustLevel = trustLevel.name
                 )
             }
-            request.submit(socketWrapper)
+            request.submitSuspend(socketWrapper)
         }
     }
 
@@ -850,8 +794,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun typing(
+    public suspend fun typing(
         recipient: Recipient,
         isTyping: Boolean,
         `when`: Long = Clock.System.now().toEpochMilliseconds()
@@ -871,7 +814,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     `when` = `when`
                 )
             }
-            request.submit(socketWrapper)
+            request.submitSuspend(socketWrapper)
         }
     }
 
@@ -885,8 +828,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun updateContact(
+    public suspend fun updateContact(
         address: JsonAddress,
         name: String? = null,
         color: String? = null,
@@ -899,7 +841,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                 name = name,
                 color = color,
                 inboxPosition = inboxPosition
-            ).submit(socketWrapper)
+            ).submitSuspend(socketWrapper)
         }
     }
 
@@ -912,8 +854,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
+    public suspend fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
         withAccountOrThrow {
             val request = when (groupUpdate) {
                 is GroupUpdate.Title -> UpdateGroupRequest(
@@ -962,7 +903,7 @@ public class Signal @Throws(SignaldException::class) constructor(
                     resetLink = true
                 )
             }
-            return request.submit(socketWrapper)
+            return request.submitSuspend(socketWrapper)
         }
     }
 
@@ -974,9 +915,8 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun verify(code: String) {
-        val account = VerifyRequest(accountId, code).submit(socketWrapper)
+    public suspend fun verify(code: String) {
+        val account = VerifyRequest(accountId, code).submitSuspend(socketWrapper)
         accountInfo = account
     }
 
@@ -986,8 +926,20 @@ public class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    @Throws(SignaldException::class)
-    public fun version(): JsonVersionMessage = VersionRequest().submit(socketWrapper)
+    public suspend fun version(): JsonVersionMessage = VersionRequest().submitSuspend(socketWrapper)
+
+    public companion object {
+        public suspend fun create(accountId: String, socketPath: String?): Signal {
+            return Signal(
+                accountId = accountId,
+                socketWrapper = SocketWrapper.createSuspend(socketPath),
+                socketPath = socketPath
+            )
+        }
+    }
+
+    /*
+    
 
     /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
@@ -1013,24 +965,8 @@ public class Signal @Throws(SignaldException::class) constructor(
                 throw e
             }
         }
-    }
+    } 
+    
 
-    /**
-     * Subscribes to incoming messages and consumes them on the thread that called this function. This will open a
-     * dedicated, persistent socket connection for this function call. The current thread will be blocked when it waits
-     * for more messages. After this function executes, an unsubscribe request will be made and the persistent socket
-     * will be closed.
-     *
-     * @throws RequestFailedException if the subscribe request fails
-     * @throws SignaldException if an I/O error occurs when communicating to the socket
      */
-    @Throws(SignaldException::class)
-    public fun subscribeAndConsumeBlocking(messageConsumer: (ClientMessageWrapper) -> Unit) {
-        val subscriptionHandler = BlockingMessageSubscriptionHandler(this)
-        try {
-            subscriptionHandler.consumeEach(messageConsumer)
-        } finally {
-            subscriptionHandler.close()
-        }
-    }
 }

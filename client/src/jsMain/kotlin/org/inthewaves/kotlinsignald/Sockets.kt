@@ -131,11 +131,7 @@ public class SocketWrapper private constructor(
     }
 
     public companion object {
-        public fun create(socketPath: String?): SocketWrapper {
-            throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-        }
-
-        public suspend fun createAsync(socketPath: String?): SocketWrapper {
+        public suspend fun createSuspend(socketPath: String?): SocketWrapper {
             val nodeSocket = NodeSocket.create(socketPath)
             nodeSocket.close()
             return SocketWrapper(nodeSocket.socketPath)
@@ -163,10 +159,6 @@ public class PersistentSocketWrapper private constructor(
     }
 
     public companion object {
-        public fun create(socketPath: String?): PersistentSocketWrapper {
-            throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-        }
-
         public suspend fun createAsync(socketPath: String?): PersistentSocketWrapper {
             return PersistentSocketWrapper(NodeSocket.create(socketPath))
         }
