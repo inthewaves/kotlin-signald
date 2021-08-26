@@ -131,7 +131,7 @@ public class SocketWrapper private constructor(
     }
 
     public companion object {
-        public suspend fun createSuspend(socketPath: String?): SocketWrapper {
+        public suspend fun createSuspend(socketPath: String? = null): SocketWrapper {
             val nodeSocket = NodeSocket.create(socketPath)
             nodeSocket.close()
             return SocketWrapper(nodeSocket.socketPath)
@@ -159,7 +159,11 @@ public class PersistentSocketWrapper private constructor(
     }
 
     public companion object {
-        public suspend fun createAsync(socketPath: String?): PersistentSocketWrapper {
+        /**
+         * @param socketPath The socket path to try. If this is null (default), it will try to default socket paths.
+         * @throws SocketUnavailableException if unable to connect to the signald socket.
+         */
+        public suspend fun createSuspend(socketPath: String? = null): PersistentSocketWrapper {
             return PersistentSocketWrapper(NodeSocket.create(socketPath))
         }
     }

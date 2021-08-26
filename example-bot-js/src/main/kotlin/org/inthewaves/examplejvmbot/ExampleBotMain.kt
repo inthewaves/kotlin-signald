@@ -14,12 +14,11 @@ import fs.NoParamCallback
 import kotlinx.coroutines.await
 import net.Socket
 import org.inthewaves.kotlinsignald.PersistentSocketWrapper
+import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.SocketWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListAccountsRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
 import kotlin.js.Promise
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
 
 fun getSocket(): Socket {
     return net.createConnection("/var/run/signald/signald.sock")
@@ -35,34 +34,41 @@ class What {
 }
  */
 
-@OptIn(ExperimentalTime::class)
+private inline fun measureHrTime(block: () -> Unit): Number {
+    val start = process.hrtime()
+    block()
+    val end: dynamic = process.hrtime(start)
+    val endMs: dynamic = end[0] * 1000 + end[1] / 1000000
+    return endMs.unsafeCast<Number>()
+}
+
 suspend fun main() {
     println(greeting("nosejs-test"))
 
-    val socketWrapper = SocketWrapper.createSuspend("/var/run/signald/signald.sock")
+    val socketWrapper = SocketWrapper.createSuspend()
 
     println("Sending version request:")
 
-    val timeTaken = measureTime {
-        val start = process.hrtime()
+    val timeTaken = measureHrTime {
         VersionRequest().submitSuspend(socketWrapper)
         ListAccountsRequest().submitSuspend(socketWrapper)
-        val end = process.hrtime(start)
-        val endMs = js("end[0] * 1000000 + end[1] / 1000")
-        println("Time taken: $endMs ms")
     }
-    println("Time: $timeTaken")
+    println("Time: $timeTaken ms")
 
-    val persistentSocket = PersistentSocketWrapper.createAsync("/var/run/signald/signald.sock")
+    val persistentSocket = PersistentSocketWrapper.createSuspend("/var/run/signald/signald.sock")
     try {
-        val timeTaken2 = measureTime {
+        val timeTaken2 = measureHrTime {
             VersionRequest().submitSuspend(socketWrapper)
             ListAccountsRequest().submitSuspend(socketWrapper)
         }
-        println("Time for persistent socket: $timeTaken2")
+        println("Time for persistent socket: $timeTaken2 ms")
     } finally {
         persistentSocket.close()
     }
+
+    val signalClient = Signal.create("+123")
+    println("Account list: ${signalClient.listAccounts()}")
+
     return
 
     // println("Sleeping for 5000ms")

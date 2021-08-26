@@ -72,7 +72,8 @@ import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
  * A synchronous signald client, for use with V1 of the signald protocol. Note that the functions and the constructor
- * can block the thread tbat called the function / constructor, since it reads and writes responses from a UNIX socket.
+ * can block the thread that called the function / constructor due to reads and writes responses from a UNIX socket via
+ * blocking method calls.
  *
  * @constructor Creates a [Signal] instance for a particular account. A connection with the signald socket with be
  * attempted, throwing an exception if unable to connect to the socket.

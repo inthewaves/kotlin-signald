@@ -83,17 +83,14 @@ public class Signal private constructor(
      */
     public val accountId: String,
     private val socketWrapper: SocketWrapper,
-    socketPath: String? = null
 ) {
     /**
      * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
-     * If this is null, getting the account info will attempt a request to the signald socket.
      *
      * @throws RequestFailedException if signald sends an error response or the incoming account list is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    public var accountInfo: Account? = null
-        private set
+    private var accountInfo: Account? = null
 
     public suspend fun getAccountInfo(forceUpdate: Boolean = false): Account? {
         val accountInfoNow = accountInfo
@@ -929,12 +926,8 @@ public class Signal private constructor(
     public suspend fun version(): JsonVersionMessage = VersionRequest().submitSuspend(socketWrapper)
 
     public companion object {
-        public suspend fun create(accountId: String, socketPath: String?): Signal {
-            return Signal(
-                accountId = accountId,
-                socketWrapper = SocketWrapper.createSuspend(socketPath),
-                socketPath = socketPath
-            )
+        public suspend fun create(accountId: String, socketPath: String? = null): Signal {
+            return Signal(accountId = accountId, socketWrapper = SocketWrapper.createSuspend(socketPath))
         }
     }
 
