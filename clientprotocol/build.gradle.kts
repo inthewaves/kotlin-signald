@@ -80,5 +80,18 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+
+        val nonJvmMain by creating {
+            dependsOn(commonMain)
+        }
+        val jsMain by getting {
+            dependsOn(nonJvmMain)
+        }
+        val linuxX64Main by getting {
+            dependsOn(nonJvmMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(nonJvmMain)
+        }
     }
 }

@@ -8,7 +8,7 @@ package org.inthewaves.kotlinsignald.clientprotocol
  *
  * This variant has suspending operations for JavaScript (Node.js) support.
  */
-public interface SuspendSocketCommunicator {
+public interface SuspendSocketCommunicator : AutoCloseable {
     /**
      * Sends the [request] to the socket as a single line of JSON (line terminated with \n), and
      * returns the JSON response from signald.

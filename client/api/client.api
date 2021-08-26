@@ -98,7 +98,7 @@ public final class org/inthewaves/kotlinsignald/GroupUpdate$UpdateRole : org/int
 	public final fun getMemberWithUpdatedRole ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/IncomingMessageSubscription {
+public abstract interface class org/inthewaves/kotlinsignald/IncomingMessageSubscription : java/lang/AutoCloseable {
 	public abstract fun close ()V
 	public abstract fun getInitialMessagesCount ()I
 	public abstract fun nextMessageSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -224,6 +224,7 @@ public final class org/inthewaves/kotlinsignald/SocketUnavailableException : jav
 public final class org/inthewaves/kotlinsignald/SocketWrapper : org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/SocketWrapper$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
 	public final fun getActualSocketPath ()Ljava/lang/String;
 	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
 	public fun readLine ()Ljava/lang/String;

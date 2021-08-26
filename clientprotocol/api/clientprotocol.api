@@ -17,12 +17,12 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/SignaldJsonKt {
 	public static final fun getSignaldJson ()Lkotlinx/serialization/json/Json;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator : java/lang/AutoCloseable {
 	public abstract fun readLine ()Ljava/lang/String;
 	public abstract fun submit (Ljava/lang/String;)Ljava/lang/String;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator {
+public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator : java/lang/AutoCloseable {
 	public abstract fun readLineSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun submitSuspend (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }

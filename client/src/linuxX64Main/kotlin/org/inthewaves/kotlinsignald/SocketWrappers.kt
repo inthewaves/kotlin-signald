@@ -40,6 +40,8 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
         @Throws(SocketUnavailableException::class)
         public actual fun create(socketPath: String?): SocketWrapper = SocketWrapper(socketPath)
     }
+
+    actual override fun close() {}
 }
 
 public actual class PersistentSocketWrapper private constructor(
@@ -61,7 +63,7 @@ public actual class PersistentSocketWrapper private constructor(
 
     override fun readLine(): String? = readLineFromSocket(socketFd)
 
-    public actual fun close() {
+    public actual override fun close() {
         close(socketFd)
         // arena.clear()
     }

@@ -27,6 +27,21 @@ internal class IncomingMessageTest {
         }
     }
 
+    @Test
+    fun testSerializationWithExplicitSerializer() {
+        getTestParams().forEachIndexed { index, (expected: IncomingMessage, jsonString: String) ->
+            val actual = SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), jsonString)
+            assertEquals(
+                expected,
+                actual,
+                """
+                    |Index [$index] failed
+                    |Expected: $expected
+                    |Actual  : $actual""".trimMargin()
+            )
+        }
+    }
+
     companion object {
         fun getTestParams() = sequenceOf(
             Pair(

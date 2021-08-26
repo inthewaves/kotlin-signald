@@ -9,11 +9,11 @@ public final class org/inthewaves/kotlinsignald/subscription/ChannelMessageSubsc
 	public static synthetic fun signalMessagesChannel$default (Lkotlinx/coroutines/CoroutineScope;Lorg/inthewaves/kotlinsignald/SignaldClient;Lkotlin/coroutines/CoroutineContext;ILkotlinx/coroutines/channels/BufferOverflow;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlinx/coroutines/channels/ReceiveChannel;
 }
 
-public abstract class org/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler {
+public abstract class org/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler : java/lang/AutoCloseable {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler$Companion;
 	public fun <init> (Lorg/inthewaves/kotlinsignald/SignaldClient;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;)V
 	public synthetic fun <init> (Lorg/inthewaves/kotlinsignald/SignaldClient;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun close ()V
+	public fun close ()V
 	protected final fun getEmissionJob ()Lkotlinx/coroutines/Job;
 	protected final fun getSignaldClient ()Lorg/inthewaves/kotlinsignald/SignaldClient;
 	protected abstract fun onCompletion ()V

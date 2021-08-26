@@ -82,6 +82,8 @@ internal class SubscribeUnsubscribeRequestTest {
             }
 
             override fun readLine(): String? = messageQueue.removeFirstOrNull()
+
+            override fun close() {}
         }
 
         return mockSocketCommunicator to listOf(
@@ -165,6 +167,8 @@ internal class SubscribeUnsubscribeRequestTest {
                 override fun readLine(): String? {
                     return messageQueue.removeFirstOrNull()
                 }
+
+                override fun close() {}
             })
         }
     }

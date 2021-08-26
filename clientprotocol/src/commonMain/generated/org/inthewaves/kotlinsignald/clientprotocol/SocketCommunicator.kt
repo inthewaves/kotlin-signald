@@ -6,7 +6,7 @@ package org.inthewaves.kotlinsignald.clientprotocol
  * socket connections after making a request, in which case, the [readLine] function will not be
  * supported.
  */
-public interface SocketCommunicator {
+public interface SocketCommunicator : AutoCloseable {
     /**
      * Sends the [request] to the socket as a single line of JSON (line terminated with \n), and
      * returns the JSON response from signald.

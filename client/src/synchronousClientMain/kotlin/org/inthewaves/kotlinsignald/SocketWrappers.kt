@@ -13,6 +13,8 @@ import kotlin.jvm.JvmStatic
 public expect class SocketWrapper : SocketCommunicator {
     public val actualSocketPath: String
 
+    public override fun close()
+
     public companion object {
         @JvmStatic
         public fun create(socketPath: String?): SocketWrapper
@@ -24,7 +26,7 @@ public expect class SocketWrapper : SocketCommunicator {
  * after a subscribe request.
  */
 public expect class PersistentSocketWrapper : SocketCommunicator {
-    public fun close()
+    public override fun close()
 
     public companion object {
         @JvmStatic

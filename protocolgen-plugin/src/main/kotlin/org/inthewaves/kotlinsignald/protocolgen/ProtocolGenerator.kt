@@ -183,6 +183,8 @@ class ProtocolGenerator(
             )
         )
 
+    private val autoCloseableClassName = ClassName(clientProtocolPackage, "AutoCloseable")
+
     private val socketCommunicatorClassName = ClassName(clientProtocolPackage, "SocketCommunicator")
 
     private val suspendSocketCommunicatorClassName = ClassName(clientProtocolPackage, "SuspendSocketCommunicator")
@@ -340,6 +342,14 @@ class ProtocolGenerator(
         }.build()
         writeTypeSpecFile(requestFailedExceptionClassName, requestFailedExceptionTypeSpec, genFilesDir)
 
+        val autoCloseableTypeSpec = TypeSpec.interfaceBuilder(autoCloseableClassName)
+            .addModifiers(KModifier.EXPECT)
+            .addFunction(FunSpec.builder("close")
+                .addModifiers(KModifier.ABSTRACT)
+                .build())
+            .build()
+        writeTypeSpecFile(autoCloseableClassName, autoCloseableTypeSpec, genFilesDir)
+
         fun createSocketCommunicatorTypeSpec(isForSuspend: Boolean): TypeSpec {
             val className = if (isForSuspend) suspendSocketCommunicatorClassName else socketCommunicatorClassName
             return TypeSpec.interfaceBuilder(className).apply {
@@ -360,6 +370,8 @@ class ProtocolGenerator(
                         "This variant has suspending operations for JavaScript (Node.js) support."
                     )
                 }
+
+                addSuperinterface(autoCloseableClassName)
 
                 val functionModifiers =
                     if (isForSuspend) listOf(KModifier.ABSTRACT, KModifier.SUSPEND) else listOf(KModifier.ABSTRACT)
@@ -430,7 +442,6 @@ class ProtocolGenerator(
         writeTypeSpecFile(socketCommunicatorClassName, socketCommunicatorTypeSpec, genFilesDir)
         val suspendSocketCommunicatorTypeSpec = createSocketCommunicatorTypeSpec(isForSuspend = true)
         writeTypeSpecFile(suspendSocketCommunicatorClassName, suspendSocketCommunicatorTypeSpec, genFilesDir)
-
 
         val protocolVersions: Set<SignaldProtocolVersion> = protocolDoc.types.keys
             .asSequence()

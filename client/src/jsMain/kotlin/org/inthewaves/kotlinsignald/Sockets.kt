@@ -126,6 +126,8 @@ public class SocketWrapper private constructor(
             return SocketWrapper(nodeSocket.socketPath)
         }
     }
+
+    override fun close() {}
 }
 
 public class PersistentSocketWrapper private constructor(
@@ -135,7 +137,7 @@ public class PersistentSocketWrapper private constructor(
 
     override suspend fun readLineSuspend(): String? = socket.readLine()
 
-    public fun close() {
+    public override fun close() {
         socket.close()
     }
 

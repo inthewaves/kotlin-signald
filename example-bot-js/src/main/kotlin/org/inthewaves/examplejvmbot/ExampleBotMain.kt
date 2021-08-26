@@ -12,27 +12,12 @@ import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import net.Socket
 import org.inthewaves.kotlinsignald.Recipient
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
 import org.inthewaves.kotlinsignald.subscription.signalMessagesChannel
-
-fun getSocket(): Socket {
-    return net.createConnection("/var/run/signald/signald.sock")
-}
-
-/*
-@JsExport
-class What {
-    suspend fun hello(): String {
-        delay(500L)
-        return "A"
-    }
-}
- */
 
 private inline fun measureHrTime(block: () -> Unit): Number {
     val start = process.hrtime()
@@ -50,7 +35,7 @@ suspend fun main() {
     coroutineScope {
         val channel = signalMessagesChannel(signalClient, Dispatchers.Default)
         for (msg in channel) {
-            println("Msg:\n$msg\n======================================")
+            println("Received a message:\n$msg\n======================================")
             val (body, src) = when (msg) {
                 is IncomingMessage -> msg.data.dataMessage?.body to msg.data.source!!
                 is ExceptionWrapper, is ListenerState -> null to null

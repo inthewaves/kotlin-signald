@@ -34,6 +34,8 @@ internal class SendRequestTest {
                 override fun readLine(): String? {
                     error("unused")
                 }
+
+                override fun close() {}
             }
 
             val resp = SendRequest("+1", recipientGroupId = "GROUPID").submit(testSocketCommunicator, TEST_ID)
@@ -63,6 +65,8 @@ internal class SendRequestTest {
                 override fun readLine(): String? {
                     error("unused")
                 }
+
+                override fun close() {}
             })
         }
     }
@@ -89,6 +93,8 @@ internal class SendRequestTest {
                     override fun readLine(): String? {
                         error("unused")
                     }
+
+                    override fun close() {}
                 })
         }
     }

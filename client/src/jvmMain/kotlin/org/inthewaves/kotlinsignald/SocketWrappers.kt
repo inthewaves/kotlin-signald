@@ -46,6 +46,8 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
         throw UnsupportedOperationException("this implementation only supports a single socket")
     }
 
+    actual override fun close() {}
+
     @Throws(IOException::class)
     private inline fun <T> useNewSocketConnection(
         skipVersion: Boolean = true,

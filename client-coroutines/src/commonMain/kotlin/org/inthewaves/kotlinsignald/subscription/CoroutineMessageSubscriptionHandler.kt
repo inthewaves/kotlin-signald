@@ -9,6 +9,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.inthewaves.kotlinsignald.IncomingMessageSubscription
 import org.inthewaves.kotlinsignald.SignaldClient
+import org.inthewaves.kotlinsignald.clientprotocol.AutoCloseable
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
@@ -34,7 +35,7 @@ public abstract class CoroutineMessageSubscriptionHandler(
     protected val signaldClient: SignaldClient,
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
-) {
+) : AutoCloseable {
     private var subscription: IncomingMessageSubscription? = null
 
     protected val emissionJob: Job = coroutineScope.launch(context, start = CoroutineStart.LAZY) {
@@ -89,7 +90,7 @@ public abstract class CoroutineMessageSubscriptionHandler(
      */
     protected abstract fun onCompletion()
 
-    public fun close() {
+    public override fun close() {
         subscription?.close()
         emissionJob.cancel(message = "Closing the message subscription handler")
     }

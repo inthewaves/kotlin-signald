@@ -1,5 +1,6 @@
 package org.inthewaves.kotlinsignald
 
+import org.inthewaves.kotlinsignald.clientprotocol.AutoCloseable
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 
 /**
@@ -8,14 +9,14 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWr
  * This interface is here because JavaScript has a different client implementation based on suspending functions, while
  * all the other platforms use non-suspend functions.
  */
-public interface IncomingMessageSubscription {
+public interface IncomingMessageSubscription : AutoCloseable {
     /**
      * The number of messages sent while we were waiting for signald's response to the subscribe request.
      * This is currently used for detecting such a situation.
      */
     public val initialMessagesCount: Int
 
-    public fun close()
+    public override fun close()
 
     public suspend fun nextMessageSuspend(): ClientMessageWrapper?
 }
