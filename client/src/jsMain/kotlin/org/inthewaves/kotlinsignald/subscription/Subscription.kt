@@ -9,8 +9,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWr
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscriptionResponse
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequest
 
-public class Subscription internal constructor(
-    public val accountId: String,
+public actual class Subscription internal constructor(
+    public actual val accountId: String,
     private val persistentSocket: PersistentSocketWrapper,
     initialMessages: Collection<ClientMessageWrapper>
 ) : IncomingMessageSubscription {
@@ -51,11 +51,11 @@ public class Subscription internal constructor(
         }
     }
 
-    public fun unsubscribe(): SubscriptionResponse {
-        return UnsubscribeRequest(account = accountId).submit(persistentSocket)
+    public suspend fun unsubscribe(): SubscriptionResponse {
+        return UnsubscribeRequest(account = accountId).submitSuspend(persistentSocket)
     }
 
-    public override fun close() {
+    public actual override fun close() {
         persistentSocket.close()
     }
 }

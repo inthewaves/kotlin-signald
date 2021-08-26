@@ -234,10 +234,6 @@ public final class org/inthewaves/kotlinsignald/SocketWrapper$Companion {
 	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/SynchronousIncomingMessageSubscription : org/inthewaves/kotlinsignald/IncomingMessageSubscription {
-	public abstract fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
-}
-
 public final class org/inthewaves/kotlinsignald/TrustLevel : java/lang/Enum {
 	public static final field TRUSTED_UNVERIFIED Lorg/inthewaves/kotlinsignald/TrustLevel;
 	public static final field TRUSTED_VERIFIED Lorg/inthewaves/kotlinsignald/TrustLevel;

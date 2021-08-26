@@ -110,14 +110,6 @@ public class SocketWrapper private constructor(
 
     override suspend fun readLineSuspend(): String? = useNewSocketConnection { socket -> socket.readLine() }
 
-    override fun submit(request: String): String {
-        throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-    }
-
-    override fun readLine(): String? {
-        throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-    }
-
     private suspend inline fun <T> useNewSocketConnection(block: (socket: NodeSocket) -> T): T {
         val socket = NodeSocket.create(actualSocketPath)
         try {
@@ -142,14 +134,6 @@ public class PersistentSocketWrapper private constructor(
     override suspend fun submitSuspend(request: String): String = socket.writeAndReadReply(request)
 
     override suspend fun readLineSuspend(): String? = socket.readLine()
-
-    override fun submit(request: String): String {
-        throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-    }
-
-    override fun readLine(): String? {
-        throw UnsupportedOperationException(NOT_SUPPORTED_ERROR_MSG)
-    }
 
     public fun close() {
         socket.close()

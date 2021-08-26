@@ -22,7 +22,7 @@ public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/Sock
 	public abstract fun submit (Ljava/lang/String;)Ljava/lang/String;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator : org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator {
 	public abstract fun readLineSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun submitSuspend (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }

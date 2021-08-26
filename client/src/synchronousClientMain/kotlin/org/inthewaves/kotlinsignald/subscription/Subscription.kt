@@ -13,8 +13,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequ
 /**
  * Contains information about an active incoming message subscription with signald.
  */
-public class Subscription internal constructor(
-    public val accountId: String,
+public actual class Subscription internal constructor(
+    public actual val accountId: String,
     private val persistentSocket: PersistentSocketWrapper,
     initialMessages: Collection<ClientMessageWrapper>
 ) : IncomingMessageSubscription {
@@ -66,7 +66,7 @@ public class Subscription internal constructor(
         return UnsubscribeRequest(account = accountId).submit(persistentSocket)
     }
 
-    public override fun close() {
+    public actual override fun close() {
         persistentSocket.close()
     }
 }
