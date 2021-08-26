@@ -17,7 +17,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.30")
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.16.2")
+        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.16.3")
     }
 }
 
