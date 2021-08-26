@@ -32,6 +32,6 @@ internal expect fun getEnvVariable(envVarName: String): String?
 
 internal fun getDefaultSocketPaths(): Sequence<String> =
     sequenceOf(
-        getEnvVariable("XDG_RUNTIME_DIR")?.let { "$it/signald/signald.sock" },
+        getEnvVariable("XDG_RUNTIME_DIR")?.let { runtimeDir -> "$runtimeDir/signald/signald.sock" },
         "/var/run/signald/signald.sock"
     ).filterNotNull()

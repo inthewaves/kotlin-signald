@@ -1,4 +1,6 @@
 @file:JvmName("SocketWrapperUtil")
+package org.inthewaves.kotlinsignald
+
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import kotlin.jvm.JvmName
 import kotlin.jvm.JvmStatic

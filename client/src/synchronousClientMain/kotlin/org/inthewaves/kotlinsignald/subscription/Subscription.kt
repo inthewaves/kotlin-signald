@@ -1,8 +1,8 @@
 package org.inthewaves.kotlinsignald.subscription
 
-import PersistentSocketWrapper
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.serialization.SerializationException
+import org.inthewaves.kotlinsignald.PersistentSocketWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper

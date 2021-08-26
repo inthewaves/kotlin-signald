@@ -1,7 +1,5 @@
 package org.inthewaves.kotlinsignald
 
-import PersistentSocketWrapper
-import SocketWrapper
 import kotlinx.datetime.Clock
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException

@@ -2,7 +2,6 @@ package org.inthewaves.kotlinsignald.subscription
 
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
  * A handler to handle incoming message subscriptions from a [Signal.Subscription].

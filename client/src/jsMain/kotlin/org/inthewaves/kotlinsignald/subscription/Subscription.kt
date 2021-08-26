@@ -7,6 +7,4 @@ public class Subscription internal constructor(
     public val accountId: String,
     private val persistentSocket: PersistentSocketWrapper,
     initialMessages: Collection<ClientMessageWrapper>
-) {
-
-}
+)

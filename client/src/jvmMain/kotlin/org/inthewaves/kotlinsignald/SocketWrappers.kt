@@ -1,9 +1,8 @@
-import org.inthewaves.kotlinsignald.SocketUnavailableException
+package org.inthewaves.kotlinsignald
+
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
-import org.inthewaves.kotlinsignald.decodeVersionOrNull
-import org.inthewaves.kotlinsignald.getSocketAddressOrThrow
 import org.newsclub.net.unix.AFUNIXSocket
 import org.newsclub.net.unix.AFUNIXSocketAddress
 import java.io.BufferedReader

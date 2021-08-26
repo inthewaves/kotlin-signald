@@ -126,6 +126,20 @@ public final class org/inthewaves/kotlinsignald/GroupUpdate$UpdateRole : org/int
 	public final fun getMemberWithUpdatedRole ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
 }
 
+public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper : java/lang/AutoCloseable, org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public static final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
+	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public fun readLine ()Ljava/lang/String;
+	public fun submit (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper$Companion {
+	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper;
+}
+
 public abstract class org/inthewaves/kotlinsignald/Recipient {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/Recipient$Companion;
 	public static final fun forGroup (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Recipient$Group;
@@ -222,6 +236,20 @@ public final class org/inthewaves/kotlinsignald/SocketUnavailableException : jav
 	public fun <init> (Ljava/lang/String;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public final class org/inthewaves/kotlinsignald/SocketWrapper : org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/SocketWrapper$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
+	public final fun getActualSocketPath ()Ljava/lang/String;
+	public final fun getVersion ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public fun readLine ()Ljava/lang/String;
+	public fun submit (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class org/inthewaves/kotlinsignald/SocketWrapper$Companion {
+	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
 }
 
 public final class org/inthewaves/kotlinsignald/TrustLevel : java/lang/Enum {

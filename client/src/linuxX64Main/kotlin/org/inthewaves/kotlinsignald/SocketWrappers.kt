@@ -1,11 +1,7 @@
-import org.inthewaves.kotlinsignald.SocketUnavailableException
+package org.inthewaves.kotlinsignald
+
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
-import org.inthewaves.kotlinsignald.decodeVersionOrNull
-import org.inthewaves.kotlinsignald.getValidPathAndFdOrNull
-import org.inthewaves.kotlinsignald.makeNewSocketConnection
-import org.inthewaves.kotlinsignald.readLineFromSocket
-import org.inthewaves.kotlinsignald.sendLineAndReadLineToSocket
 import platform.posix.close
 
 public actual class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
