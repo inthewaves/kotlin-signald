@@ -89,7 +89,7 @@ public class Signal @Throws(SignaldException::class) constructor(
      */
     public val accountId: String,
     socketPath: String? = null
-) {
+) : SignaldClient {
     private val socketWrapper = SocketWrapper.create(socketPath)
 
     /**
@@ -990,14 +990,14 @@ public class Signal @Throws(SignaldException::class) constructor(
 
     /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
-     * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
-     * [Subscription.unsubscribe] or disconnect from the socket via [PersistentSocketWrapper.close] to stop receiving
-     * messages.
+     * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. When finished, to prevent leaks,
+     * send an unsubscribe request via [Subscription.unsubscribe] or disconnect from the socket via
+     * [PersistentSocketWrapper.close] to stop receiving messages.
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    internal fun subscribe(): Subscription {
+    public fun subscribe(): Subscription {
         withAccountOrThrow {
             val persistentSocket = PersistentSocketWrapper.create(socketWrapper.actualSocketPath)
             try {
@@ -1013,6 +1013,8 @@ public class Signal @Throws(SignaldException::class) constructor(
             }
         }
     }
+
+    override suspend fun subscribeSuspend(): IncomingMessageSubscription = subscribe()
 
     /**
      * Subscribes to incoming messages and consumes them on the thread that called this function. This will open a

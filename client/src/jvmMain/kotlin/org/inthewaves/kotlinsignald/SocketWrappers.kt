@@ -72,7 +72,6 @@ public actual class SocketWrapper @Throws(SocketUnavailableException::class) pri
          * @throws IOException if there is any I/O errors when communicating to the socket (signald first returns the
          * signald version JSON as [JsonVersionMessage]).
          */
-        @JvmStatic
         @Throws(IOException::class)
         public actual fun create(socketPath: String?): SocketWrapper = SocketWrapper(socketPath)
     }
@@ -113,7 +112,6 @@ public actual class PersistentSocketWrapper private constructor(
          * @param socketPath An optional path to the signald socket. If this is null, it will attempt the default socket
          * locations (`$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock`)
          */
-        @JvmStatic
         @Throws(SocketUnavailableException::class)
         public actual fun create(socketPath: String?): PersistentSocketWrapper = PersistentSocketWrapper(socketPath)
     }

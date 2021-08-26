@@ -2,6 +2,7 @@ package org.inthewaves.kotlinsignald.subscription
 
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.serialization.SerializationException
+import org.inthewaves.kotlinsignald.IncomingMessageSubscription
 import org.inthewaves.kotlinsignald.PersistentSocketWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
@@ -16,15 +17,17 @@ public class Subscription internal constructor(
     public val accountId: String,
     private val persistentSocket: PersistentSocketWrapper,
     initialMessages: Collection<ClientMessageWrapper>
-) {
+) : IncomingMessageSubscription {
     /**
      * The number of messages sent while we were waiting for signald's response to the subscribe.
      */
-    public val initialMessagesCount: Int = initialMessages.size
+    public override val initialMessagesCount: Int = initialMessages.size
 
     private var initialMessagesState = initialMessages
         .ifEmpty { null }
         ?.let { it.toMutableList() to SynchronizedObject() }
+
+    override suspend fun nextMessageSuspend(): ClientMessageWrapper? = nextMessage()
 
     /**
      * Parses an incoming message from the socket. If this returns null, then the socket is closed / reached EOF.
@@ -63,7 +66,7 @@ public class Subscription internal constructor(
         return UnsubscribeRequest(account = accountId).submit(persistentSocket)
     }
 
-    public fun close() {
+    public override fun close() {
         persistentSocket.close()
     }
 }

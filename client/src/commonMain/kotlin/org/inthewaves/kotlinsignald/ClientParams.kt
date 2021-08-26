@@ -18,6 +18,7 @@ public sealed class Recipient {
      * with `listGroups` or by reading the responses from `joinGroup` or `getGroupLinkInfo`.
      */
     public class Group(public val groupID: String) : Recipient()
+
     /**
      * A Signal user as the recipient.
      */
@@ -26,8 +27,10 @@ public sealed class Recipient {
     public companion object {
         @JvmStatic
         public fun forGroup(groupID: String): Group = Group(groupID)
+
         @JvmStatic
         public fun forIndividual(address: JsonAddress): Individual = Individual(address)
+
         @JvmStatic
         public fun forReply(incomingMessage: IncomingMessage): Recipient {
             val gv2Id = incomingMessage.data.dataMessage?.groupV2?.id
@@ -37,8 +40,10 @@ public sealed class Recipient {
                 Individual(address = incomingMessage.data.source!!)
             }
         }
+
         @JvmStatic
         public fun forNumber(number: String): Individual = Individual(JsonAddress(number = number))
+
         @JvmStatic
         public fun forUUID(uuid: String): Individual = Individual(JsonAddress(uuid = uuid))
     }
@@ -52,6 +57,7 @@ public sealed interface GroupUpdate {
     public class Title(public val newTitle: String) : GroupUpdate
     public class Description(public val newDescription: String) : GroupUpdate
     public class Avatar(public val newAvatarPath: String) : GroupUpdate
+
     /**
      * @property newTimerSeconds The new disappearing message timer in seconds. Set to 0 to disable
      */
@@ -62,6 +68,7 @@ public sealed interface GroupUpdate {
     public class UpdateAccessControl(update: AccessControlUpdate) : GroupUpdate {
         public val groupAccessControl: GroupAccessControl = update.groupAccessControlBody
     }
+
     public object ResetLink : GroupUpdate
 }
 
@@ -126,10 +133,12 @@ public sealed class AccessControlUpdate {
             GroupLinkStatus.ON_WITH_ADMIN_APPROVAL -> AccessRequired.ADMINISTRATOR
         }
     }
+
     /**
      * Edit the access required to edit group information.
      */
     public class Attributes(public override val accessRequired: AccessRequired) : AccessControlUpdate()
+
     /**
      * Edit the access required to add new members.
      */

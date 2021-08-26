@@ -46,6 +46,7 @@ public actual class PersistentSocketWrapper private constructor(
     socketPath: String?
 ) : SocketCommunicator {
     public val version: JsonVersionMessage?
+
     // private val arena = Arena()
     private val socketFd: Int
 

@@ -1,6 +1,7 @@
 package org.inthewaves.examplejvmbot
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -61,7 +62,7 @@ fun main(args: Array<String>) {
 
     println("Starting example bot with type $receiverType. It will reply back with the text that is sent to it.")
     when (receiverType) {
-        ReceiverType.CHANNEL -> runBlocking {
+        ReceiverType.CHANNEL -> runBlocking(Dispatchers.IO) {
             val channel = signalMessagesChannel(signal)
             for (message in channel) {
                 val handleResult = handleMessage(message, signal)
@@ -71,7 +72,7 @@ fun main(args: Array<String>) {
                 delay(1500L)
             }
         }
-        ReceiverType.FLOW -> runBlocking {
+        ReceiverType.FLOW -> runBlocking(Dispatchers.IO) {
             val flow = signalMessagesSharedFlow(signal)
             // note: SharedFlow can have multiple collectors / subscribers
             flow.collect { message ->

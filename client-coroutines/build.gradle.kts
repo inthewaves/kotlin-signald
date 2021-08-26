@@ -9,6 +9,16 @@ plugins {
 
 description = "Coroutine-based message subscriptions"
 
+repositories {
+    mavenCentral()
+    jcenter {
+        content {
+            includeModule("org.jetbrains.kotlinx", "kotlinx-nodejs")
+        }
+    }
+}
+
+
 kotlin {
     explicitApi()
 
@@ -21,14 +31,12 @@ kotlin {
         }
     }
 
-    /*
-
     js(IR) {
         nodejs {}
         binaries.library()
     }
 
-
+    /*
     val nativeBaseName = "kotlinsignald"
 
     linuxX64 {

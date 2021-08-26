@@ -1,4 +1,5 @@
 @file:JvmName("SocketUtil")
+
 package org.inthewaves.kotlinsignald
 
 import kotlinx.serialization.SerializationException

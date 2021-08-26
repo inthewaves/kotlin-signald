@@ -4,7 +4,6 @@ import Buffer
 import NodeJS.get
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withTimeout
 import net.Socket
 import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import process
@@ -41,11 +40,9 @@ private class NodeSocket private constructor(private val rawSocket: Socket, val 
     }
 
     suspend fun readLine(): String? {
-        return withTimeout(2000L) {
-            suspendCancellableCoroutine { cont ->
-                val lineReader = { buffer: Buffer -> cont.resume("$buffer", null) }
-                rawSocket.once("data", lineReader)
-            }
+        return suspendCancellableCoroutine { cont ->
+            val lineReader = { buffer: Buffer -> cont.resume("$buffer", null) }
+            rawSocket.once("data", lineReader)
         }
     }
 

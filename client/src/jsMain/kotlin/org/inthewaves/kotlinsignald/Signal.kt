@@ -60,12 +60,14 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
+import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
  * An asynchronous signald client, for use with V1 of the signald protocol. Use the [create] function to create an
@@ -83,7 +85,7 @@ public class Signal private constructor(
      */
     public val accountId: String,
     private val socketWrapper: SocketWrapper,
-) {
+) : SignaldClient {
     /**
      * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
      *
@@ -299,7 +301,9 @@ public class Signal private constructor(
      */
     public suspend fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
         withAccountOrThrow {
-            return GetGroupRequest(account = accountId, groupID = groupID, revision = revision).submitSuspend(socketWrapper)
+            return GetGroupRequest(account = accountId, groupID = groupID, revision = revision).submitSuspend(
+                socketWrapper
+            )
         }
     }
 
@@ -931,9 +935,6 @@ public class Signal private constructor(
         }
     }
 
-    /*
-    
-
     /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
      * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
@@ -943,11 +944,11 @@ public class Signal private constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    internal fun subscribe(): Subscription {
+    override suspend fun subscribeSuspend(): Subscription {
         withAccountOrThrow {
-            val persistentSocket = PersistentSocketWrapper.create(socketWrapper.actualSocketPath)
+            val persistentSocket = PersistentSocketWrapper.createSuspend(socketWrapper.actualSocketPath)
             try {
-                val subscribeResponse = SubscribeRequest(account = accountId).submit(persistentSocket)
+                val subscribeResponse = SubscribeRequest(account = accountId).submitSuspend(persistentSocket)
                 return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
             } catch (e: Throwable) {
                 try {
@@ -958,8 +959,5 @@ public class Signal private constructor(
                 throw e
             }
         }
-    } 
-    
-
-     */
+    }
 }
