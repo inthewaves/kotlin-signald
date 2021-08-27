@@ -13,13 +13,10 @@ import kotlinx.cinterop.toKStringFromUtf8
 import kotlinx.cinterop.usePinned
 import kotlinx.cinterop.value
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
 import platform.linux.sockaddr_un
 import platform.posix.AF_UNIX
 import platform.posix.EINTR
 import platform.posix.SOCK_STREAM
-import platform.posix.close
 import platform.posix.connect
 import platform.posix.getenv
 import platform.posix.posix_errno
@@ -31,7 +28,7 @@ import platform.posix.strcpy
 import platform.posix.strerror
 import platform.posix.write
 
-private fun makeNewSocketConnection(socketPath: String): Int? {
+internal fun makeNewSocketConnection(socketPath: String): Int? {
     val socketFd = socket(AF_UNIX, SOCK_STREAM, 0)
     if (socketFd == -1) {
         return null
@@ -56,7 +53,7 @@ private fun makeNewSocketConnection(socketPath: String): Int? {
 /**
  * @return the line or null if eof
  */
-private fun readLineFromSocket(socketFd: Int): String? {
+internal fun readLineFromSocket(socketFd: Int): String? {
     return buildString {
         memScoped {
             val chr = alloc<ByteVar>()
@@ -89,7 +86,7 @@ private fun readLineFromSocket(socketFd: Int): String? {
     }
 }
 
-private fun getValidPathAndFdOrNull(socketPath: String?): Pair<String, Int>? {
+internal fun getValidPathAndFdOrNull(socketPath: String?): Pair<String, Int>? {
     val socketPathsToTry = if (socketPath != null) sequenceOf(socketPath) else getDefaultSocketPaths()
 
     @Suppress("UNCHECKED_CAST")
@@ -98,89 +95,10 @@ private fun getValidPathAndFdOrNull(socketPath: String?): Pair<String, Int>? {
         .firstOrNull { it.second != null } as Pair<String, Int>?
 }
 
-private fun sendLineAndReadLineToSocket(socketFd: Int, request: String): String {
+internal fun sendLineAndReadLineToSocket(socketFd: Int, request: String): String {
     val requestBytes = "$request\n".encodeToByteArray()
     requestBytes.usePinned { write(socketFd, it.addressOf(0), requestBytes.size.convert()) }
     return readLineFromSocket(socketFd) ?: throw SignaldException("socket EOF")
-}
-
-public actual class SocketWrapper @Throws(SocketUnavailableException::class) private constructor(
-    socketPath: String?
-) : SuspendSocketCommunicator {
-    public val version: JsonVersionMessage?
-    public actual val actualSocketPath: String
-
-    init {
-        val (path, socketFd) = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
-        actualSocketPath = path
-        try {
-            version = decodeVersionOrNull(readLineFromSocket(socketFd))
-        } finally {
-            close(socketFd)
-        }
-    }
-
-    override suspend fun submitSuspend(request: String): String = submit(request)
-
-    override suspend fun readLineSuspend(): String? = readLine()
-
-    override fun submit(request: String): String {
-        val socketFd = makeNewSocketConnection(actualSocketPath)
-            ?: throw SocketUnavailableException("unable to get socket")
-        try {
-            // ignore version line from reconnecting
-            readLineFromSocket(socketFd)
-            return sendLineAndReadLineToSocket(socketFd, request)
-        } finally {
-            close(socketFd)
-        }
-    }
-
-    override fun readLine(): String? {
-        throw UnsupportedOperationException("wrong SocketWrapper type")
-    }
-
-    public actual companion object {
-        @Throws(SocketUnavailableException::class)
-        public actual fun create(socketPath: String?): SocketWrapper = SocketWrapper(socketPath)
-    }
-}
-
-public actual class PersistentSocketWrapper private constructor(
-    socketPath: String?
-) : SuspendSocketCommunicator {
-    public val version: JsonVersionMessage?
-    // private val arena = Arena()
-    private val socketFd: Int
-
-    init {
-        val (_, validSocketFd) = getValidPathAndFdOrNull(socketPath) ?: throw SocketUnavailableException("can't")
-        socketFd = validSocketFd
-        // Skip the version line
-        version = decodeVersionOrNull(readLineFromSocket(validSocketFd))
-    }
-
-    override suspend fun submitSuspend(request: String): String {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun readLineSuspend(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override fun submit(request: String): String = sendLineAndReadLineToSocket(socketFd, request)
-
-    override fun readLine(): String? = readLineFromSocket(socketFd)
-
-    public actual fun close() {
-        close(socketFd)
-        // arena.clear()
-    }
-
-    public actual companion object {
-        @Throws(SocketUnavailableException::class)
-        public actual fun create(socketPath: String?): PersistentSocketWrapper = PersistentSocketWrapper(socketPath)
-    }
 }
 
 internal actual fun getEnvVariable(envVarName: String): String? = getenv(envVarName)?.toKStringFromUtf8()

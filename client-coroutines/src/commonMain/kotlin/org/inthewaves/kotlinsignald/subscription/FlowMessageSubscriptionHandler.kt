@@ -5,17 +5,18 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import org.inthewaves.kotlinsignald.Signal
+import org.inthewaves.kotlinsignald.IncomingMessageSubscription
+import org.inthewaves.kotlinsignald.SignaldClient
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-private const val DEFAULT_REPLAY = 0
+internal const val DEFAULT_REPLAY = 0
 
 /**
- * Launches a new coroutine that uses the [signal] instance to create a new socket connection and using the socket to
- * subscribe to incoming messages from signald. The incoming messages are emitted in the returned [SharedFlow].
+ * Launches a new coroutine that uses the [IncomingMessageSubscription] to handle incoming messages from signald. The
+ * incoming messages are emitted in the returned [SharedFlow].
  *
  * The coroutine context is inherited from a [CoroutineScope]. Additional context elements can be specified with the
  * [context] parameter.
@@ -36,14 +37,14 @@ private const val DEFAULT_REPLAY = 0
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
  */
 public fun CoroutineScope.signalMessagesSharedFlow(
-    signal: Signal,
+    signaldClient: SignaldClient,
     context: CoroutineContext = EmptyCoroutineContext,
     replay: Int = DEFAULT_REPLAY,
     extraBufferCapacity: Int = CoroutineMessageSubscriptionHandler.DEFAULT_BUFFER_CAPACITY,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
 ): SharedFlow<ClientMessageWrapper> =
     FlowMessageSubscriptionHandler(
-        signal = signal,
+        signaldClient = signaldClient,
         coroutineScope = this,
         context = context,
         replay = replay,
@@ -59,7 +60,7 @@ public fun CoroutineScope.signalMessagesSharedFlow(
  *
  * Note that the [messages] flow is hot, meaning that it will be active regardless of whether there are any subscribers.
  *
- * @param signal The [Signal] instance. Must be associated with an account registered with signald.
+ * @param signalWrapper The [Signal] instance. Must be associated with an account registered with signald.
  * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine. This is used to cancel
  * the handler.
  * @param replay The number of values replayed to new subscribers (cannot be negative, defaults to zero).
@@ -74,13 +75,13 @@ public fun CoroutineScope.signalMessagesSharedFlow(
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
  */
 public class FlowMessageSubscriptionHandler(
-    signal: Signal,
+    signaldClient: SignaldClient,
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
     replay: Int = DEFAULT_REPLAY,
     extraBufferCapacity: Int = DEFAULT_BUFFER_CAPACITY,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
-) : CoroutineMessageSubscriptionHandler(signal, coroutineScope, context) {
+) : CoroutineMessageSubscriptionHandler(signaldClient, coroutineScope, context) {
 
     private val _messages = MutableSharedFlow<ClientMessageWrapper>(
         replay = replay,

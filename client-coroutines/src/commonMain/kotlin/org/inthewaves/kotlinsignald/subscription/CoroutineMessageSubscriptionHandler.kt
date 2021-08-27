@@ -7,7 +7,9 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.inthewaves.kotlinsignald.Signal
+import org.inthewaves.kotlinsignald.IncomingMessageSubscription
+import org.inthewaves.kotlinsignald.SignaldClient
+import org.inthewaves.kotlinsignald.clientprotocol.AutoCloseable
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
@@ -30,15 +32,17 @@ import kotlin.coroutines.EmptyCoroutineContext
  * @param context Additional coroutine context to the `coroutineScope`'s context.
  */
 public abstract class CoroutineMessageSubscriptionHandler(
-    signal: Signal,
+    protected val signaldClient: SignaldClient,
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
-) : MessageSubscriptionHandler(signal) {
+) : AutoCloseable {
+    private var subscription: IncomingMessageSubscription? = null
 
     protected val emissionJob: Job = coroutineScope.launch(context, start = CoroutineStart.LAZY) {
+        val subscription = signaldClient.subscribeSuspend().also { subscription = it }
         while (isActive) {
             val newMessage: ClientMessageWrapper = try {
-                subscription.nextMessage()
+                subscription.nextMessageSuspend()
                     ?: run {
                         cancel("Message receive socket is closed --- no more incoming messages")
                         awaitCancellation()
@@ -59,7 +63,7 @@ public abstract class CoroutineMessageSubscriptionHandler(
         }
     }.also { job ->
         job.invokeOnCompletion {
-            super.close()
+            subscription?.close()
             onCompletion()
         }
     }
@@ -86,8 +90,8 @@ public abstract class CoroutineMessageSubscriptionHandler(
      */
     protected abstract fun onCompletion()
 
-    override fun close() {
-        super.close()
+    public override fun close() {
+        subscription?.close()
         emissionJob.cancel(message = "Closing the message subscription handler")
     }
 

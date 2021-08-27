@@ -4,20 +4,13 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     id("kotlinx-atomicfu")
     id("org.jetbrains.dokka")
-    id("org.inthewaves.kotlin-signald-protocolgen")
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("org.jlleitschuh.gradle.ktlint")
     `maven-publish`
     `java-library`
     signing
 }
 
-description = "A Kotlin Multiplatform library for communicating with signald"
-
-signaldProtocolGen {
-    packageName = "org.inthewaves.kotlinsignald"
-    outputDirectory = "src/commonMain/generated"
-    protocolJsonFile = "protocol.json"
-}
+description = "A Kotlin Multiplatform client API to communicate with signald"
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configureEach {
     kotlinOptions {
@@ -56,6 +49,7 @@ kotlin {
         binaries {
             sharedLib {
                 baseName = nativeBaseName
+                export(project(":clientprotocol"))
             }
         }
     }
@@ -72,8 +66,8 @@ kotlin {
 
     sourceSets {
         val commonMain by getting {
-            kotlin.setSrcDirs(listOf("src/commonMain/kotlin", "src/commonMain/generated"))
             dependencies {
+                api(project(":clientprotocol"))
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
             }
@@ -83,12 +77,21 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+
+        val synchronousClientMain by creating {
+            dependsOn(commonMain)
+        }
         val jvmMain by getting {
+            dependsOn(synchronousClientMain)
             dependencies {
                 implementation("com.kohlschutter.junixsocket:junixsocket-common:2.4.0")
                 implementation("com.kohlschutter.junixsocket:junixsocket-native-common:2.4.0")
             }
         }
+        val linuxX64Main by getting {
+            dependsOn(synchronousClientMain)
+        }
+
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")

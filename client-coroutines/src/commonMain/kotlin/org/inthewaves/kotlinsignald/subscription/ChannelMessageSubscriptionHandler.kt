@@ -4,14 +4,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import org.inthewaves.kotlinsignald.Signal
+import org.inthewaves.kotlinsignald.SignaldClient
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 /**
- * Launches a new coroutine that uses the [signal] instance to create a new socket connection and using the socket to
+ * Launches a new coroutine that uses the [signaldClient] to create a new socket connection and using the socket to
  * subscribe to incoming messages from signald. The incoming messages are sent through the returned [ReceiveChannel].
  *
  * The coroutine context is inherited from a [CoroutineScope]. Additional context elements can be specified with the
@@ -33,14 +33,14 @@ import kotlin.coroutines.EmptyCoroutineContext
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
  */
 public fun CoroutineScope.signalMessagesChannel(
-    signal: Signal,
+    signaldClient: SignaldClient,
     context: CoroutineContext = EmptyCoroutineContext,
     bufferCapacity: Int = 25,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((ClientMessageWrapper) -> Unit)? = null
 ): ReceiveChannel<ClientMessageWrapper> =
     ChannelMessageSubscriptionHandler(
-        signal = signal,
+        signaldClient = signaldClient,
         coroutineScope = this,
         context = context,
         bufferCapacity = bufferCapacity,
@@ -65,13 +65,13 @@ public fun CoroutineScope.signalMessagesChannel(
  * @throws SignaldException if subscription fails (e.g., creating the persistent socket fails)
  */
 public class ChannelMessageSubscriptionHandler(
-    signal: Signal,
+    signaldClient: SignaldClient,
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
     bufferCapacity: Int = 25,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((ClientMessageWrapper) -> Unit)? = null
-) : CoroutineMessageSubscriptionHandler(signal, coroutineScope, context) {
+) : CoroutineMessageSubscriptionHandler(signaldClient, coroutineScope, context) {
 
     private val _messages: Channel<ClientMessageWrapper> = Channel(
         capacity = bufferCapacity,
