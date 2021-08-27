@@ -67,7 +67,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
-import org.inthewaves.kotlinsignald.subscription.BlockingMessageSubscriptionHandler
 import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
@@ -1027,11 +1026,15 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun subscribeAndConsumeBlocking(messageConsumer: (ClientMessageWrapper) -> Unit) {
-        val subscriptionHandler = BlockingMessageSubscriptionHandler(this)
+        val subscription = subscribe()
         try {
-            subscriptionHandler.consumeEach(messageConsumer)
+            var nextMessage = subscription.nextMessage()
+            while (nextMessage != null) {
+                messageConsumer(nextMessage)
+                nextMessage = subscription.nextMessage()
+            }
         } finally {
-            subscriptionHandler.close()
+            subscription.close()
         }
     }
 }
