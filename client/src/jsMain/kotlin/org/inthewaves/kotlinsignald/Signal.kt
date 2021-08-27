@@ -46,6 +46,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ReactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RegisterRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteConfigList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteConfigRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteDeleteRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveLinkedDeviceRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveServerRequest
@@ -492,6 +494,18 @@ public actual class Signal private constructor(
             voice = voice,
             captcha = captcha
         ).submitSuspend(socketWrapper)
+    }
+
+    /**
+     * Gets the remote config (feature flags) from the server.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     */
+    public suspend fun remoteConfig(): RemoteConfigList {
+        withAccountOrThrow {
+            return RemoteConfigRequest(account = accountId).submitSuspend(socketWrapper)
+        }
     }
 
     /**

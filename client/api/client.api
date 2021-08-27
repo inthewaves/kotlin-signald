@@ -182,6 +182,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public static synthetic fun react$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/Recipient;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonReaction;JILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun register (ZLjava/lang/String;)V
 	public static synthetic fun register$default (Lorg/inthewaves/kotlinsignald/Signal;ZLjava/lang/String;ILjava/lang/Object;)V
+	public final fun remoteConfig ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoteConfigList;
 	public final fun remoteDelete (Lorg/inthewaves/kotlinsignald/Recipient;J)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun removeLinkedDevice (J)V
 	public final fun requestSync (ZZZZ)V
@@ -241,18 +242,6 @@ public final class org/inthewaves/kotlinsignald/TrustLevel : java/lang/Enum {
 	public static final field UNTRUSTED Lorg/inthewaves/kotlinsignald/TrustLevel;
 	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/TrustLevel;
 	public static fun values ()[Lorg/inthewaves/kotlinsignald/TrustLevel;
-}
-
-public final class org/inthewaves/kotlinsignald/subscription/BlockingMessageSubscriptionHandler : org/inthewaves/kotlinsignald/subscription/MessageSubscriptionHandler {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
-	public final fun consumeEach (Lkotlin/jvm/functions/Function1;)V
-}
-
-public abstract class org/inthewaves/kotlinsignald/subscription/MessageSubscriptionHandler {
-	public fun <init> (Lorg/inthewaves/kotlinsignald/Signal;)V
-	public fun close ()V
-	public final fun getInitialMessagesCount ()I
-	protected final fun getSubscription ()Lorg/inthewaves/kotlinsignald/subscription/Subscription;
 }
 
 public final class org/inthewaves/kotlinsignald/subscription/Subscription : org/inthewaves/kotlinsignald/IncomingMessageSubscription {
