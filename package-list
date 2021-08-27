@@ -20,6 +20,7 @@ $dokka.location:org.inthewaves.kotlinsignald/Signal/listAccounts/#/PointingToDec
 $dokka.location:org.inthewaves.kotlinsignald/Signal/listContacts/#kotlin.Boolean?/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]list-contacts.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/listGroups/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]list-groups.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/register/#kotlin.Boolean#kotlin.String?/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]register.html
+$dokka.location:org.inthewaves.kotlinsignald/Signal/remoteConfig/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]remote-config.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/remoteDelete/#org.inthewaves.kotlinsignald.Recipient#kotlin.Long/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]remote-delete.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/removeLinkedDevice/#kotlin.Long/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]remove-linked-device.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/requestSync/#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]request-sync.html
