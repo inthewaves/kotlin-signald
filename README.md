@@ -11,6 +11,9 @@ Documentation for the library is available at https://inthewaves.github.io/kotli
 
 ## Supported platforms
 
+Note that since signald currently works by communicating with UNIX sockets, these platforms are effectively limited to
+UNIX environments supported by signald.
+
 ### `clientprotocol` module
 
 This module contains the model classes for signald, as well as support for serializing them into JSON strings.
@@ -18,27 +21,21 @@ This module contains the model classes for signald, as well as support for seria
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
-- Linux x64
-- macOS x64
+- Linux x86-64
+- macOS x86-64
 - JavaScript (Node.js)
-
-Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
-supported by signald.
 
 ### `client` module
 
-This module contains a simple client API for communicating with signald. It depends on the `clientprotocol` model and
-makes it easier to use the `clientprotocol` classes (e.g., it will automatically add the account ID to each request).
+This module contains a simple client API for communicating with signald, including implementations of the 
+`SocketCommunicator` interfaces. It depends on the `clientprotocol` model and makes it easier to use the
+`clientprotocol` classes (e.g., it will automatically add the account ID to each request that needs it).
 
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
-- Linux x64
-
-Since signald currently works by communicating with UNIX sockets, JVM is effectively limited to UNIX environments
-supported by signald.
-
-JavaScript (Node.js) support is incomplete.
+- Linux x86-64
+- JavaScript (Node.js; requires coroutines)
 
 ### `client-coroutines` module
 
@@ -48,8 +45,9 @@ Channel or a SharedFlow.
 The following platforms are supported:
 
 - JVM (JDK 1.8 or higher)
+- JavaScript (Node.js)
 
-Linux x64 and JavaScript (Node.js) support are incomplete.
+Linux x64 support is incomplete.
 
 ## Usage
 
@@ -80,7 +78,37 @@ signald will handle these incoming messages, as long as there is a message subsc
 
 ### Client protocol
 
-The `clientprotocol` model contains the generated model classes from signald.
+The `clientprotocol` model contains the generated model classes from signald with support for (de)serializing responses
+and requests. However, this module does not contain any implementations of the `SocketCommunciator` and
+`SuspendSocketCommunicator` interfaces. It's recommended to use the `client` module instead. 
+
+Mirroring the [example on the signald site](https://signald.org/articles/getting-started/#message-sending), these
+raw classes can be used in the following manner:
+
+```kotlin
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
+import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
+
+val socketCommunicator: SocketCommunicator = // your own interface here ...
+
+val request = SendRequest(
+  username = "+12025555555", 
+  messageBody = "hello, joe", 
+  recipientAddress =  JsonAddress(number = "+12026666666"),
+)
+
+val response: SendResponse = try { 
+  request.submit(socketWrapper)
+} catch (e: SignaldException) {
+  // e can be of type RequestFailedException, which contains
+  // specific information if signald sent back an error response.
+  // Otherwise, the SignaldException can also be an I/O error from
+  // the socket
+}
+```
 
 #### Gradle
 First add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
@@ -111,7 +139,8 @@ placeholders can be replaced by one of the versions from the
 
 ### Client
 
-The `client` module has support for connecting to the UNIX socket and (de)serializing responses and requests.
+The `client` module has support for connecting to the UNIX socket, as well as providing a simplified client API (the
+`Signal` class implementing the `SignaldClient` interface).
 
 Ensure that signald is running and that the socket is available. The default socket paths of
 `$XDG_RUNTIME_DIR/signald/signald.sock` and `/var/run/signald/signald.sock` will be tested if an explicit socket path is
@@ -213,30 +242,8 @@ signal.subscribeAndConsumeBlocking { message: ClientMessageWrapper ->
 }
 ```
 
-Examples of echo bots can be found in the [`example-bot-jvm`](./example-bot-jvm) and
-[`example-bot-linuxX64`](./example-bot-linuxX64) modules.
-
-The raw client protocol models are also available for use. Mirroring the
-[example on the signald site](https://signald.org/articles/getting-started/#message-sending):
-
-```kotlin
-val socketWrapper = SocketWrapper()
-
-val request = SendRequest(
-  username = "+12025555555", 
-  messageBody = "hello, joe", 
-  recipientAddress =  JsonAddress(number = "+12026666666"),
-)
-
-val response: SendResponse = try { 
-  request.submit(socketWrapper)
-} catch (e: SignaldException) {
-  // e can be of type RequestFailedException, which contains
-  // specific information if signald sent back an error response.
-  // Otherwise, the SignaldException can also be an I/O error from
-  // the socket
-}
-```
+Examples of echo bots can be found in the [`example-bot-jvm`](./example-bot-jvm),
+[`example-bot-linuxX64`](./example-bot-linuxX64), and [`example-bot-js`](./example-bot-js) modules.
 
 #### Gradle
 First add `mavenCentral()` to the dependencies block if you haven't already done so. All of the `<current version>`
@@ -265,9 +272,7 @@ placeholders can be replaced by one of the versions from the
     }
     ```
 
-### Coroutine-based message receiver (JVM)
-
-Note that only JVM is supported for now.
+### Coroutine-based message receiver (JVM and JS only)
 
 The `client-coroutines` module adds coroutine-based message subscription handlers via the `signalMessagesChannel` and
 `signalMessagesSharedFlow` functions. Each function is an extension function of `CoroutineScope` that creates a
@@ -307,8 +312,9 @@ suspend fun receiveMessages(signal: Signal) {
 }
 ```
 
-See the [`example-bot-jvm`](./example-bot-jvm/src/main/kotlin/org/inthewaves/examplejvmbot/ExampleBotMain.kt) module for
-a full example of a bot that uses these coroutine functions.
+See [`example-bot-jvm`](./example-bot-jvm/src/main/kotlin/org/inthewaves/examplejvmbot/ExampleBotMain.kt) and
+[`example-bot-js`](./example-bot-js/src/main/kotlin/org/inthewaves/examplejsbot/ExampleBotMain.kt) for
+a full examples of bots that use these coroutine functions.
 
 #### Gradle
 

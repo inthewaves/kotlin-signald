@@ -1,14 +1,3 @@
-/*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.await
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resumeWithException
- */
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -27,8 +16,11 @@ private inline fun measureHrTime(block: () -> Unit): Number {
     return endMs.unsafeCast<Number>()
 }
 
-suspend fun main() {
-    val signalClient = Signal.create("+123")
+suspend fun main(args: Array<String>) {
+    println("args: ${args.asList()}")
+    val actualArgs = process.argv.slice(2.. process.argv.lastIndex)
+    println("args from process: $actualArgs")
+    val signalClient = Signal.create(actualArgs.first())
     println("Account list: ${signalClient.listAccounts()}")
 
     println("Entering channel")
