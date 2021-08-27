@@ -82,12 +82,12 @@ import org.inthewaves.kotlinsignald.subscription.Subscription
  * @param accountId See [accountId].
  * @param socketPath An optional path to the signald socket.
  */
-public class Signal @Throws(SignaldException::class) constructor(
+public actual class Signal @Throws(SignaldException::class) constructor(
     /**
      * The ID of account corresponding to the signald account to use. As of the current version, this is
      * a phone number in E.164 format starting with a + character.
      */
-    public val accountId: String,
+    public actual val accountId: String,
     socketPath: String? = null
 ) : SignaldClient {
     private val socketWrapper = SocketWrapper.create(socketPath)

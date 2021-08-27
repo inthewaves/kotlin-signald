@@ -2,7 +2,7 @@ package org.inthewaves.kotlinsignald.subscription
 
 import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.IncomingMessageSubscription
-import org.inthewaves.kotlinsignald.PersistentSocketWrapper
+import org.inthewaves.kotlinsignald.NodePersistentSocketWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
@@ -11,7 +11,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequ
 
 public actual class Subscription internal constructor(
     public actual val accountId: String,
-    private val persistentSocket: PersistentSocketWrapper,
+    private val persistentSocket: NodePersistentSocketWrapper,
     initialMessages: Collection<ClientMessageWrapper>
 ) : IncomingMessageSubscription {
     /**

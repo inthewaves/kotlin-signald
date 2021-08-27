@@ -101,7 +101,7 @@ private class NodeSocket private constructor(private val rawSocket: Socket, val 
     }
 }
 
-public class SocketWrapper private constructor(
+public class NodeSocketWrapper private constructor(
     public val actualSocketPath: String
 ) : SuspendSocketCommunicator {
     override suspend fun submitSuspend(request: String): String = useNewSocketConnection { socket ->
@@ -120,17 +120,17 @@ public class SocketWrapper private constructor(
     }
 
     public companion object {
-        public suspend fun createSuspend(socketPath: String? = null): SocketWrapper {
+        public suspend fun createSuspend(socketPath: String? = null): NodeSocketWrapper {
             val nodeSocket = NodeSocket.create(socketPath)
             nodeSocket.close()
-            return SocketWrapper(nodeSocket.socketPath)
+            return NodeSocketWrapper(nodeSocket.socketPath)
         }
     }
 
     override fun close() {}
 }
 
-public class PersistentSocketWrapper private constructor(
+public class NodePersistentSocketWrapper private constructor(
     private val socket: NodeSocket
 ) : SuspendSocketCommunicator {
     override suspend fun submitSuspend(request: String): String = socket.writeAndReadReply(request)
@@ -146,8 +146,8 @@ public class PersistentSocketWrapper private constructor(
          * @param socketPath The socket path to try. If this is null (default), it will try to default socket paths.
          * @throws SocketUnavailableException if unable to connect to the signald socket.
          */
-        public suspend fun createSuspend(socketPath: String? = null): PersistentSocketWrapper {
-            return PersistentSocketWrapper(NodeSocket.create(socketPath))
+        public suspend fun createSuspend(socketPath: String? = null): NodePersistentSocketWrapper {
+            return NodePersistentSocketWrapper(NodeSocket.create(socketPath))
         }
     }
 }

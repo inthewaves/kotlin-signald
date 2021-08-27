@@ -78,13 +78,13 @@ import org.inthewaves.kotlinsignald.subscription.Subscription
  * @param accountId See [accountId].
  * @param socketPath An optional path to the signald socket.
  */
-public class Signal private constructor(
+public actual class Signal private constructor(
     /**
      * The ID of account corresponding to the signald account to use. As of the current version, this is
      * a phone number in E.164 format starting with a + character.
      */
-    public val accountId: String,
-    private val socketWrapper: SocketWrapper,
+    public actual val accountId: String,
+    private val socketWrapper: NodeSocketWrapper,
 ) : SignaldClient {
     /**
      * The account info for the specified [accountId]. May be null if the account doesn't exist with signald.
@@ -931,14 +931,14 @@ public class Signal private constructor(
 
     public companion object {
         public suspend fun create(accountId: String, socketPath: String? = null): Signal {
-            return Signal(accountId = accountId, socketWrapper = SocketWrapper.createSuspend(socketPath))
+            return Signal(accountId = accountId, socketWrapper = NodeSocketWrapper.createSuspend(socketPath))
         }
     }
 
     /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
      * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
-     * [Subscription.unsubscribe] or disconnect from the socket via [PersistentSocketWrapper.close] to stop receiving
+     * [Subscription.unsubscribe] or disconnect from the socket via [NodePersistentSocketWrapper.close] to stop receiving
      * messages.
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
@@ -946,7 +946,7 @@ public class Signal private constructor(
      */
     override suspend fun subscribeSuspend(): Subscription {
         withAccountOrThrow {
-            val persistentSocket = PersistentSocketWrapper.createSuspend(socketWrapper.actualSocketPath)
+            val persistentSocket = NodePersistentSocketWrapper.createSuspend(socketWrapper.actualSocketPath)
             try {
                 val subscribeResponse = SubscribeRequest(account = accountId).submitSuspend(persistentSocket)
                 return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
