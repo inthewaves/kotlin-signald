@@ -3,7 +3,7 @@ import java.net.URI
 
 plugins {
     id("org.jetbrains.dokka") version "1.5.0"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.0" apply false
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.1" apply false
     `maven-publish`
     signing
 }
