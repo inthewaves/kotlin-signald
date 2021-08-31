@@ -7,5 +7,9 @@ package org.inthewaves.kotlinsignald
  * all the other platforms use non-suspend functions.
  */
 public interface SignaldClient {
+    /**
+     * @throws [UnsupportedOperationException] if the client doesn't support it (JS)
+     */
+    public fun subscribe(): IncomingMessageSubscription
     public suspend fun subscribeSuspend(): IncomingMessageSubscription
 }

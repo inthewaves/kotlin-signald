@@ -10,17 +10,13 @@ public final class org/inthewaves/kotlinsignald/subscription/ChannelMessageSubsc
 }
 
 public abstract class org/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler : java/lang/AutoCloseable {
-	public static final field Companion Lorg/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler$Companion;
 	public fun <init> (Lorg/inthewaves/kotlinsignald/SignaldClient;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;)V
 	public synthetic fun <init> (Lorg/inthewaves/kotlinsignald/SignaldClient;Lkotlinx/coroutines/CoroutineScope;Lkotlin/coroutines/CoroutineContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
 	protected final fun getEmissionJob ()Lkotlinx/coroutines/Job;
 	protected final fun getSignaldClient ()Lorg/inthewaves/kotlinsignald/SignaldClient;
 	protected abstract fun onCompletion ()V
-	protected abstract fun sendMessage (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class org/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler$Companion {
+	protected abstract fun sendMessageToSubscribers (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class org/inthewaves/kotlinsignald/subscription/FlowMessageSubscriptionHandler : org/inthewaves/kotlinsignald/subscription/CoroutineMessageSubscriptionHandler {

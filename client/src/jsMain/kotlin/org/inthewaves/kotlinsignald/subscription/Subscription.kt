@@ -58,4 +58,8 @@ public actual class Subscription internal constructor(
     public actual override fun close() {
         persistentSocket.close()
     }
+
+    override fun nextMessage(): ClientMessageWrapper? {
+        throw UnsupportedOperationException("not supported on JS")
+    }
 }

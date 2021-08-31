@@ -36,7 +36,7 @@ public actual class Subscription internal constructor(
      * @throws RequestFailedException if an incoming message can't be serialized (subclass of [SignaldException])
      * @throws SignaldException if an I/O error occurs when communicating with the socket.
      */
-    public fun nextMessage(): ClientMessageWrapper? {
+    public override fun nextMessage(): ClientMessageWrapper? {
         val msgState = initialMessagesState
         if (msgState != null) {
             val (list, lock) = msgState

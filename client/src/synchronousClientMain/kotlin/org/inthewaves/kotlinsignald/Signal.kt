@@ -1011,7 +1011,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
-    public fun subscribe(): Subscription {
+    public override fun subscribe(): Subscription {
         withAccountOrThrow {
             val persistentSocket = PersistentSocketWrapper.create(socketWrapper.actualSocketPath)
             try {

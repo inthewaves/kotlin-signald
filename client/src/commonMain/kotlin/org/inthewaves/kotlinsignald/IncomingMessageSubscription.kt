@@ -18,5 +18,10 @@ public interface IncomingMessageSubscription : AutoCloseable {
 
     public override fun close()
 
+    /**
+     * @throws [UnsupportedOperationException] if the platform doesn't support it (JS)
+     */
+    public fun nextMessage(): ClientMessageWrapper?
+
     public suspend fun nextMessageSuspend(): ClientMessageWrapper?
 }

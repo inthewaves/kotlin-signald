@@ -101,6 +101,7 @@ public final class org/inthewaves/kotlinsignald/GroupUpdate$UpdateRole : org/int
 public abstract interface class org/inthewaves/kotlinsignald/IncomingMessageSubscription : java/lang/AutoCloseable {
 	public abstract fun close ()V
 	public abstract fun getInitialMessagesCount ()I
+	public abstract fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
 	public abstract fun nextMessageSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -197,7 +198,8 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun setDeviceName (Ljava/lang/String;)V
 	public final fun setExpiration (Lorg/inthewaves/kotlinsignald/Recipient;I)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun subscribe ()Lorg/inthewaves/kotlinsignald/subscription/Subscription;
+	public synthetic fun subscribe ()Lorg/inthewaves/kotlinsignald/IncomingMessageSubscription;
+	public fun subscribe ()Lorg/inthewaves/kotlinsignald/subscription/Subscription;
 	public final fun subscribeAndConsumeBlocking (Lkotlin/jvm/functions/Function1;)V
 	public fun subscribeSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun trust (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Fingerprint;Lorg/inthewaves/kotlinsignald/TrustLevel;)V
@@ -212,6 +214,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 }
 
 public abstract interface class org/inthewaves/kotlinsignald/SignaldClient {
+	public abstract fun subscribe ()Lorg/inthewaves/kotlinsignald/IncomingMessageSubscription;
 	public abstract fun subscribeSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -248,7 +251,7 @@ public final class org/inthewaves/kotlinsignald/subscription/Subscription : org/
 	public fun close ()V
 	public final fun getAccountId ()Ljava/lang/String;
 	public fun getInitialMessagesCount ()I
-	public final fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
+	public fun nextMessage ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper;
 	public fun nextMessageSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun unsubscribe ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubscriptionResponse;
 }

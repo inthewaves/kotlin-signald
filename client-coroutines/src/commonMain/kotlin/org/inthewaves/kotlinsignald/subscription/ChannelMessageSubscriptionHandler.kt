@@ -23,8 +23,11 @@ import kotlin.coroutines.EmptyCoroutineContext
  * `Dispatchers.IO` on JVM or using a new single-threaded context.
  *
  * @see [ChannelMessageSubscriptionHandler]
- * @param signal The [Signal] instance. Must be associated with an account registered with signald.
- * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to 25)
+ * @param signaldClient The [SignaldClient] instance. Must be associated with an account registered with signald.
+ * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to
+ * [Channel.RENDEZVOUS], i.e. zero). This option should be used with care; setting a higher buffer means that the
+ * client will take messages from signald that will be buffered locally, but if the client crashes and never handles
+ * those messages, signald will not resend those messages.
  * @param onBufferOverflow configures an action on buffer overflow (optional, defaults to a suspending attempt to send a
  * value, supported only when `capacity >= 0` or `capacity == Channel.BUFFERED`, implicitly creates a channel with at
  * least one buffered element)
@@ -35,7 +38,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 public fun CoroutineScope.signalMessagesChannel(
     signaldClient: SignaldClient,
     context: CoroutineContext = EmptyCoroutineContext,
-    bufferCapacity: Int = 25,
+    bufferCapacity: Int = Channel.RENDEZVOUS,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((ClientMessageWrapper) -> Unit)? = null
 ): ReceiveChannel<ClientMessageWrapper> =
@@ -53,10 +56,13 @@ public fun CoroutineScope.signalMessagesChannel(
  * [ReceiveChannel]. Unsubscription and closing of the socket is handled by calling [close] or cancelling the given
  * `coroutineScope`.
  *
- * @param signal The [Signal] instance. Must be associated with an account registered with signald.
+ * @param signaldClient The [SignaldClient] instance. Must be associated with an account registered with signald.
  * @param coroutineScope The [CoroutineScope] to use for the message subscription coroutine.
  * @param context An additional [CoroutineContext] that will be added to the given `coroutineScope`'s context.
- * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to 25)
+ * @param bufferCapacity Size of the buffer for the channel. (optional, cannot be negative, defaults to
+ * [Channel.RENDEZVOUS], i.e. zero). This option should be used with care; setting a higher buffer means that the
+ * client will take messages from signald that will be buffered locally, but if the client crashes and never handles
+ * those messages, signald will not resend those messages.
  * @param onBufferOverflow configures an action on buffer overflow (optional, defaults to a suspending attempt to send a
  * value, supported only when `capacity >= 0` or `capacity == Channel.BUFFERED`, implicitly creates a channel with at
  * least one buffered element)
@@ -68,7 +74,7 @@ public class ChannelMessageSubscriptionHandler(
     signaldClient: SignaldClient,
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
-    bufferCapacity: Int = 25,
+    bufferCapacity: Int = Channel.RENDEZVOUS,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND,
     onUndeliveredElement: ((ClientMessageWrapper) -> Unit)? = null
 ) : CoroutineMessageSubscriptionHandler(signaldClient, coroutineScope, context) {
@@ -90,7 +96,7 @@ public class ChannelMessageSubscriptionHandler(
         emissionJob.start()
     }
 
-    override suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean {
+    override suspend fun sendMessageToSubscribers(newMessage: ClientMessageWrapper): Boolean {
         return if (_messages.isClosedForSend) {
             false
         } else {

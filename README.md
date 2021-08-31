@@ -13,6 +13,8 @@ Documentation for the library is available at https://inthewaves.github.io/kotli
 
 ## Supported platforms
 
+> This library is experimental, with the API subject to breaking changes.
+
 Note that since signald currently works by communicating with UNIX sockets, these platforms are effectively limited to
 UNIX environments supported by signald.
 
@@ -52,8 +54,6 @@ The following platforms are supported:
 Linux x64 support is incomplete.
 
 ## Usage
-
-> This library is experimental, with the API subject to breaking changes.
 
 This library is compatible with the signald version in the [protocol.json](./client/protocol.json) file, which
 is used to generate the data classes for requests and responses.

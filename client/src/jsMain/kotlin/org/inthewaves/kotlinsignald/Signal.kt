@@ -766,6 +766,36 @@ public actual class Signal private constructor(
         }
     }
 
+    override fun subscribe(): IncomingMessageSubscription {
+        throw UnsupportedOperationException("subscribe not supported on JS")
+    }
+
+    /**
+     * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
+     * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
+     * [Subscription.unsubscribe] or disconnect from the socket via [NodePersistentSocketWrapper.close] to stop receiving
+     * messages.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     */
+    override suspend fun subscribeSuspend(): Subscription {
+        withAccountOrThrow {
+            val persistentSocket = NodePersistentSocketWrapper.createSuspend(socketWrapper.actualSocketPath)
+            try {
+                val subscribeResponse = SubscribeRequest(account = accountId).submitSuspend(persistentSocket)
+                return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
+            } catch (e: Throwable) {
+                try {
+                    persistentSocket.close()
+                } catch (closeError: Throwable) {
+                    e.addSuppressed(closeError)
+                }
+                throw e
+            }
+        }
+    }
+
     /**
      * Trust another user's safety number using either the QR code data or the safety number text
      *
@@ -946,32 +976,6 @@ public actual class Signal private constructor(
     public companion object {
         public suspend fun create(accountId: String, socketPath: String? = null): Signal {
             return Signal(accountId = accountId, socketWrapper = NodeSocketWrapper.createSuspend(socketPath))
-        }
-    }
-
-    /**
-     * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
-     * incoming messages will be sent to the client encoded as [ClientMessageWrapper]. Send an unsubscribe request via
-     * [Subscription.unsubscribe] or disconnect from the socket via [NodePersistentSocketWrapper.close] to stop receiving
-     * messages.
-     *
-     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
-     * @throws SignaldException if the request to the socket fails
-     */
-    override suspend fun subscribeSuspend(): Subscription {
-        withAccountOrThrow {
-            val persistentSocket = NodePersistentSocketWrapper.createSuspend(socketWrapper.actualSocketPath)
-            try {
-                val subscribeResponse = SubscribeRequest(account = accountId).submitSuspend(persistentSocket)
-                return Subscription(accountId = accountId, persistentSocket, subscribeResponse.messages)
-            } catch (e: Throwable) {
-                try {
-                    persistentSocket.close()
-                } catch (closeError: Throwable) {
-                    e.addSuppressed(closeError)
-                }
-                throw e
-            }
         }
     }
 }

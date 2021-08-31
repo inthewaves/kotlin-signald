@@ -12,7 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWr
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-internal const val DEFAULT_REPLAY = 0
+private const val DEFAULT_REPLAY = 0
+
+private const val DEFAULT_EXTRA_BUFFER_CAPACITY = 0
 
 /**
  * Launches a new coroutine that uses the [IncomingMessageSubscription] to handle incoming messages from signald. The
@@ -28,7 +30,9 @@ internal const val DEFAULT_REPLAY = 0
  * @param replay The number of values replayed to new subscribers (cannot be negative, defaults to zero).
  * @param extraBufferCapacity Size of the buffer for emissions to the messages shared flow, allowing slow subscribers
  * to get values from the buffer without suspending emitters. The buffer space determines how much slow subscribers can
- * lag from the fast ones. (optional, cannot be negative, defaults to 25)
+ * lag from the fast ones. (optional, cannot be negative, defaults to zero). This option should be used with care;
+ * setting a higher buffer means that the client will take messages from signald that will be buffered locally, but if
+ * the client crashes and never handles those messages, signald will not resend those messages.
  * @param onBufferOverflow configures an emit action on buffer overflow. Optional, defaults to suspending attempts to
  * emit a value. Values other than [BufferOverflow.SUSPEND] are supported only when `replay > 0` or
  * `extraBufferCapacity > 0`. Buffer overflow can happen only when there is at least one subscriber that is not ready to
@@ -40,7 +44,7 @@ public fun CoroutineScope.signalMessagesSharedFlow(
     signaldClient: SignaldClient,
     context: CoroutineContext = EmptyCoroutineContext,
     replay: Int = DEFAULT_REPLAY,
-    extraBufferCapacity: Int = CoroutineMessageSubscriptionHandler.DEFAULT_BUFFER_CAPACITY,
+    extraBufferCapacity: Int = DEFAULT_EXTRA_BUFFER_CAPACITY,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
 ): SharedFlow<ClientMessageWrapper> =
     FlowMessageSubscriptionHandler(
@@ -66,7 +70,9 @@ public fun CoroutineScope.signalMessagesSharedFlow(
  * @param replay The number of values replayed to new subscribers (cannot be negative, defaults to zero).
  * @param extraBufferCapacity Size of the buffer for emissions to the messages shared flow, allowing slow subscribers
  * to get values from the buffer without suspending emitters. The buffer space determines how much slow subscribers can
- * lag from the fast ones. (optional, cannot be negative, defaults to 25)
+ * lag from the fast ones. (optional, cannot be negative, defaults to zero). This option should be used with care;
+ * setting a higher buffer means that the client will take messages from signald that will be buffered locally, but if
+ * the client crashes and never handles those messages, signald will not resend those messages.
  * @param onBufferOverflow configures an emit action on buffer overflow. Optional, defaults to suspending attempts to
  * emit a value. Values other than [BufferOverflow.SUSPEND] are supported only when `replay > 0` or
  * `extraBufferCapacity > 0`. **Buffer overflow can happen only when there is at least one subscriber that is not ready
@@ -79,7 +85,7 @@ public class FlowMessageSubscriptionHandler(
     coroutineScope: CoroutineScope,
     context: CoroutineContext = EmptyCoroutineContext,
     replay: Int = DEFAULT_REPLAY,
-    extraBufferCapacity: Int = DEFAULT_BUFFER_CAPACITY,
+    extraBufferCapacity: Int = DEFAULT_EXTRA_BUFFER_CAPACITY,
     onBufferOverflow: BufferOverflow = BufferOverflow.SUSPEND
 ) : CoroutineMessageSubscriptionHandler(signaldClient, coroutineScope, context) {
 
@@ -100,7 +106,7 @@ public class FlowMessageSubscriptionHandler(
         emissionJob.start()
     }
 
-    override suspend fun sendMessage(newMessage: ClientMessageWrapper): Boolean {
+    override suspend fun sendMessageToSubscribers(newMessage: ClientMessageWrapper): Boolean {
         _messages.emit(newMessage)
         return true
     }
