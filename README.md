@@ -1,5 +1,7 @@
 # kotlin-signald
 
+[![Maven Central](https://img.shields.io/maven-central/v/org.inthewaves.kotlin-signald/client)](https://search.maven.org/artifact/org.inthewaves.kotlin-signald/client)
+
 A Kotlin Multiplatform library for communicating with signald. For more information about signald, visit
 https://signald.org.
 
