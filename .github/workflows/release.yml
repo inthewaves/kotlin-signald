@@ -17,13 +17,6 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           cache: 'gradle'
-      - name: Cache konan
-        uses: actions/cache@v2
-        with:
-            path: ~/.konan
-            key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-            restore-keys: |
-              ${{ runner.os }}-konan-
       - name: Publish publications to Sonatype
         env:
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}

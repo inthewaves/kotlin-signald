@@ -18,13 +18,6 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           cache: 'gradle'
-      - name: Cache konan
-        uses: actions/cache@v2
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
       - name: Validate binary compatibility of API
         run: ./gradlew apiCheck
       - name: Run all tests
