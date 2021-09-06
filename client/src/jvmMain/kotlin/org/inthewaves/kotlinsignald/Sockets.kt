@@ -21,7 +21,7 @@ internal fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
         .filterNotNull()
         .filter {
             try {
-                Files.exists(it) && Files.isReadable(it) && Files.isWritable(it)
+                Files.exists(it) && Files.isWritable(it)
             } catch (e: SecurityException) {
                 false
             }
@@ -37,11 +37,19 @@ internal fun getSocketAddressOrThrow(customPath: String?): AFUNIXSocketAddress {
         .firstOrNull()
         ?: throw SocketUnavailableException(
             if (customPath != null) {
-                "unable to connect to signald socket at $customPath"
+                "unable to connect to signald socket at $customPath (${buildErrorMessageForPath(customPath)})"
             } else {
-                "unable to connect to default signald socket paths"
+                "unable to connect to default signald socket paths " +
+                    "(${getDefaultSocketPaths().map(::buildErrorMessageForPath).joinToString(";")})"
             }
         )
+}
+
+private fun buildErrorMessageForPath(path: String): String {
+    val nioPath = Paths.get(path)
+    return "$path: exists: ${Files.exists(nioPath)}, " +
+        "readable ${Files.isReadable(nioPath)}, " +
+        "writable ${Files.isWritable(nioPath)}"
 }
 
 internal actual fun getEnvVariable(envVarName: String): String? = System.getenv(envVarName)
