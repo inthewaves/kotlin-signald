@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 import java.net.URI
 
 plugins {
-    id("org.jetbrains.dokka") version "1.5.0"
+    id("org.jetbrains.dokka") version "1.5.30"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.7.1" apply false
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0" apply false
     `maven-publish`
