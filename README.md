@@ -56,7 +56,9 @@ Linux x64 support is incomplete.
 ## Usage
 
 This library is compatible with the signald version in the [protocol.json](./client/protocol.json) file, which
-is used to generate the data classes for requests and responses.
+is used to generate the data classes for requests and responses. Also, to make it more obvious what version of signald
+is used to generate the classes in a particular kotlin-signald release, the signald version will be added as the build
+metadata in the semantic version strings of the releases.
 
 This project comes with a client library for signald (the `client` module). There are also coroutine-based message
 subscription handlers, which is provided as optional module (`client-coroutines`) to accommodate cases where a custom
