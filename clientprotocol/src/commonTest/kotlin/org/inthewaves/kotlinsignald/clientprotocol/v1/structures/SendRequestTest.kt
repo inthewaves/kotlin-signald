@@ -10,7 +10,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.assertThrows
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Success
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -30,7 +29,7 @@ internal class SendRequestTest {
                                 number = "+11112223333",
                                 uuid = "f752327a-f947-4bdc-a6b5-2e53b95e6e06"
                             ),
-                            success = Success(
+                            success = SendSuccess(
                                 unidentified = true,
                                 needsSync = true,
                                 duration = 234

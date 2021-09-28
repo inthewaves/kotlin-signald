@@ -49,5 +49,10 @@ public data class JsonGroupV2Info(
     /**
      * detailed pending member list
      */
-    public val pendingMemberDetail: List<GroupMember> = emptyList()
+    public val pendingMemberDetail: List<GroupMember> = emptyList(),
+    /**
+     * indicates if the group is an announcements group. Only admins are allowed to send messages to
+     * announcements groups. Options are UNKNOWN, ENABLED or DISABLED
+     */
+    public val announcements: String? = null
 ) : SignaldResponseBodyV1()

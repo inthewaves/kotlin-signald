@@ -4,16 +4,15 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetGroup
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.RefuseMembership
 
 /**
- * Query the server for the latest state of a known group. If no account in signald is a member of
- * the group (anymore), an error with error_type: 'UnknownGroupError' is returned.
+ * deny a request to join a group
  */
 @Serializable
-@SerialName("get_group")
-public data class GetGroupRequest(
+@SerialName("refuse_membership")
+public data class RefuseMembershipRequest(
     /**
      * The account to interact with
      *
@@ -21,22 +20,23 @@ public data class GetGroupRequest(
      */
     public val account: String,
     /**
+     * list of requesting members to refuse
+     */
+    public val members: List<JsonAddress>,
+    /**
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
-    public val groupID: String,
-    /**
-     * the latest known revision, default value (-1) forces fetch from server
-     */
-    public val revision: Int? = null
+    @SerialName("group_id")
+    public val groupId: String
 ) : SignaldRequestBodyV1<JsonGroupV2Info>() {
-    internal override val responseWrapperSerializer: KSerializer<GetGroup>
-        get() = GetGroup.serializer()
+    internal override val responseWrapperSerializer: KSerializer<RefuseMembership>
+        get() = RefuseMembership.serializer()
 
     internal override val responseDataSerializer: KSerializer<JsonGroupV2Info>
         get() = JsonGroupV2Info.serializer()
 
     internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
-        JsonGroupV2Info? = if (responseWrapper is GetGroup && responseWrapper.data is
+        JsonGroupV2Info? = if (responseWrapper is RefuseMembership && responseWrapper.data is
         JsonGroupV2Info
     ) {
         responseWrapper.data

@@ -10,7 +10,7 @@ public data class JsonVersionMessage(
      */
     public val name: String? = null,
     /**
-     * Example: "0.14.1+git2021-08-27r6dd96a17.28"
+     * Example: "0.14.1-44-4cabeeb5"
      */
     public val version: String? = null,
     /**
@@ -18,7 +18,7 @@ public data class JsonVersionMessage(
      */
     public val branch: String? = null,
     /**
-     * Example: "6dd96a17c921766b0d284165e571476744ac2829"
+     * Example: "4cabeeb563ad906ff50fcea3fbb9b20a3acc59b6"
      */
     public val commit: String? = null
 ) : SignaldResponseBodyV1()

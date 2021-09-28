@@ -30,6 +30,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
+// TODO: Deal with errors somehow. Kotlin doesn't really have checked exceptions, so we can't do a simple "throws"
+//  statement.
+
 /**
  * Every structure / type is generated in the same way, with special handling for request and response types.
  * However, sometimes we require the need to add extra properties or modifiers, so a [SpecialTypeHandler] modifies
@@ -64,7 +67,8 @@ class ProtocolGenerator(
         protocolDoc = try {
             Json.decodeFromString(protocolJson)
         } catch (e: SerializationException) {
-            println("specified [$protocolJsonFile] as the protocol.json, but it is invalid")
+            println("specified [$protocolJsonFile] as the protocol.json, but it is invalid: ")
+            println(e.stackTraceToString())
             exitProcess(1)
         }
 

@@ -27,7 +27,8 @@ public data class SendRequest(
     public val attachments: List<JsonAttachment> = emptyList(),
     public val quote: JsonQuote? = null,
     public val timestamp: Long? = null,
-    public val mentions: List<JsonMention> = emptyList()
+    public val mentions: List<JsonMention> = emptyList(),
+    public val previews: List<JsonPreview> = emptyList()
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()

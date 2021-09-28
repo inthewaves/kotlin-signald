@@ -53,7 +53,11 @@ public data class UpdateGroupRequest(
     /**
      * regenerate the group link password, invalidating the old one
      */
-    public val resetLink: Boolean? = null
+    public val resetLink: Boolean? = null,
+    /**
+     * ENABLED to only allow admins to post messages, DISABLED to allow anyone to post
+     */
+    public val announcements: String? = null
 ) : SignaldRequestBodyV1<GroupInfo>() {
     internal override val responseWrapperSerializer: KSerializer<UpdateGroup>
         get() = UpdateGroup.serializer()

@@ -17,6 +17,9 @@ public data class JsonMessageEnvelope(
     public val source: JsonAddress? = null,
     public val sourceDevice: Int? = null,
     public val type: String? = null,
+    /**
+     * this field is no longer available and will never be populated
+     */
     public val relay: String? = null,
     /**
      * Example: 1615576442475

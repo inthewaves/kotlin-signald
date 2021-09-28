@@ -107,6 +107,7 @@ data class SignaldProtocolDocument(
 @Serializable
 data class Structure(
     val fields: Map<String, Field>,
+    val error: Boolean = false,
     val doc: String? = null,
     val deprecated: Boolean = false,
     @SerialName("removal_date")
@@ -145,8 +146,15 @@ data class Structure(
 data class Action(
     val request: SignaldType,
     val response: SignaldType? = null,
+    val errors: List<ErrorListItem> = emptyList(),
     val doc: String? = null,
     val deprecated: Boolean = false,
     @SerialName("removal_date")
     val removalDate: Long? = null
+)
+
+@Serializable
+data class ErrorListItem(
+    val name: SignaldType,
+    val doc: String? = null,
 )

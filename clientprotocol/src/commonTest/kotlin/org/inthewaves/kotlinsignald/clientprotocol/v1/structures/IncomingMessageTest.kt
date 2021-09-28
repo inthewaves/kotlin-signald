@@ -3,7 +3,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.decodeFromString
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.ConfigurationMessage
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonStickerPackOperationMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Name
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Optional

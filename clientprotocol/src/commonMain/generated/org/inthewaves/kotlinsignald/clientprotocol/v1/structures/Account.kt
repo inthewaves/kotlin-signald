@@ -14,6 +14,10 @@ public data class Account(
      */
     public val address: JsonAddress? = null,
     /**
+     * indicates the account has not completed registration
+     */
+    public val pending: Boolean? = null,
+    /**
      * The Signal device ID. Official Signal mobile clients (iPhone and Android) have device ID = 1,
      * while linked devices such as Signal Desktop or Signal iPad have higher device IDs.
      */

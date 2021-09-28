@@ -3,8 +3,6 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonPreview
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonSticker
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.SharedContact
 

@@ -15,6 +15,9 @@ public data class Server(
      */
     public val uuid: String? = null,
     public val proxy: String? = null,
+    /**
+     * base64 encoded trust store, password must be 'whisper'
+     */
     public val ca: String? = null,
     @SerialName("service_url")
     public val serviceUrl: String? = null,
@@ -31,6 +34,25 @@ public data class Server(
      */
     @SerialName("zk_param")
     public val zkParam: String? = null,
+    /**
+     * base64 encoded
+     */
     @SerialName("unidentified_sender_root")
-    public val unidentifiedSenderRoot: String? = null
+    public val unidentifiedSenderRoot: String? = null,
+    @SerialName("key_backup_service_name")
+    public val keyBackupServiceName: String? = null,
+    /**
+     * base64 encoded
+     */
+    @SerialName("key_backup_service_id")
+    public val keyBackupServiceId: String? = null,
+    @SerialName("key_backup_mrenclave")
+    public val keyBackupMrenclave: String? = null,
+    @SerialName("cds_mrenclave")
+    public val cdsMrenclave: String? = null,
+    /**
+     * base64 encoded trust store, password must be 'whisper'
+     */
+    @SerialName("ias_ca")
+    public val iasCa: String? = null
 )
