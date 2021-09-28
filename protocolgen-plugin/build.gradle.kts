@@ -29,6 +29,6 @@ repositories {
 
 dependencies {
     implementation("com.squareup:kotlinpoet:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
 }
