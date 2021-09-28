@@ -45,6 +45,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Payment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ReactRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RefuseMembershipRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RegisterRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteConfigList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoteConfigRequest
@@ -519,6 +520,23 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 )
             }
             return request.submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Deny requests from users from joining a group.
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     */
+    @Throws(SignaldException::class)
+    public fun refuseMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
+        withAccountOrThrow {
+            return RefuseMembershipRequest(
+                account = accountId,
+                members = members.toList(),
+                groupId = groupID
+            ).submit(socketWrapper)
         }
     }
 
