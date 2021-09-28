@@ -68,7 +68,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":clientprotocol"))
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.0")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
             }
         }
