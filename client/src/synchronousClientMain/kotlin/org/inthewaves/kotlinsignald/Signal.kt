@@ -938,8 +938,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * Update information about a group
      *
      * @param groupID The base64-encoded ID of the V2 group to update
-     * @param groupUpdate The update to make to the group. This is done so that only one of the modification actions can
-     * be performed at once. See [GroupUpdate] for details.
+     * @param groupUpdate The update to make to the group. This is done as a sealed class so that only one of the
+     * modification actions can be performed at once. See [GroupUpdate] for details and all possible update types.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
@@ -991,6 +991,11 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                     account = accountId,
                     groupID = groupID,
                     resetLink = true
+                )
+                is GroupUpdate.SetAnnouncement -> UpdateGroupRequest(
+                    account = accountId,
+                    groupID = groupID,
+                    announcements = if (groupUpdate.setAnnouncementOnly) "ENABLED" else "DISABLED"
                 )
             }
             return request.submit(socketWrapper)

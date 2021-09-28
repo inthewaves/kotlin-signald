@@ -69,6 +69,11 @@ public sealed interface GroupUpdate {
         public val groupAccessControl: GroupAccessControl = update.groupAccessControlBody
     }
 
+    /**
+     * Whether to only allow admins to post messages.
+     */
+    public class SetAnnouncement(public val setAnnouncementOnly: Boolean) : GroupUpdate
+
     public object ResetLink : GroupUpdate
 }
 

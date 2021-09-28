@@ -78,6 +78,11 @@ public final class org/inthewaves/kotlinsignald/GroupUpdate$ResetLink : org/inth
 	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/GroupUpdate$ResetLink;
 }
 
+public final class org/inthewaves/kotlinsignald/GroupUpdate$SetAnnouncement : org/inthewaves/kotlinsignald/GroupUpdate {
+	public fun <init> (Z)V
+	public final fun getSetAnnouncementOnly ()Z
+}
+
 public final class org/inthewaves/kotlinsignald/GroupUpdate$Title : org/inthewaves/kotlinsignald/GroupUpdate {
 	public fun <init> (Ljava/lang/String;)V
 	public final fun getNewTitle ()Ljava/lang/String;
