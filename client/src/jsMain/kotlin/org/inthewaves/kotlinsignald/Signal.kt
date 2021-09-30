@@ -31,6 +31,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMention
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonPreview
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonReaction
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
@@ -641,21 +642,23 @@ public actual class Signal private constructor(
      * @param recipient The recipient that will receive our message. If sending to a group, note that signald will
      * handle the fan-out of messages to all users.
      * @param messageBody The body of the message.
+     * @param timestamp The timestamp of the message that we are sending. Default to the current system clock time.
      * @param attachments Attachments to include in the message.
      * @param quote A quote to include in the message, where the quote refers to a previous message.
      * @param mentions Mentions to include in the message. Typically, an empty space is used as the mention placeholder,
      * and then the position of the empty space is referred to by the [JsonMention.start] property.
-     * @param timestamp The timestamp of the message that we are sending. Default to the current system clock time.
+     * @param previews Link previews to include in the message.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
     public suspend fun send(
         recipient: Recipient,
         messageBody: String,
+        timestamp: Long = Clock.System.now().toEpochMilliseconds(),
         attachments: Iterable<JsonAttachment> = emptyList(),
         quote: JsonQuote? = null,
         mentions: Iterable<JsonMention> = emptyList(),
-        timestamp: Long = Clock.System.now().toEpochMilliseconds()
+        previews: Iterable<JsonPreview> = emptyList(),
     ): SendResponse {
         withAccountOrThrow {
             val request = when (recipient) {
@@ -667,6 +670,7 @@ public actual class Signal private constructor(
                     quote = quote,
                     timestamp = timestamp,
                     mentions = mentions.toList(),
+                    previews = previews.toList(),
                 )
                 is Recipient.Individual -> SendRequest(
                     username = accountId,
@@ -676,6 +680,7 @@ public actual class Signal private constructor(
                     quote = quote,
                     timestamp = timestamp,
                     mentions = mentions.toList(),
+                    previews = previews.toList(),
                 )
             }
             return request.submitSuspend(socketWrapper)
