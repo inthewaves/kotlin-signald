@@ -344,7 +344,7 @@
   <div>
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">sealed class <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
-<div class="brief "><p class="paragraph">Wraps all incoming messages after a v1 subscribe request is issued</p></div></div>
+<div class="brief "><p class="paragraph">Wraps all incoming messages sent to the client after a v1 subscribe request is issued</p></div></div>
 </div>
                     </div>
                   </div>
@@ -409,6 +409,26 @@
                     </div>
                   </div>
                 </div>
+<a data-name="-1961953949%2FClasslikes%2F1348745360" anchor-label="DuplicateMessageError" id="-1961953949%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-duplicate-message-error/index.html"><span>Duplicate</span><wbr><span>Message</span><wbr><span><span>Error</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1961953949%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-duplicate-message-error/index.html">DuplicateMessageError</a>(message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
 <a data-name="1148938209%2FClasslikes%2F1348745360" anchor-label="EmptyResponse" id="1148938209%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
@@ -442,7 +462,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-exception-wrapper/index.html">ExceptionWrapper</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-exception-wrapper/-data/index.html">ExceptionWrapper.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-exception-wrapper/index.html">ExceptionWrapper</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-exception-wrapper/-data/index.html">ExceptionWrapper.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 <div class="brief "><p class="paragraph">An incoming message representing an error that can be sent by signald after a v1 subscribe request. This is not documented in the client protocol; however, as the signald socket can send it anyway, we add this here for type safety purposes.</p></div></div>
 </div>
@@ -882,7 +902,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-incoming-message/index.html">IncomingMessage</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-incoming-message/-data/index.html">IncomingMessage.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-incoming-message/index.html">IncomingMessage</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-incoming-message/-data/index.html">IncomingMessage.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 </div>
 </div>
@@ -902,9 +922,9 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-internal-error/index.html">InternalError</a>(exceptions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-internal-error/index.html">InternalError</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-internal-error/-data/index.html">InternalError.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
-<div class="brief "><p class="paragraph">an internal error in signald has occured.</p></div></div>
+<div class="brief "><p class="paragraph">an internal error in signald has occurred. typically these are things that "should never happen" such as issues saving to the local disk, but it is also the default error type and may catch some things that should have their own error type. If you find tht your code is depending on the exception list for any particular behavior, please file an issue so we can pull those errors out to a separate error type: https://gitlab.com/signald/signald/-/issues/new</p></div></div>
 </div>
                     </div>
                   </div>
@@ -1402,7 +1422,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-json-send-message-result/index.html">JsonSendMessageResult</a>(address: <a href="-json-address/index.html">JsonAddress</a>?, success: <a href="-send-success/index.html">SendSuccess</a>?, networkFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, unregisteredFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, identityFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-json-send-message-result/index.html">JsonSendMessageResult</a>(address: <a href="-json-address/index.html">JsonAddress</a>?, success: <a href="-send-success/index.html">SendSuccess</a>?, networkFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, unregisteredFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, identityFailure: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, proofRequiredFailure: <a href="-proof-required-error/index.html">ProofRequiredError</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 </div>
 </div>
@@ -1622,9 +1642,9 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-listener-state/index.html">ListenerState</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-listener-state/-data/index.html">ListenerState.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-listener-state/index.html">ListenerState</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-listener-state/-data/index.html">ListenerState.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
-<div class="brief "><p class="paragraph">indicates when the incoming connection to the signal server has started or stopped</p></div></div>
+<div class="brief "><p class="paragraph">prior attempt to indicate signald connectivity state. WebSocketConnectionState messages will be delivered at the  same time as well as in other parts of the websocket lifecycle.</p></div></div>
 </div>
                     </div>
                   </div>
@@ -1869,6 +1889,66 @@
                     </div>
                   </div>
                 </div>
+<a data-name="-1390127314%2FClasslikes%2F1348745360" anchor-label="ProofRequiredError" id="-1390127314%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-proof-required-error/index.html"><span>Proof</span><wbr><span>Required</span><wbr><span><span>Error</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1390127314%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-proof-required-error/index.html">ProofRequiredError</a>(token: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, options: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>&gt;, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, retryAfter: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1925424175%2FClasslikes%2F1348745360" anchor-label="ProtocolInvalidMessageError" id="1925424175%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-protocol-invalid-message-error/index.html"><span>Protocol</span><wbr><span>Invalid</span><wbr><span>Message</span><wbr><span><span>Error</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1925424175%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-protocol-invalid-message-error/index.html">ProtocolInvalidMessageError</a>(sender: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, senderDevice: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, contentHint: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, groupId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1746981914%2FClasslikes%2F1348745360" anchor-label="RateLimitError" id="-1746981914%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-rate-limit-error/index.html"><span>Rate</span><wbr><span>Limit</span><wbr><span><span>Error</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1746981914%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-rate-limit-error/index.html">RateLimitError</a>(message: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
 <a data-name="-1240828477%2FClasslikes%2F1348745360" anchor-label="ReactRequest" id="-1240828477%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
@@ -1882,7 +1962,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-react-request/index.html">ReactRequest</a>(username: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, recipientAddress: <a href="-json-address/index.html">JsonAddress</a>?, recipientGroupId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, reaction: <a href="-json-reaction/index.html">JsonReaction</a>, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-react-request/index.html">ReactRequest</a>(username: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, recipientAddress: <a href="-json-address/index.html">JsonAddress</a>?, recipientGroupId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, reaction: <a href="-json-reaction/index.html">JsonReaction</a>, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>?, members: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 <div class="brief "><p class="paragraph">react to a previous message</p></div></div>
 </div>
@@ -2042,7 +2122,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-remote-delete-request/index.html">RemoteDeleteRequest</a>(account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, address: <a href="-json-address/index.html">JsonAddress</a>?, group: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-remote-delete-request/index.html">RemoteDeleteRequest</a>(account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, address: <a href="-json-address/index.html">JsonAddress</a>?, group: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>, members: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 <div class="brief "><p class="paragraph">delete a message previously sent</p></div></div>
 </div>
@@ -2182,7 +2262,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-send-request/index.html">SendRequest</a>(username: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, recipientAddress: <a href="-json-address/index.html">JsonAddress</a>?, recipientGroupId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, messageBody: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, attachments: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../org.inthewaves.kotlinsignald.clientprotocol.v0.structures/-json-attachment/index.html">JsonAttachment</a>&gt;, quote: <a href="-json-quote/index.html">JsonQuote</a>?, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>?, mentions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-mention/index.html">JsonMention</a>&gt;, previews: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-preview/index.html">JsonPreview</a>&gt;) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-send-request/index.html">SendRequest</a>(username: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, recipientAddress: <a href="-json-address/index.html">JsonAddress</a>?, recipientGroupId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, messageBody: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, attachments: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="../org.inthewaves.kotlinsignald.clientprotocol.v0.structures/-json-attachment/index.html">JsonAttachment</a>&gt;?, quote: <a href="-json-quote/index.html">JsonQuote</a>?, timestamp: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html">Long</a>?, mentions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-mention/index.html">JsonMention</a>&gt;?, previews: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-preview/index.html">JsonPreview</a>&gt;?, members: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-send-response/index.html">SendResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 </div>
 </div>
@@ -2409,6 +2489,26 @@
                     </div>
                   </div>
                 </div>
+<a data-name="59359471%2FClasslikes%2F1348745360" anchor-label="SubmitChallengeRequest" id="59359471%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-submit-challenge-request/index.html"><span>Submit</span><wbr><span>Challenge</span><wbr><span><span>Request</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="59359471%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-submit-challenge-request/index.html">SubmitChallengeRequest</a>(account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, challenge: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, captchaToken: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-empty-response/index.html">EmptyResponse</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
 <a data-name="-638784370%2FClasslikes%2F1348745360" anchor-label="SubscribeRequest" id="-638784370%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue ">
@@ -2622,7 +2722,7 @@
                       <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
 
   <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-update-group-request/index.html">UpdateGroupRequest</a>(account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, title: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, avatar: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, updateTimer: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, addMembers: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;, removeMembers: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;, updateRole: <a href="-group-member/index.html">GroupMember</a>?, updateAccessControl: <a href="-group-access-control/index.html">GroupAccessControl</a>?, resetLink: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, announcements: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-group-info/index.html">GroupInfo</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-update-group-request/index.html">UpdateGroupRequest</a>(account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, title: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, description: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, avatar: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, updateTimer: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a>?, addMembers: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;?, removeMembers: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="-json-address/index.html">JsonAddress</a>&gt;?, updateRole: <a href="-group-member/index.html">GroupMember</a>?, updateAccessControl: <a href="-group-access-control/index.html">GroupAccessControl</a>?, resetLink: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, announcements: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-group-info/index.html">GroupInfo</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 <div class="brief "><p class="paragraph">modify a group. Note that only one modification action may be performed at once</p></div></div>
 </div>
@@ -2685,6 +2785,26 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">class <a href="-version-request/index.html">VersionRequest</a> : <a href="-signald-request-body-v1/index.html">SignaldRequestBodyV1</a>&lt;<a href="-json-version-message/index.html">JsonVersionMessage</a>&gt; <span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
 </div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-6688537%2FClasslikes%2F1348745360" anchor-label="WebSocketConnectionState" id="-6688537%2FClasslikes%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-web-socket-connection-state/index.html"><span>Web</span><wbr><span>Socket</span><wbr><span>Connection</span><wbr><span><span>State</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-6688537%2FClasslikes%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace">data class <a href="-web-socket-connection-state/index.html">WebSocketConnectionState</a>(version: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?, data: <a href="-web-socket-connection-state/-data/index.html">WebSocketConnectionState.Data</a>, error: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>?, account: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>?) : <a href="-client-message-wrapper/index.html">ClientMessageWrapper</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<div class="brief "><p class="paragraph">indicates when the websocket connection state to the signal server has changed</p></div></div>
 </div>
                     </div>
                   </div>

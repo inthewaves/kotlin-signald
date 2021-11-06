@@ -24,16 +24,16 @@
           </div>
           <div class="cover ">
             <h1 class="cover"><span><span>Group</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><div class="symbol monospace">class <a href="index.html">Group</a>(groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>) : <a href="../index.html">Recipient</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A group as the recipient, using the base64-encoded <a href="group-i-d.html">groupID</a> as the identifier. <a href="group-i-d.html">groupID</a>s can be retrieved with <code>listGroups</code> or by reading the responses from <code>joinGroup</code> or <code>getGroupLinkInfo</code>.</p></div></div>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><div class="symbol monospace">class <a href="index.html">Group</a>(groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, memberSubset: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../../../../clientprotocol/org.inthewaves.kotlinsignald.clientprotocol.v1.structures/-json-address/index.html">JsonAddress</a>&gt;) : <a href="../index.html">Recipient</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">A group as the recipient, using the base64-encoded <a href="group-i-d.html">groupID</a> as the identifier. <a href="group-i-d.html">groupID</a>s can be retrieved with <code>listGroups</code> or by reading the responses from <code>joinGroup</code> or <code>getGroupLinkInfo</code>.</p><p class="paragraph">If a <a href="member-subset.html">memberSubset</a> is non-empty, messages will only be sent to that subset. This is useful for handling message send failures for only certain members of the group (e.g. safety number changes).</p></div></div>
           </div>
           <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
             <div class="tabs-section-body">
               <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="-1282158729%2FConstructors%2F-645211096" anchor-label="Group" id="-1282158729%2FConstructors%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a>
+              <div class="table" data-togglable="Constructors"><a data-name="169593827%2FConstructors%2F-645211096" anchor-label="Group" id="169593827%2FConstructors%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a>
                 <div class="table-row" data-filterable-current=":client:dokkaHtmlPartial/commonMain" data-filterable-set=":client:dokkaHtmlPartial/commonMain">
                   <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-group.html">Group</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1282158729%2FConstructors%2F-645211096"></span>
+                    <div class=""><span class="inline-flex"><a href="-group.html">Group</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="169593827%2FConstructors%2F-645211096"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
@@ -41,8 +41,30 @@
                         <div class="platform-tag common-like">common</div>
                       </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="-group.html">Group</a>(groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="-group.html">Group</a>(groupID: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, memberSubset: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../../../../clientprotocol/org.inthewaves.kotlinsignald.clientprotocol.v1.structures/-json-address/index.html">JsonAddress</a>&gt; = emptyList())<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="1588216039%2FFunctions%2F-645211096" anchor-label="withMemberSubset" id="1588216039%2FFunctions%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":client:dokkaHtmlPartial/commonMain" data-filterable-set=":client:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="with-member-subset.html"><span>with</span><wbr><span>Member</span><wbr><span><span>Subset</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1588216039%2FFunctions%2F-645211096"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":client:dokkaHtmlPartial/commonMain" data-filterable-set=":client:dokkaHtmlPartial/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><div class="symbol monospace">fun <a href="with-member-subset.html">withMemberSubset</a>(memberSubset: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../../../../clientprotocol/org.inthewaves.kotlinsignald.clientprotocol.v1.structures/-json-address/index.html">JsonAddress</a>&gt;): <a href="index.html">Recipient.Group</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<div class="brief "><p class="paragraph">Creates a copy of this <a href="index.html">Group</a> with the same groupID but using the given <a href="with-member-subset.html">memberSubset</a>. This is useful for handling message send failures for only certain members of the group (e.g. safety number changes).</p></div></div>
+</div>
                     </div>
                   </div>
                 </div>
@@ -60,6 +82,22 @@
                       </div>
                       <div class="title">
                         <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><a data-name="-691495470%2FProperties%2F-645211096" anchor-label="groupID" id="-691495470%2FProperties%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace">val <a href="group-i-d.html">groupID</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-605480302%2FProperties%2F-645211096" anchor-label="memberSubset" id="-605480302%2FProperties%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":client:dokkaHtmlPartial/commonMain" data-filterable-set=":client:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="member-subset.html">memberSubset</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-605480302%2FProperties%2F-645211096"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":client:dokkaHtmlPartial/commonMain"><a data-name="-605480302%2FProperties%2F-645211096" anchor-label="memberSubset" id="-605480302%2FProperties%2F-645211096" data-filterable-set=":client:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace">val <a href="member-subset.html">memberSubset</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html">Collection</a>&lt;<a href="../../../../clientprotocol/org.inthewaves.kotlinsignald.clientprotocol.v1.structures/-json-address/index.html">JsonAddress</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
                       </div>
                     </div>
                   </div>
