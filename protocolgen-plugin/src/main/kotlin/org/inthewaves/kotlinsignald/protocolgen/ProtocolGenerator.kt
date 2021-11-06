@@ -895,14 +895,19 @@ class ProtocolGenerator(
                         constructorBuilder = FunSpec.constructorBuilder()
 
                         for ((fieldName, fieldDetail) in structureDetails.fields) {
+                            // Do not use non-null lists for request types. Sometimes, an empty list can mean
+                            // different things (e.g., in the send requests, sending an empty list might not send
+                            // any messages at all)
+                            val isList = structureTypeName !in requestTypes && fieldDetail.list
+
                             val propertyName = fieldName.snakeDashToCamelCase()
                             val type = fieldDetail
                                 .getTypeName(packageName, fieldName)
-                                .copy(nullable = !fieldDetail.list && !fieldDetail.required)
+                                .copy(nullable = !isList && !fieldDetail.required)
 
                             val parameter = ParameterSpec.builder(propertyName, type).apply {
                                 if (!fieldDetail.required) {
-                                    if (!fieldDetail.list) {
+                                    if (!isList) {
                                         defaultValue("null")
                                     } else {
                                         defaultValue("%M()", MemberName("kotlin.collections", "emptyList"))

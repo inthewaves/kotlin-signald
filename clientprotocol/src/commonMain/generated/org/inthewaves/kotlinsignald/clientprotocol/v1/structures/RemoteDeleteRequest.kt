@@ -35,7 +35,7 @@ public data class RemoteDeleteRequest(
     /**
      * Optionally set to a sub-set of group members. Ignored if group isn't specified
      */
-    public val members: List<JsonAddress> = emptyList()
+    public val members: List<JsonAddress>? = null
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<RemoteDelete>
         get() = RemoteDelete.serializer()

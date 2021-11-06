@@ -43,8 +43,8 @@ public data class UpdateGroupRequest(
      * update the group timer.
      */
     public val updateTimer: Int? = null,
-    public val addMembers: List<JsonAddress> = emptyList(),
-    public val removeMembers: List<JsonAddress> = emptyList(),
+    public val addMembers: List<JsonAddress>? = null,
+    public val removeMembers: List<JsonAddress>? = null,
     public val updateRole: GroupMember? = null,
     /**
      * note that only one of the access controls may be updated per request

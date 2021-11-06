@@ -24,15 +24,15 @@ public data class SendRequest(
      * Example: "hello"
      */
     public val messageBody: String? = null,
-    public val attachments: List<JsonAttachment> = emptyList(),
+    public val attachments: List<JsonAttachment>? = null,
     public val quote: JsonQuote? = null,
     public val timestamp: Long? = null,
-    public val mentions: List<JsonMention> = emptyList(),
-    public val previews: List<JsonPreview> = emptyList(),
+    public val mentions: List<JsonMention>? = null,
+    public val previews: List<JsonPreview>? = null,
     /**
      * Optionally set to a sub-set of group members. Ignored if recipientGroupId isn't specified
      */
-    public val members: List<JsonAddress> = emptyList()
+    public val members: List<JsonAddress>? = null
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()
