@@ -22,7 +22,8 @@ import kotlinx.serialization.Serializable
 public data class ExceptionWrapper(
     public override val version: String? = null,
     public override val data: Data,
-    public override val error: Boolean? = false
+    public override val error: Boolean? = false,
+    public override val account: String? = null
 ) : ClientMessageWrapper() {
     @Serializable
     public data class Data(

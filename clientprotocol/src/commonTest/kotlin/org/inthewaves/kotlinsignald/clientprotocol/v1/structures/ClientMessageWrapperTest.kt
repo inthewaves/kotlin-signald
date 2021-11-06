@@ -100,5 +100,35 @@ internal class ClientMessageWrapperTest {
         assertEquals(
             anotherExceptionMessage, SignaldJson.decodeFromString<ClientMessageWrapper>(anotherExceptionAsJsonString)
         )
+
+        val (internalError, internalErrorJson) = InternalError(
+            version = "v1",
+            data = InternalError.Data(
+                exceptions = listOf(
+                    "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                    "org.whispersystems.libsignal.DuplicateMessageException"
+                ),
+                message = "org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+            ),
+            error = true,
+            account = "+1234567890"
+        ) to """
+            {
+                "type":"InternalError",
+                "version":"v1",
+                "data":{
+                    "exceptions":[
+                        "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                        "org.whispersystems.libsignal.DuplicateMessageException"
+                    ],
+                    "message":"org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+                },
+                "error":true,
+                "account":"+1234567890"
+            }
+        """.trimIndent()
+        assertEquals(
+            internalError, SignaldJson.decodeFromString<ClientMessageWrapper>(internalErrorJson)
+        )
     }
 }

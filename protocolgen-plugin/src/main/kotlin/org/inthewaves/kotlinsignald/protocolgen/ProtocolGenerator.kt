@@ -1166,6 +1166,11 @@ class ProtocolGenerator(
                             .defaultValue("false")
                             .build()
                     )
+                    .addParameter(
+                        ParameterSpec.builder("account", String::class.asClassName().copy(nullable = true))
+                            .defaultValue("null")
+                            .build()
+                    )
                     .build()
             )
 
@@ -1184,6 +1189,12 @@ class ProtocolGenerator(
             addProperty(
                 PropertySpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
                     .initializer("error")
+                    .addModifiers(KModifier.OVERRIDE)
+                    .build()
+            )
+            addProperty(
+                PropertySpec.builder("account", String::class.asClassName().copy(nullable = true))
+                    .initializer("account")
                     .addModifiers(KModifier.OVERRIDE)
                     .build()
             )
@@ -1343,8 +1354,8 @@ class ProtocolGenerator(
                             .build()
                     }
 
-                    // TODO: Use @JsonClassDiscriminator in kotlinx.serialization 1.3.0 to make it more clear that the type
-                    //  field is used as a discriminator.
+                    // TODO: Use @JsonClassDiscriminator when it is stable in kotlinx.serialization 1.3.0 to make it
+                    //  more clear that the type field is used as a discriminator.
                     propertySpecs.removeIf { it.name == "type" }
                     addKdoc(
                         "\n\n%L",
@@ -1354,6 +1365,8 @@ class ProtocolGenerator(
                 SignaldType("IncomingMessage") to clientMessageWrapperSubclassHandler,
                 SignaldType("ListenerState") to clientMessageWrapperSubclassHandler,
                 SignaldType("ExceptionWrapper") to clientMessageWrapperSubclassHandler,
+                SignaldType("InternalError") to clientMessageWrapperSubclassHandler,
+                SignaldType("WebSocketConnectionState") to clientMessageWrapperSubclassHandler,
             )
         )
     }

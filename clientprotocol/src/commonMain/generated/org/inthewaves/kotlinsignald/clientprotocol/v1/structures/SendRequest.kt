@@ -28,7 +28,11 @@ public data class SendRequest(
     public val quote: JsonQuote? = null,
     public val timestamp: Long? = null,
     public val mentions: List<JsonMention> = emptyList(),
-    public val previews: List<JsonPreview> = emptyList()
+    public val previews: List<JsonPreview> = emptyList(),
+    /**
+     * Optionally set to a sub-set of group members. Ignored if recipientGroupId isn't specified
+     */
+    public val members: List<JsonAddress> = emptyList()
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()

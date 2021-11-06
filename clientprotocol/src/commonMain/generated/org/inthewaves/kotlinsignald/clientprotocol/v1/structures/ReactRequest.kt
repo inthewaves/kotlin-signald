@@ -23,7 +23,11 @@ public data class ReactRequest(
      */
     public val recipientGroupId: String? = null,
     public val reaction: JsonReaction,
-    public val timestamp: Long? = null
+    public val timestamp: Long? = null,
+    /**
+     * Optionally set to a sub-set of group members. Ignored if recipientGroupId isn't specified
+     */
+    public val members: List<JsonAddress> = emptyList()
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<React>
         get() = React.serializer()

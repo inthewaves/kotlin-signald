@@ -4,7 +4,7 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.Serializable
 
 /**
- * Wraps all incoming messages after a v1 subscribe request is issued
+ * Wraps all incoming messages sent to the client after a v1 subscribe request is issued
  *
  * Note that the `type` field has been removed. kotlinx.serialization uses that as a discriminator
  */
@@ -25,6 +25,11 @@ public sealed class ClientMessageWrapper {
      * true if the incoming message represents an error
      */
     public abstract val error: Boolean?
+
+    /**
+     * the account this message is from
+     */
+    public abstract val account: String?
 
     @Serializable
     public sealed class Data

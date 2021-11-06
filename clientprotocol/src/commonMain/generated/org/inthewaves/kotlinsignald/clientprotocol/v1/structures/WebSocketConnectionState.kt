@@ -5,12 +5,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * prior attempt to indicate signald connectivity state. WebSocketConnectionState messages will be
- * delivered at the  same time as well as in other parts of the websocket lifecycle.
+ * indicates when the websocket connection state to the signal server has changed
  */
 @Serializable
-@SerialName("ListenerState")
-public data class ListenerState(
+@SerialName("WebSocketConnectionState")
+public data class WebSocketConnectionState(
     public override val version: String? = null,
     public override val data: Data,
     public override val error: Boolean? = false,
@@ -18,6 +17,14 @@ public data class ListenerState(
 ) : ClientMessageWrapper() {
     @Serializable
     public data class Data(
-        public val connected: Boolean? = null
+        /**
+         * One of: DISCONNECTED, CONNECTING, CONNECTED, RECONNECTING, DISCONNECTING,
+         * AUTHENTICATION_FAILED, FAILED
+         */
+        public val state: String? = null,
+        /**
+         * One of: UNIDENTIFIED, IDENTIFIED
+         */
+        public val socket: String? = null
     ) : ClientMessageWrapper.Data()
 }

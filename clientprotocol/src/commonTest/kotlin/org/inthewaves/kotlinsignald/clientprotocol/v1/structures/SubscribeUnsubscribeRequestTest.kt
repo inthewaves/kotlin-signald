@@ -21,7 +21,13 @@ internal class SubscribeUnsubscribeRequestTest {
             // in the subscribe response.
             val action = if (isSubscribe) "subscribe" else "unsubscribe"
             val messageQueue = mutableListOf(
-                """{"type":"ListenerState","version":"v1","data":{"connected":true}}""",
+                """
+                    {
+                        "type":"ListenerState",
+                        "version":"v1",
+                        "data":{"connected":true}
+                    }
+                """.trimIndent(),
                 """
                     {
                         "type":"ExceptionWrapper",
@@ -31,6 +37,17 @@ internal class SubscribeUnsubscribeRequestTest {
                             "unexpected":true
                         },
                         "error":true
+                    }
+                """.trimIndent(),
+                """
+                    {
+                        "type":"WebSocketConnectionState",
+                        "version":"v1",
+                        "data": {
+                            "state":"CONNECTED",
+                            "socket":"UNIDENTIFIED"
+                        },
+                        "account":"+1234567890"
                     }
                 """.trimIndent(),
                 """
@@ -98,6 +115,14 @@ internal class SubscribeUnsubscribeRequestTest {
                     unexpected = true
                 ),
                 error = true
+            ),
+            WebSocketConnectionState(
+                version = "v1",
+                data = WebSocketConnectionState.Data(
+                    state = "CONNECTED",
+                    socket = "UNIDENTIFIED"
+                ),
+                account = "+1234567890"
             ),
             IncomingMessage(
                 version = "v1",

@@ -4,37 +4,25 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.AddDevice
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SubmitChallenge
 
-/**
- * Link a new device to a local Signal account
- */
 @Serializable
-@SerialName("add_device")
-public data class AddLinkedDeviceRequest(
-    /**
-     * The account to interact with
-     *
-     * Example: "+12024561414"
-     */
+@SerialName("submit_challenge")
+public data class SubmitChallengeRequest(
     public val account: String,
-    /**
-     * the sgnl://linkdevice uri provided (typically in qr code form) by the new device
-     *
-     * Example:
-     * "sgnl://linkdevice?uuid=jAaZ5lxLfh7zVw5WELd6-Q&pub_key=BfFbjSwmAgpVJBXUdfmSgf61eX3a%2Bq9AoxAVpl1HUap9"
-     */
-    public val uri: String
+    public val challenge: String,
+    @SerialName("captcha_token")
+    public val captchaToken: String? = null
 ) : SignaldRequestBodyV1<EmptyResponse>() {
-    internal override val responseWrapperSerializer: KSerializer<AddDevice>
-        get() = AddDevice.serializer()
+    internal override val responseWrapperSerializer: KSerializer<SubmitChallenge>
+        get() = SubmitChallenge.serializer()
 
     internal override val responseDataSerializer: KSerializer<EmptyResponse>
         get() = EmptyResponse.serializer()
 
     internal override fun getTypedResponseOrNull(responseWrapper: JsonMessageWrapper<*>):
-        EmptyResponse? = if (responseWrapper is AddDevice && responseWrapper.data is
+        EmptyResponse? = if (responseWrapper is SubmitChallenge && responseWrapper.data is
         EmptyResponse
     ) {
         responseWrapper.data
