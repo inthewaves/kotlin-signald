@@ -896,8 +896,8 @@ class ProtocolGenerator(
 
                         for ((fieldName, fieldDetail) in structureDetails.fields) {
                             // Do not use non-null lists for request types. Sometimes, an empty list can mean
-                            // different things (e.g., in the send requests, sending an empty list might not send
-                            // any messages at all)
+                            // different things (e.g., in the send requests, using an empty list in the `members` field
+                            // might not send any messages at all)
                             val isList = structureTypeName !in requestTypes && fieldDetail.list
 
                             val propertyName = fieldName.snakeDashToCamelCase()
