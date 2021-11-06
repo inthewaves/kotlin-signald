@@ -9,7 +9,6 @@ import kotlinx.coroutines.runBlocking
 import org.inthewaves.kotlinsignald.Recipient
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
@@ -157,8 +156,8 @@ private fun handleMessage(
                 HandleResult.Failure("ListenerState connected is not true")
             }
         }
-        is ExceptionWrapper -> {
-            System.err.println("warning: received exception: ${message.data}")
+        else -> {
+            System.err.println("warning: received unhandled message: ${message.data}")
             return HandleResult.Success
         }
     }

@@ -1,12 +1,13 @@
+package org.inthewaves.examplejsbot
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import org.inthewaves.kotlinsignald.Recipient
 import org.inthewaves.kotlinsignald.Signal
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
 import org.inthewaves.kotlinsignald.subscription.signalMessagesChannel
+import process
 
 private inline fun measureHrTime(block: () -> Unit): Number {
     val start = process.hrtime()
@@ -30,7 +31,7 @@ suspend fun main(args: Array<String>) {
             println("Received a message:\n$msg\n======================================")
             val (body, src) = when (msg) {
                 is IncomingMessage -> msg.data.dataMessage?.body to msg.data.source!!
-                is ExceptionWrapper, is ListenerState -> null to null
+                else -> null to null
             }
             if (body != null && src != null) {
                 signalClient.send(Recipient.forIndividual(src), "I am replying")

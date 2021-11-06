@@ -1,7 +1,6 @@
 import org.inthewaves.kotlinsignald.Recipient
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
@@ -97,8 +96,8 @@ private fun handleMessage(
                 HandleResult.Failure("ListenerState connected is not true")
             }
         }
-        is ExceptionWrapper -> {
-            fputs("warning: received exception: ${message.data}", stderr)
+        else -> {
+            fputs("warning: received other type: ${message.data}", stderr)
             return HandleResult.Success
         }
     }

@@ -6,7 +6,24 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupAccessCont
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupMember
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
+import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
+
+/**
+ * Specifies a submission to a rate limit challenge issued by the server.
+ */
+public sealed class RateLimitChallenge(public val challengeToken: String) {
+    public class PushChallenge(challengeToken: String) : RateLimitChallenge(challengeToken)
+
+    /**
+     * Responding to a server's rate limit challenge that includes CAPTCHA as one of the options for the challenge.
+     *
+     * The [captchaToken] should be obtained from Signal-Android's `RECAPTCHA_PROOF_URL` BuildConfig field in
+     * app/build.gradle (usually https://signalcaptchas.org/challenge/generate.html) and then completing a reCAPTCHA
+     * there.
+     */
+    public class Recaptcha(challengeToken: String, public val captchaToken: String) : RateLimitChallenge(challengeToken)
+}
 
 /**
  * Specifies a recipient type for functions that can send to either type (e.g., `react`, `remoteDelete`, `send`,
@@ -16,8 +33,20 @@ public sealed class Recipient {
     /**
      * A group as the recipient, using the base64-encoded [groupID] as the identifier. [groupID]s can be retrieved
      * with `listGroups` or by reading the responses from `joinGroup` or `getGroupLinkInfo`.
+     *
+     * If a [memberSubset] is non-empty, messages will only be sent to that subset. This is useful for handling message
+     * send failures for only certain members of the group (e.g. safety number changes).
      */
-    public class Group(public val groupID: String) : Recipient()
+    public class Group(
+        public val groupID: String,
+        public val memberSubset: Collection<JsonAddress> = emptyList()
+    ) : Recipient() {
+        /**
+         * Creates a copy of this [Group] with the same groupID but using the given [memberSubset]. This is useful for
+         * handling message send failures for only certain members of the group (e.g. safety number changes).
+         */
+        public fun withMemberSubset(memberSubset: Collection<JsonAddress>): Group = Group(groupID, memberSubset)
+    }
 
     /**
      * A Signal user as the recipient.
@@ -25,8 +54,17 @@ public sealed class Recipient {
     public class Individual(public val address: JsonAddress) : Recipient()
 
     public companion object {
+        /**
+         * Constructs a recipient type for sending a message/reaction/etc. to a group. If [memberSubset] is non-empty,
+         * the message will only be sent to members in the [memberSubset]. This is useful for handling message
+         * send failures for only certain members of the group (e.g. safety number changes).
+         */
         @JvmStatic
-        public fun forGroup(groupID: String): Group = Group(groupID)
+        @JvmOverloads
+        public fun forGroup(groupID: String, memberSubset: Collection<JsonAddress> = emptyList()): Group = Group(
+            groupID,
+            memberSubset
+        )
 
         @JvmStatic
         public fun forIndividual(address: JsonAddress): Individual = Individual(address)
@@ -62,8 +100,8 @@ public sealed interface GroupUpdate {
      * @property newTimerSeconds The new disappearing message timer in seconds. Set to 0 to disable
      */
     public class UpdateExpirationTimer(public val newTimerSeconds: Int) : GroupUpdate
-    public class AddMembers(public val membersToAdd: Iterable<JsonAddress>) : GroupUpdate
-    public class RemoveMembers(public val membersToRemove: Iterable<JsonAddress>) : GroupUpdate
+    public class AddMembers(public val membersToAdd: Collection<JsonAddress>) : GroupUpdate
+    public class RemoveMembers(public val membersToRemove: Collection<JsonAddress>) : GroupUpdate
     public class UpdateRole(public val memberWithUpdatedRole: GroupMember) : GroupUpdate
     public class UpdateAccessControl(update: AccessControlUpdate) : GroupUpdate {
         public val groupAccessControl: GroupAccessControl = update.groupAccessControlBody
@@ -112,7 +150,7 @@ public enum class AccessRequired(public val value: Int) {
 }
 
 /**
- * Used with the [updateGroup] function inside of [GroupUpdate]. A class to enforce that only one of the access
+ * Used with the `updateGroup` function inside of [GroupUpdate]. A class to enforce that only one of the access
  * controls are updated at once.
  */
 public sealed class AccessControlUpdate {
@@ -151,7 +189,7 @@ public sealed class AccessControlUpdate {
 }
 
 /**
- * Used with the [trust] function.
+ * Used with the `trust` function.
  */
 public enum class TrustLevel {
     TRUSTED_UNVERIFIED, TRUSTED_VERIFIED, UNTRUSTED

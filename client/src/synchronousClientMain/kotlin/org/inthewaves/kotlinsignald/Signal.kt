@@ -64,6 +64,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubmitChallengeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
@@ -208,7 +209,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
-    public fun approveMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
+    public fun approveMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
         withAccountOrThrow {
             return ApproveMembershipRequest(
                 account = accountId,
@@ -232,7 +233,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun createGroup(
-        members: Iterable<JsonAddress>,
+        members: Collection<JsonAddress>,
         title: String,
         avatar: String? = null,
         timer: Int? = null,
@@ -480,7 +481,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     @Throws(SignaldException::class)
     public fun markRead(
         to: JsonAddress,
-        timestamps: Iterable<Long>,
+        timestamps: Collection<Long>,
         `when`: Long = Clock.System.now().toEpochMilliseconds()
     ) {
         withAccountOrThrow {
@@ -511,7 +512,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                     username = accountId,
                     recipientGroupId = recipient.groupID,
                     reaction = reaction,
-                    timestamp = timestamp
+                    timestamp = timestamp,
+                    members = recipient.memberSubset.takeUnless { it.isEmpty() }?.toList()
                 )
                 is Recipient.Individual -> ReactRequest(
                     username = accountId,
@@ -531,7 +533,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws SignaldException if the request to the socket fails
      */
     @Throws(SignaldException::class)
-    public fun refuseMembership(groupID: String, members: Iterable<JsonAddress>): JsonGroupV2Info {
+    public fun refuseMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
         withAccountOrThrow {
             return RefuseMembershipRequest(
                 account = accountId,
@@ -588,7 +590,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Group -> RemoteDeleteRequest(
                     account = accountId,
                     group = recipient.groupID,
-                    timestamp = timestampOfTarget
+                    timestamp = timestampOfTarget,
+                    members = recipient.memberSubset.takeUnless { it.isEmpty() }?.toList()
                 )
                 is Recipient.Individual -> RemoteDeleteRequest(
                     account = accountId,
@@ -705,10 +708,10 @@ public actual class Signal @Throws(SignaldException::class) constructor(
         recipient: Recipient,
         messageBody: String,
         timestamp: Long = Clock.System.now().toEpochMilliseconds(),
-        attachments: Iterable<JsonAttachment> = emptyList(),
+        attachments: Collection<JsonAttachment> = emptyList(),
         quote: JsonQuote? = null,
-        mentions: Iterable<JsonMention> = emptyList(),
-        previews: Iterable<JsonPreview> = emptyList(),
+        mentions: Collection<JsonMention> = emptyList(),
+        previews: Collection<JsonPreview> = emptyList(),
     ): SendResponse {
         withAccountOrThrow {
             val request = when (recipient) {
@@ -721,6 +724,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                     timestamp = timestamp,
                     mentions = mentions.toList(),
                     previews = previews.toList(),
+                    members = recipient.memberSubset.takeUnless { it.isEmpty() }?.toList()
                 )
                 is Recipient.Individual -> SendRequest(
                     username = accountId,
@@ -839,6 +843,34 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 emoji = emoji,
                 mobilecoinAddress = mobileCoinAddress
             ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Submits a challenge that is requested by the server. Sometimes, when sending a message, the server may rate
+     * limit the sender (signald has `ProofRequiredError`), requiring the user to either submit a push challenge (on
+     * Android, this is via Firebase Cloud Message) or a reCAPTCHA. This is indicated by the property
+     * [org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonSendMessageResult.proofRequiredFailure], which
+     * corresponds to `ProofRequiredException` in the Signal-Android code.
+     *
+     * @see RateLimitChallenge
+     */
+    @Throws(SignaldException::class)
+    public fun submitChallenge(challenge: RateLimitChallenge) {
+        withAccountOrThrow {
+            val request = when (challenge) {
+                is RateLimitChallenge.PushChallenge -> SubmitChallengeRequest(
+                    account = accountId,
+                    challenge = challenge.challengeToken,
+                    captchaToken = null,
+                )
+                is RateLimitChallenge.Recaptcha -> SubmitChallengeRequest(
+                    account = accountId,
+                    challenge = challenge.challengeToken,
+                    captchaToken = challenge.captchaToken,
+                )
+            }
+            request.submit(socketWrapper)
         }
     }
 
