@@ -72,7 +72,7 @@ kotlin {
             kotlin.setSrcDirs(listOf("src/commonMain/kotlin", "src/commonMain/generated"))
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
             }
         }
         val commonTest by getting {
