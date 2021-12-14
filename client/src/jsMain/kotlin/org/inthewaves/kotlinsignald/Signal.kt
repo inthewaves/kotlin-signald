@@ -763,10 +763,11 @@ public actual class Signal private constructor(
      * Example: "/tmp/image.jpg
      * @param about An optional about string. If unset, null or an empty string will unset profile's about field.
      * @param emoji An optional single emoji character. If unset, null or an empty string will unset profile emoji.
-     * @param mobileCoinAddress an optional base64-encoded MobileCoin address to set in the profile. Note that this is
-     * not the traditional MobileCoin address encoding, which is custom. Clients are responsible for converting between
-     * MobileCoin's custom base58 on the user-facing side and base64 encoding on the signald side. If unset, null or an
-     * empty string, will empty the profile payment address
+     * @param mobileCoinAddress An optional base64-encoded MobileCoin address to set in the profile. Payment address
+     * must be a *base64-encoded* MobileCoin address. Note that this is not the traditional MobileCoin address encoding,
+     * which is custom. Clients are responsible for converting between MobileCoin's custom base58 on the user-facing
+     * side and base64 encoding on the signald side.
+     * @param visibleBadgeIds IDs of badges. Badges and their IDs are dynamically provided by the server.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      */
@@ -775,7 +776,8 @@ public actual class Signal private constructor(
         avatarFile: String?,
         about: String?,
         emoji: String?,
-        mobileCoinAddress: String?
+        mobileCoinAddress: String?,
+        visibleBadgeIds: List<String>?
     ) {
         withAccountOrThrow {
             SetProfile(
@@ -784,7 +786,8 @@ public actual class Signal private constructor(
                 avatarFile = avatarFile,
                 about = about,
                 emoji = emoji,
-                mobilecoinAddress = mobileCoinAddress
+                mobilecoinAddress = mobileCoinAddress,
+                visibleBadgeIds = visibleBadgeIds
             ).submitSuspend(socketWrapper)
         }
     }
@@ -818,7 +821,6 @@ public actual class Signal private constructor(
             }
         }
     }
-
 
     /**
      * Submits a challenge that is requested by the server. Sometimes, when sending a message, the server may rate

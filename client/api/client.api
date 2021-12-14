@@ -223,7 +223,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public static synthetic fun sendPayment$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Payment;JILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun setDeviceName (Ljava/lang/String;)V
 	public final fun setExpiration (Lorg/inthewaves/kotlinsignald/Recipient;I)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
-	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
 	public final fun submitChallenge (Lorg/inthewaves/kotlinsignald/RateLimitChallenge;)V
 	public synthetic fun subscribe ()Lorg/inthewaves/kotlinsignald/IncomingMessageSubscription;
 	public fun subscribe ()Lorg/inthewaves/kotlinsignald/subscription/Subscription;
