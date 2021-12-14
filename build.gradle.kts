@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 import java.net.URI
 
 plugins {
-    id("org.jetbrains.dokka") version "1.5.31"
+    id("org.jetbrains.dokka") version "1.6.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.8.0" apply false
     id("org.jlleitschuh.gradle.ktlint") version "10.2.0" apply false
     `maven-publish`
@@ -16,9 +16,9 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.31")
-        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.16.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.6.10")
+        classpath("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.17.0")
     }
 }
 

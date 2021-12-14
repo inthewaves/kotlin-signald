@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.dokka")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
     `maven-publish`
-    `java-library`
     signing
 }
 
@@ -17,7 +16,6 @@ repositories {
         }
     }
 }
-
 
 kotlin {
     explicitApi()

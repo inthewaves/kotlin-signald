@@ -7,7 +7,6 @@ plugins {
     id("org.inthewaves.kotlin-signald-protocolgen")
     id("org.jlleitschuh.gradle.ktlint")
     `maven-publish`
-    `java-library`
     signing
 }
 
@@ -17,12 +16,6 @@ signaldProtocolGen {
     packageName = "org.inthewaves.kotlinsignald"
     outputDirectory = "src/commonMain/generated"
     protocolJsonFile = "protocol.json"
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon>().configureEach {
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-    }
 }
 
 repositories {
@@ -68,11 +61,15 @@ kotlin {
     }
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlin.RequiresOptIn")
+        }
+
         val commonMain by getting {
             kotlin.setSrcDirs(listOf("src/commonMain/kotlin", "src/commonMain/generated"))
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
             }
         }
         val commonTest by getting {

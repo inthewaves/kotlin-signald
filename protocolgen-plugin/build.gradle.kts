@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.5.30"
-    kotlin("plugin.serialization") version "1.5.30"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
     id("java-gradle-plugin")
 }
 
@@ -18,7 +18,7 @@ gradlePlugin {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
