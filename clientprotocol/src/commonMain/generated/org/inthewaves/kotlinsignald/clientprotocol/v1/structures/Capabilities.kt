@@ -9,5 +9,11 @@ public data class Capabilities(
     public val gv2: Boolean? = null,
     public val storage: Boolean? = null,
     @SerialName("gv1-migration")
-    public val gv1Migration: Boolean? = null
+    public val gv1Migration: Boolean? = null,
+    @SerialName("sender_key")
+    public val senderKey: Boolean? = null,
+    @SerialName("announcement_group")
+    public val announcementGroup: Boolean? = null,
+    @SerialName("change_number")
+    public val changeNumber: Boolean? = null
 )

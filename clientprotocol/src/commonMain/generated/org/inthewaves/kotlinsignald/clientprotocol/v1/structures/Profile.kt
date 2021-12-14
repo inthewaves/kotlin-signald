@@ -42,5 +42,10 @@ public data class Profile(
      * will empty the profile payment address
      */
     @SerialName("mobilecoin_address")
-    public val mobilecoinAddress: String? = null
+    public val mobilecoinAddress: String? = null,
+    /**
+     * currently unclear how these work, as they are not available in the production Signal apps
+     */
+    @SerialName("visible_badge_ids")
+    public val visibleBadgeIds: List<String> = emptyList()
 ) : SignaldResponseBodyV1()

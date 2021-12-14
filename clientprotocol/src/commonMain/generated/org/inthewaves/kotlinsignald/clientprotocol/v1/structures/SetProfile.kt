@@ -16,11 +16,11 @@ public data class SetProfile(
      */
     public val account: String,
     /**
-     * New profile name. Set to empty string for no profile name
+     * Change the profile name
      *
      * Example: "signald user"
      */
-    public val name: String,
+    public val name: String? = null,
     /**
      * Path to new profile avatar file. If unset or null, unset the profile avatar
      *
@@ -28,22 +28,26 @@ public data class SetProfile(
      */
     public val avatarFile: String? = null,
     /**
-     * an optional about string. If unset, null or an empty string will unset profile about field
+     * Change the 'about' profile field
      */
     public val about: String? = null,
     /**
-     * an optional single emoji character. If unset, null or an empty string will unset profile
-     * emoji
+     * Change the profile emoji
      */
     public val emoji: String? = null,
     /**
-     * an optional *base64-encoded* MobileCoin address to set in the profile. Note that this is not
-     * the traditional MobileCoin address encoding, which is custom. Clients are responsible for
-     * converting between MobileCoin's custom base58 on the user-facing side and base64 encoding on the
-     * signald side. If unset, null or an empty string, will empty the profile payment address
+     * Change the profile payment address. Payment address must be a *base64-encoded* MobileCoin
+     * address. Note that this is not the traditional MobileCoin address encoding, which is custom.
+     * Clients are responsible for converting between MobileCoin's custom base58 on the user-facing
+     * side and base64 encoding on the signald side.
      */
     @SerialName("mobilecoin_address")
-    public val mobilecoinAddress: String? = null
+    public val mobilecoinAddress: String? = null,
+    /**
+     * configure visible badge IDs
+     */
+    @SerialName("visible_badge_ids")
+    public val visibleBadgeIds: List<String>? = null
 ) : SignaldRequestBodyV1<EmptyResponse>() {
     internal override val responseWrapperSerializer:
         KSerializer<org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetProfile>

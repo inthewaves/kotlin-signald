@@ -9,6 +9,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SetDeviceName
 
 /**
  * set this device's name. This will show up on the mobile device on the same account under
+ * settings -> linked devices
  */
 @Serializable
 @SerialName("set_device_name")
