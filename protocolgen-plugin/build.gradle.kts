@@ -18,7 +18,7 @@ gradlePlugin {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
 }
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup:kotlinpoet:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+    implementation("com.squareup:kotlinpoet:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.3.1")
 }
