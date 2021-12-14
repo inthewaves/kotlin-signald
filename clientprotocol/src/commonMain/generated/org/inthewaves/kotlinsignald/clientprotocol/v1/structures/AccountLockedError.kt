@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 public data class AccountLockedError(
     public val more: String? = null,
     public val message: String? = null
-)
+) : TypedExceptionV1

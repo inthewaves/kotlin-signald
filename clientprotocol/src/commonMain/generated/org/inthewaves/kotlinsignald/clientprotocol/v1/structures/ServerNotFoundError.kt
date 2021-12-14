@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 public data class ServerNotFoundError(
     public val uuid: String? = null,
     public val message: String? = null
-)
+) : TypedExceptionV1
