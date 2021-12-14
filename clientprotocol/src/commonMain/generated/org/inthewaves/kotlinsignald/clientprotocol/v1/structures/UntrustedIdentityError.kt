@@ -10,4 +10,4 @@ public data class UntrustedIdentityError(
     public val message: String? = null,
     @SerialName("identity_key")
     public val identityKey: IdentityKey? = null
-)
+) : TypedExceptionV1

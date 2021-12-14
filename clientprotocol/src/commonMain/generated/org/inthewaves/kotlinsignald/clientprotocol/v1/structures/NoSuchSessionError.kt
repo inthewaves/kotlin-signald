@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class NoSuchSessionError(
     public val message: String? = null
-)
+) : TypedExceptionV1

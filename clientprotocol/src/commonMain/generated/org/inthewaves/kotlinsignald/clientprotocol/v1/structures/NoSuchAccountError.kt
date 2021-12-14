@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 public data class NoSuchAccountError(
     public val account: String? = null,
     public val message: String? = null
-)
+) : TypedExceptionV1

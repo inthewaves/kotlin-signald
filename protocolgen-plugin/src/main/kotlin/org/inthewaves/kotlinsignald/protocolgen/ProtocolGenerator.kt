@@ -134,7 +134,8 @@ class ProtocolGenerator(
          */
         val responseWrapperType: ClassName,
         val responseDataType: ClassName,
-        val actionName: SignaldActionName
+        val actionName: SignaldActionName,
+        val errors: List<ErrorListItem>
     )
 
     private fun getSubscriptionResponseClassName(version: SignaldProtocolVersion) =
@@ -450,15 +451,24 @@ class ProtocolGenerator(
         val protocolVersions: Set<SignaldProtocolVersion> = protocolDoc.types.keys
             .asSequence()
             .map { SignaldProtocolVersion(it.name.lowercase()) }
-            .plus(protocolDoc.types.keys.map { SignaldProtocolVersion(it.name.lowercase()) })
             .toSet()
 
         for (protocolVersion in protocolVersions) {
-            val responseBodySealedClassName = protocolVersion.getResponseSealedClassName(packageName)
+
             if (protocolVersion in protocolDoc.types) {
                 writeTypeSpecFile(
                     protocolVersion.getResponseSealedClassName(packageName),
-                    createSealedClassTypeSpecBuilder(responseInterfaceClassName = responseBodySealedClassName).build(),
+                    createSealedClassTypeSpecBuilder(
+                        responseInterfaceClassName = protocolVersion.getResponseSealedClassName(packageName)
+                    ).build(),
+                    genFilesDir
+                )
+
+                writeTypeSpecFile(
+                    protocolVersion.getTypedExceptionSealedInterfaceName(packageName),
+                    createSealedInterfaceTypeSpecBuilder(
+                        responseInterfaceClassName = protocolVersion.getTypedExceptionSealedInterfaceName(packageName)
+                    ).build(),
                     genFilesDir
                 )
             }
@@ -702,12 +712,15 @@ class ProtocolGenerator(
             }
         }
 
+        // linked maps and sets to preserve iteration order
         val actionRequestTypes = linkedMapOf<SignaldProtocolVersion, Map<SignaldType, ActionInfo>>()
         val actionResponseTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
+        val actionErrorTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
         for ((version: SignaldProtocolVersion, actionMap: Map<SignaldActionName, Action>) in protocolDoc.actions) {
             val requestTypesToActionMap = actionRequestTypes.getOrPut(version) { linkedMapOf() }
                     as MutableMap<SignaldType, ActionInfo>
             val responseTypes: MutableSet<SignaldType> = actionResponseTypes.getOrPut(version) { linkedSetOf() }
+            val errorTypes: MutableSet<SignaldType> = actionErrorTypes.getOrPut(version) { linkedSetOf() }
 
             val structuresPackage = GenUtil.getStructuresPackage(packageName, version)
             val (jsonMsgWrapperClassName, jsonMsgWrapperTypeSpec) = createJsonMessageWrapperInfo(version)
@@ -757,9 +770,15 @@ class ProtocolGenerator(
                     emptyResponseClassName
                 }
 
+                errorTypes.addAll(actionDetail.errors.asSequence().map { it.name })
+
                 val requestClassName = actionName.asClassName(packageName, version)
-                requestTypesToActionMap[actionDetail.request] =
-                    ActionInfo(requestClassName, responseClassName, actionName)
+                requestTypesToActionMap[actionDetail.request] = ActionInfo(
+                    requestClassName,
+                    responseClassName,
+                    actionName,
+                    actionDetail.errors
+                )
 
                 val typeSpec = TypeSpec.classBuilder(requestClassName).apply {
                     if (actionDetail.request != SignaldType.UNUSED) {
@@ -819,6 +838,7 @@ class ProtocolGenerator(
                 writeTypeSpecFile(requestClassName, typeSpec, genFilesDir)
             }
         }
+        println("actionErrorTypes: $actionErrorTypes")
 
         // Sometimes, we may need to modify structure, e.g. subclass something or create nested classes
         val specialTypeHandlers = getSpecialTypeHandler()
@@ -827,6 +847,7 @@ class ProtocolGenerator(
             val structurePackage = GenUtil.getStructuresPackage(packageName, version)
             val requestTypes: Map<SignaldType, ActionInfo> = actionRequestTypes[version] ?: emptyMap()
             val responseTypes: Set<SignaldType> = actionResponseTypes[version] ?: emptySet()
+            val errorTypes: Set<SignaldType> = actionErrorTypes[version] ?: emptySet()
 
             val sequence = typeMapForVersion.asSequence()
                 .plus(extraTypes[version]?.asSequence() ?: emptySequence())
@@ -835,12 +856,19 @@ class ProtocolGenerator(
                 val typeSpec = TypeSpec.classBuilder(className).apply {
                     addAnnotation(Serializable::class)
 
+                    check(structureTypeName !in errorTypes || (structureTypeName !in responseTypes && structureTypeName !in requestTypes)) {
+                        "$structureTypeName is an error type but also a response and request type"
+                    }
                     check(structureTypeName !in responseTypes || structureTypeName !in requestTypes) {
                         "$structureTypeName is used for both a response and a request"
                     }
                     if (structureTypeName in responseTypes) {
                         // TODO: Use @EncodeDefault in kotlinx.serialization 1.3.0 where applicable.
                         superclass(version.getResponseSealedClassName(packageName))
+                    }
+
+                    if (structureTypeName in errorTypes) {
+                        addSuperinterfaces(listOf(version.getTypedExceptionSealedInterfaceName(packageName)))
                     }
 
                     val responseActionInfo: ActionInfo?
@@ -1381,6 +1409,13 @@ class ProtocolGenerator(
         vararg typeVariables: TypeVariableName
     ): TypeSpec.Builder = TypeSpec.classBuilder(responseInterfaceClassName)
         .addAnnotation(Serializable::class)
+        .addModifiers(KModifier.SEALED)
+        .apply { typeVariables.forEach(::addTypeVariable) }
+
+    private fun createSealedInterfaceTypeSpecBuilder(
+        responseInterfaceClassName: ClassName,
+        vararg typeVariables: TypeVariableName
+    ): TypeSpec.Builder = TypeSpec.interfaceBuilder(responseInterfaceClassName)
         .addModifiers(KModifier.SEALED)
         .apply { typeVariables.forEach(::addTypeVariable) }
 

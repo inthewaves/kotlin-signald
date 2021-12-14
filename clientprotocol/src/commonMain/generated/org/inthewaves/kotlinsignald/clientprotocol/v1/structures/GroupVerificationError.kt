@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class GroupVerificationError(
     public val message: String? = null
-)
+) : TypedExceptionV1

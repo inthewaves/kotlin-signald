@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class AccountHasNoKeysError(
     public val message: String? = null
-)
+) : TypedExceptionV1

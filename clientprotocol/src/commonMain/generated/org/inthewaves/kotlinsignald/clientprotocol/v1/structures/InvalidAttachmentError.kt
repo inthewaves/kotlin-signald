@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 public data class InvalidAttachmentError(
     public val filename: String? = null,
     public val message: String? = null
-)
+) : TypedExceptionV1

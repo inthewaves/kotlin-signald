@@ -18,7 +18,7 @@ public data class InternalError(
     public override val data: Data,
     public override val error: Boolean? = false,
     public override val account: String? = null
-) : ClientMessageWrapper() {
+) : ClientMessageWrapper(), TypedExceptionV1 {
     @Serializable
     public data class Data(
         public val exceptions: List<String> = emptyList(),
