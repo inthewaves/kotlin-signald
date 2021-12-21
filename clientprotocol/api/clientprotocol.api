@@ -1542,6 +1542,9 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/Typ
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0 {
+}
+
 public abstract class org/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper$Companion;
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/json/JsonObject;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -1630,7 +1633,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -1662,7 +1665,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -1726,7 +1729,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -2045,7 +2048,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Cap
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -2326,7 +2329,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Exc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -2720,7 +2723,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -2822,7 +2825,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -2854,7 +2857,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3132,7 +3135,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper, org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Companion;
 	public synthetic fun <init> (ILjava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;)V
@@ -3204,7 +3207,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Int
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3238,7 +3241,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3270,7 +3273,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3302,7 +3305,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3334,7 +3337,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3366,7 +3369,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3398,7 +3401,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3430,7 +3433,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -3462,7 +3465,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -4697,7 +4700,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Mar
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -4729,7 +4732,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoK
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -4761,7 +4764,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoS
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -4795,7 +4798,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoS
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -4865,7 +4868,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Off
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -5017,7 +5020,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Pro
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -5127,7 +5130,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Pro
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -5940,7 +5943,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ser
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -6257,6 +6260,9 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Tru
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
+}
+
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypingMessage {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypingMessage$Companion;
 	public fun <init> ()V
@@ -6333,7 +6339,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Typ
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -6365,7 +6371,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Unk
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -6432,7 +6438,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Uns
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UntrustedIdentityError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UntrustedIdentityError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UntrustedIdentityError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IdentityKey;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
@@ -6562,7 +6568,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Upd
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError$Companion;
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
