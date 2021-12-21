@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("UntrustedIdentityError")
 public data class UntrustedIdentityError(
     public val identifier: String? = null,
     public val message: String? = null,

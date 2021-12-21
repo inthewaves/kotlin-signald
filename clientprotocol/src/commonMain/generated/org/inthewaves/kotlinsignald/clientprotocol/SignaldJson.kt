@@ -2,6 +2,40 @@
 package org.inthewaves.kotlinsignald.clientprotocol
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountAlreadyVerifiedError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountHasNoKeysError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountLockedError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FingerprintVersionMismatchError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupNotActiveError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupVerificationError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InternalError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidAttachmentError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidBase64Error
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidFingerprintError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidGroupError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidGroupStateError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidInviteURIError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidProxyError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRecipientError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRequestError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoKnownUUIDError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSendPermissionError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchAccountError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchSessionError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavailableError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypedExceptionV1
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownIdentityKeyError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UntrustedIdentityError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UserAlreadyExistsError
 import kotlin.native.concurrent.ThreadLocal
 
 /**
@@ -12,4 +46,38 @@ import kotlin.native.concurrent.ThreadLocal
 public val SignaldJson: Json = kotlinx.serialization.json.Json {
     encodeDefaults = false
     ignoreUnknownKeys = true
+    serializersModule = SerializersModule {
+        polymorphic(TypedExceptionV1::class) {
+            subclass(NoSuchAccountError::class)
+            subclass(ServerNotFoundError::class)
+            subclass(InvalidProxyError::class)
+            subclass(NoSendPermissionError::class)
+            subclass(InvalidAttachmentError::class)
+            subclass(InternalError::class)
+            subclass(InvalidRequestError::class)
+            subclass(UnknownGroupError::class)
+            subclass(RateLimitError::class)
+            subclass(InvalidRecipientError::class)
+            subclass(OwnProfileKeyDoesNotExistError::class)
+            subclass(GroupVerificationError::class)
+            subclass(InvalidGroupStateError::class)
+            subclass(InvalidInviteURIError::class)
+            subclass(GroupNotActiveError::class)
+            subclass(InvalidBase64Error::class)
+            subclass(UntrustedIdentityError::class)
+            subclass(ProfileUnavailableError::class)
+            subclass(NoKnownUUIDError::class)
+            subclass(NoSuchSessionError::class)
+            subclass(UserAlreadyExistsError::class)
+            subclass(CaptchaRequiredError::class)
+            subclass(AccountHasNoKeysError::class)
+            subclass(AccountAlreadyVerifiedError::class)
+            subclass(AccountLockedError::class)
+            subclass(FingerprintVersionMismatchError::class)
+            subclass(UnknownIdentityKeyError::class)
+            subclass(InvalidFingerprintError::class)
+            subclass(InvalidGroupError::class)
+            subclass(GroupLinkNotActiveError::class)
+        }
+    }
 }

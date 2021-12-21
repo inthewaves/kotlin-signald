@@ -9,7 +9,8 @@ inline fun <reified T : Throwable> assertThrows(executable: () -> Unit): T {
         }
 
         throw AssertionError(
-            "Unexpected exception type thrown (expected: ${T::class.simpleName}; got ${e::class.simpleName}"
+            "Unexpected exception type thrown (expected: ${T::class.simpleName}; got ${e::class.simpleName}. " +
+                "Exception stacktrace:\n" + e.stackTraceToString()
         )
     }
     throw AssertionError("Expected ${T::class.simpleName} to be thrown, but nothing was thrown.")

@@ -2,6 +2,7 @@ package org.inthewaves.kotlinsignald.protocolgen
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
@@ -15,6 +16,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.WildcardTypeName
 import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.withIndent
 import kotlinx.datetime.Clock
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Required
@@ -204,20 +206,6 @@ class ProtocolGenerator(
                     "version ${protocolDoc.version.version} (doc version ${protocolDoc.docVersion} " +
                     "into $genFilesDir"
         )
-
-        val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
-            .initializer(
-                "%M { encodeDefaults = false; ignoreUnknownKeys = true }",
-                MemberName("kotlinx.serialization.json", "Json")
-            )
-            .addAnnotation(ClassName("kotlin.native.concurrent", "ThreadLocal"))
-            .addKdoc(
-                "%L",
-                "The [Json] instance used to serialize and deserialize signald requests and responses. We set it to " +
-                    "ignore unknown keys for forward compatibility reasons."
-            )
-            .build()
-        writePropertySpecFile(signaldJsonClassName, jsonProperty, genFilesDir)
 
         val signaldExceptionTypeSpec = TypeSpec.classBuilder(signaldExceptionClassName)
             .superclass(ClassName("kotlin", "Exception"))
@@ -468,7 +456,8 @@ class ProtocolGenerator(
                     protocolVersion.getTypedExceptionSealedInterfaceName(packageName),
                     createSealedInterfaceTypeSpecBuilder(
                         responseInterfaceClassName = protocolVersion.getTypedExceptionSealedInterfaceName(packageName)
-                    ).build(),
+                    ).addKdoc("Here as an interface, because InternalError is used as a class of another subtype")
+                        .build(),
                     genFilesDir
                 )
             }
@@ -840,6 +829,7 @@ class ProtocolGenerator(
         }
         println("actionErrorTypes: $actionErrorTypes")
 
+
         // Sometimes, we may need to modify structure, e.g. subclass something or create nested classes
         val specialTypeHandlers = getSpecialTypeHandler()
 
@@ -869,6 +859,9 @@ class ProtocolGenerator(
 
                     if (structureTypeName in errorTypes) {
                         addSuperinterfaces(listOf(version.getTypedExceptionSealedInterfaceName(packageName)))
+                        addAnnotation(
+                            AnnotationSpec.builder(SerialName::class).addMember("%S", structureTypeName.name).build()
+                        )
                     }
 
                     val responseActionInfo: ActionInfo?
@@ -991,6 +984,54 @@ class ProtocolGenerator(
                 writeTypeSpecFile(className, typeSpec, genFilesDir)
             }
         }
+
+        println(actionErrorTypes)
+
+        val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
+            .initializer(
+                CodeBlock.builder()
+                    .beginControlFlow("%M", MemberName("kotlinx.serialization.json", "Json"))
+                    .withIndent {
+                        addStatement("encodeDefaults = false")
+                        addStatement("ignoreUnknownKeys = true")
+                        beginControlFlow(
+                            "serializersModule = %M",
+                            MemberName("kotlinx.serialization.modules", "SerializersModule")
+                        )
+                        withIndent {
+                            for ((version, errorTypes) in actionErrorTypes) {
+                                if (errorTypes.isEmpty()) continue
+                                beginControlFlow(
+                                    "%M(%T::class)",
+                                    MemberName("kotlinx.serialization.modules", "polymorphic"),
+                                    version.getTypedExceptionSealedInterfaceName(packageName)
+                                )
+                                withIndent {
+                                    for (errorType in errorTypes) {
+                                        addStatement(
+                                            "%M(%T::class)",
+                                            MemberName("kotlinx.serialization.modules", "subclass"),
+                                            errorType.asSignaldClassName(packageName, isStructure = true, version)
+                                        )
+                                    }
+                                }
+                                endControlFlow()
+                            }
+                        }
+                        endControlFlow()
+                    }
+                    .endControlFlow()
+                    .build()
+            )
+            .addAnnotation(ClassName("kotlin.native.concurrent", "ThreadLocal"))
+            .addKdoc(
+                "%L",
+                "The [Json] instance used to serialize and deserialize signald requests and responses. We set it to " +
+                    "ignore unknown keys for forward compatibility reasons."
+            )
+            .build()
+        writePropertySpecFile(signaldJsonClassName, jsonProperty, genFilesDir)
+
         println("Generated signald classes for ${protocolDoc.version.version}")
     }
 
@@ -1170,7 +1211,12 @@ class ProtocolGenerator(
                 )
             }
             superclass(clientMessageWrapperClassName)
-            addAnnotation(AnnotationSpec.builder(SerialName::class).addMember("%S", className.simpleName).build())
+            val serialNameAnnotation = AnnotationSpec.builder(SerialName::class)
+                .addMember("%S", className.simpleName)
+                .build()
+            if (!annotationSpecs.any { it == serialNameAnnotation }) {
+                addAnnotation(serialNameAnnotation)
+            }
 
             // Move the properties into a nested data class.
             val properties = propertySpecs.toMutableList()
