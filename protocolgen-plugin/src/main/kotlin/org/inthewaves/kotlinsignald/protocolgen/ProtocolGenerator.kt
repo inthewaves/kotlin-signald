@@ -1308,7 +1308,7 @@ class ProtocolGenerator(
                     .addParameter(ParameterSpec.builder("data", innerDataClassName).build())
                     .addParameter(
                         ParameterSpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
-                            .defaultValue("false")
+                            .defaultValue(if (className.simpleName == "ExceptionWrapper") "true" else "false")
                             .build()
                     )
                     .addParameter(
