@@ -2,6 +2,11 @@
 package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 
 /**
  * Wraps all incoming messages sent to the client after a v1 subscribe request is issued
@@ -33,4 +38,52 @@ public sealed class ClientMessageWrapper {
 
     @Serializable
     public sealed class Data
+
+    public companion object {
+        public fun decodeFromStringOrThrow(incomingMessageString: String): ClientMessageWrapper =
+            try {
+                SignaldJson.decodeFromString(serializer(), incomingMessageString)
+            } catch (e: SerializationException) {
+                // Try to polymorphically deserialize the error.
+                val responseJson: JsonObject = try {
+                    SignaldJson.decodeFromString(JsonObject.serializer(), incomingMessageString)
+                } catch (anotherException: SerializationException) {
+                    e.addSuppressed(anotherException)
+                    throw SerializationException("incoming object is not a valid JSON object", e)
+                }
+                val isError = (responseJson["error"] as? JsonPrimitive)?.booleanOrNull ?: false
+                if (!isError) {
+                    throw SerializationException("incoming object is an unrecognized non-error type", e)
+                }
+                val errorType = (responseJson["type"] as? JsonPrimitive)
+                    ?.takeIf { it.isString }
+                    ?.content
+                    ?: throw SerializationException("incoming object has no type", e)
+                val errorData = responseJson["data"] as? JsonObject
+                    ?: throw SerializationException("data is not a JSON object", e)
+                val deserializer = SignaldJson.serializersModule.getPolymorphic(
+                    TypedExceptionV1::class,
+                    errorType
+                )
+                    ?: throw SerializationException("""$errorType is an unrecognized error type""", e)
+
+                val exceptionType: TypedExceptionV1 = try {
+                    SignaldJson.decodeFromJsonElement(deserializer, errorData)
+                } catch (anotherException: SerializationException) {
+                    e.addSuppressed(anotherException)
+                    throw SerializationException("""body for $errorType has invalid schema""", e)
+                }
+
+                IncomingException(
+                    version = (responseJson["version"] as? JsonPrimitive)
+                        ?.takeIf { it.isString }
+                        ?.content,
+                    data = IncomingException.Data(typedException = exceptionType),
+                    error = true,
+                    account = (responseJson["account"] as? JsonPrimitive)
+                        ?.takeIf { it.isString }
+                        ?.content
+                )
+            }
+    }
 }

@@ -52,6 +52,30 @@ internal class SubscribeUnsubscribeRequestTest {
                 """.trimIndent(),
                 """
                     {
+                        "type":"UntrustedIdentityError",
+                        "version":"v1",
+                        "data":{"identifier":"e00eda40-e2c2-459c-87f4-304ae01f9d0a"},
+                        "error":true,
+                        "account":"+123"
+                    }
+                """.trimIndent(),
+                """
+                    {
+                        "type":"InternalError",
+                        "version":"v1",
+                        "data":{
+                            "exceptions":[
+                                "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                                "org.whispersystems.libsignal.DuplicateMessageException"
+                            ],
+                            "message":"org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+                        },
+                        "error":true,
+                        "account":"+123"
+                    }
+                """.trimIndent(),
+                """
+                    {
                         "type": "IncomingMessage",
                         "version": "v1",
                         "data": {
@@ -123,6 +147,26 @@ internal class SubscribeUnsubscribeRequestTest {
                     socket = "UNIDENTIFIED"
                 ),
                 account = "+1234567890"
+            ),
+            IncomingException(
+                version = "v1",
+                data = IncomingException.Data(UntrustedIdentityError(identifier = "e00eda40-e2c2-459c-87f4-304ae01f9d0a")),
+                error = true,
+                account = "+123"
+            ),
+            IncomingException(
+                version = "v1",
+                data = IncomingException.Data(
+                    InternalError(
+                        exceptions = listOf(
+                            "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                            "org.whispersystems.libsignal.DuplicateMessageException"
+                        ),
+                        message = "org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+                    )
+                ),
+                error = true,
+                account = "+123"
             ),
             IncomingMessage(
                 version = "v1",

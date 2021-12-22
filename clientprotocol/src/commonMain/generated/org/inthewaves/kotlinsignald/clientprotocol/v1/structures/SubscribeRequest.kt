@@ -68,7 +68,7 @@ public data class SubscribeRequest(
 
             for (i in 0 until 25) {
                 val incomingMessage: ClientMessageWrapper = try {
-                    SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
+                    ClientMessageWrapper.decodeFromStringOrThrow(rawJsonResponse)
                 } catch (e: SerializationException) {
                     val nextResponse: JsonMessageWrapper<*> = try {
                         SignaldJson.decodeFromString(
@@ -135,7 +135,7 @@ public data class SubscribeRequest(
 
             for (i in 0 until 25) {
                 val incomingMessage: ClientMessageWrapper = try {
-                    SignaldJson.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
+                    ClientMessageWrapper.decodeFromStringOrThrow(rawJsonResponse)
                 } catch (e: SerializationException) {
                     val nextResponse: JsonMessageWrapper<*> = try {
                         SignaldJson.decodeFromString(
