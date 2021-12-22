@@ -184,11 +184,7 @@ val signalWithCustomSocketPath = Signal(
 try {
   signal.register()
 } catch (e: SignaldException) {
-  // e can be of type RequestFailedException, which contains
-  // specific information if signald sent back an error response.
-  // Otherwise, the SignaldException can also be an I/O error from
-  // the socket.
-  if (e is RequestFailedException && e.exception == "CaptchaRequired") {
+  if (e is CaptchaRequiredError) {
     // https://signald.org/articles/captcha/
     //
     // Get a captcha token. It might be better to just
@@ -196,12 +192,14 @@ try {
     // a captcha would have to mean using a browser to get the
     // token.
     //
+    val myCaptchaToken: String = ...
     signal.register(captcha = myCaptchaToken)
   }
 }
 
-// Get verification code from SMS (or call)
-signal.verify("some verification code")
+// Get verification code from SMS (or a call)
+val verificationCode = ...
+signal.verify(verificationCode)
 
 // Send to a single user via their number. The returned [SendResponse] contains information
 // about the sent message, including the message timestamp (which identifies the message),
