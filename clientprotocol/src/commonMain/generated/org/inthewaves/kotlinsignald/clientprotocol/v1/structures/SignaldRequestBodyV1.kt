@@ -109,11 +109,30 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
             )
         }
         if (!response.isSuccessful) {
-            throw RequestFailedException(
+            val deserializer = SignaldJson.serializersModule.getPolymorphic(
+                TypedExceptionV1::class,
+                response.errorType
+            )
+            deserializer?.let {
+                response.error?.let { errorJson ->
+                    try {
+                        throw SignaldJson.decodeFromJsonElement(deserializer, errorJson)
+                    } catch (e: SerializationException) {
+                        throw RequestFailedException(
+                            responseJsonString = responseJson,
+                            errorBody = response.error,
+                            errorType = response.errorType,
+                            exception = response.exception,
+                            cause = e,
+                        )
+                    }
+                }
+            } ?: throw RequestFailedException(
                 responseJsonString = responseJson,
-                errorBody =
-                response.error,
-                errorType = response.errorType, exception = response.exception
+                errorBody = response.error,
+                errorType = response.errorType,
+                exception = response.exception,
+                extraMessage = "unknown error type or missing error body"
             )
         }
         return getTypedResponseOrNull(response) ?: throw RequestFailedException(
@@ -188,11 +207,30 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
             )
         }
         if (!response.isSuccessful) {
-            throw RequestFailedException(
+            val deserializer = SignaldJson.serializersModule.getPolymorphic(
+                TypedExceptionV1::class,
+                response.errorType
+            )
+            deserializer?.let {
+                response.error?.let { errorJson ->
+                    try {
+                        throw SignaldJson.decodeFromJsonElement(deserializer, errorJson)
+                    } catch (e: SerializationException) {
+                        throw RequestFailedException(
+                            responseJsonString = responseJson,
+                            errorBody = response.error,
+                            errorType = response.errorType,
+                            exception = response.exception,
+                            cause = e,
+                        )
+                    }
+                }
+            } ?: throw RequestFailedException(
                 responseJsonString = responseJson,
-                errorBody =
-                response.error,
-                errorType = response.errorType, exception = response.exception
+                errorBody = response.error,
+                errorType = response.errorType,
+                exception = response.exception,
+                extraMessage = "unknown error type or missing error body"
             )
         }
         return getTypedResponseOrNull(response) ?: throw RequestFailedException(
