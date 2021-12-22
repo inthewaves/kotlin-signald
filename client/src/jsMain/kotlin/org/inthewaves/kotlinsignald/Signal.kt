@@ -7,13 +7,18 @@ import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AcceptInvitationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountAlreadyVerifiedError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountHasNoKeysError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountLockedError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddLinkedDeviceRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddServerRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AllIdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ApproveMembershipRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CreateGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.DeleteAccountRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FingerprintVersionMismatchError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FinishLinkRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GenerateLinkingURIRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetAllIdentities
@@ -24,8 +29,21 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetProfileReque
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetServersRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkInfoRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupNotActiveError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupVerificationError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IdentityKeyList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InternalError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidAttachmentError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidBase64Error
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidFingerprintError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidGroupError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidGroupStateError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidInviteURIError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidProxyError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRecipientError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRequestError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JoinGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
@@ -42,9 +60,15 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListAccountsReq
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListContactsRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListGroupsRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.MarkReadRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoKnownUUIDError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSendPermissionError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchAccountError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Payment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavailableError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ReactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RefuseMembershipRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RegisterRequest
@@ -61,6 +85,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Server
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetDeviceNameRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetExpirationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SetProfile
@@ -68,8 +93,12 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubmitChallenge
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownIdentityKeyError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UntrustedIdentityError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UserAlreadyExistsError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
 import org.inthewaves.kotlinsignald.subscription.Subscription
@@ -140,6 +169,13 @@ public actual class Signal private constructor(
      * @param groupID A base-64 encoded ID of the group.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws OwnProfileKeyDoesNotExistError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws UnknownGroupError
+     * @throws InternalError
+     * @throws InvalidRequestError
      */
     public suspend fun acceptInvitation(
         groupID: String
@@ -159,6 +195,11 @@ public actual class Signal private constructor(
      * `tsdevice:/?uuid=jAaZ5lxLfh7zVw5WELd6-Q&pub_key=BfFbjSwmAgpVJBXUdfmSgf61eX3a%2Bq9AoxAVpl1HUap9`
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InvalidRequestError caused by syntax errors with the provided linking URI
+     * @throws InternalError
      */
     public suspend fun addDevice(uri: String) {
         withAccountOrThrow {
@@ -174,6 +215,8 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InvalidProxyError
+     * @throws InternalError
      */
     public suspend fun addServer(server: Server): String {
         return AddServerRequest(server).submitSuspend(socketWrapper)
@@ -184,6 +227,13 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws UnknownGroupError
+     * @throws InternalError
+     * @throws GroupVerificationError
+     * @throws InvalidRequestError
      */
     public suspend fun approveMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
         withAccountOrThrow {
@@ -206,6 +256,16 @@ public actual class Signal private constructor(
      * (case-insensitive). Example: "ADMINISTRATOR"
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws OwnProfileKeyDoesNotExistError
+     * @throws NoKnownUUIDError
+     * @throws InvalidRequestError
+     * @throws GroupVerificationError
+     * @throws InvalidGroupStateError
+     * @throws UnknownGroupError
      */
     public suspend fun createGroup(
         members: Collection<JsonAddress>,
@@ -232,6 +292,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
      */
     public suspend fun deleteAccount(alsoDeleteAccountOnServer: Boolean) {
         withAccountOrThrow {
@@ -247,6 +311,7 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
      */
     public suspend fun deleteServer(serverUuid: String) {
         withAccountOrThrow {
@@ -261,6 +326,12 @@ public actual class Signal private constructor(
      * @return Information about the new account once the linking process is completed by the other device.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * throws NoSuchSessionError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws NoSuchAccountError
+     * @throws UserAlreadyExistsError
      */
     public suspend fun finishLink(deviceName: String, sessionId: String): Account {
         withAccountOrThrow {
@@ -276,6 +347,8 @@ public actual class Signal private constructor(
      * servers but configurable at build time)
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
      */
     public suspend fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
         withAccountOrThrow {
@@ -288,6 +361,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InvalidProxyError
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InternalError
      */
     public suspend fun getAllIdentities(): AllIdentityKeyList {
         withAccountOrThrow {
@@ -303,6 +380,14 @@ public actual class Signal private constructor(
      * @param revision The latest known revision of the group, default value (-1) forces fetch from server
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws UnknownGroupError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws GroupVerificationError
+     * @throws InvalidGroupStateError
+     * @throws InvalidRequestError
      */
     public suspend fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
         withAccountOrThrow {
@@ -317,6 +402,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
      */
     public suspend fun getIdentities(address: JsonAddress): IdentityKeyList {
         withAccountOrThrow {
@@ -329,6 +418,11 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
      */
     public suspend fun getLinkedDevices(): LinkedDevices {
         withAccountOrThrow {
@@ -342,6 +436,11 @@ public actual class Signal private constructor(
      * @param address The address of the user to get the profile of.
      * @param async If true, return results from local store immediately, refreshing from server in the
      * background if needed. If false (default), block until profile can be retrieved from server
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws ProfileUnavailableError
      */
     public suspend fun getProfile(address: JsonAddress, async: Boolean = false): Profile {
         withAccountOrThrow {
@@ -354,6 +453,7 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
      */
     public suspend fun getServers(): ServerList = GetServersRequest().submitSuspend(socketWrapper)
 
@@ -362,6 +462,13 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws GroupLinkNotActiveError
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
+     * @throws GroupVerificationError
      */
     public suspend fun getGroupLinkInfo(groupLink: String): JsonGroupJoinInfo {
         withAccountOrThrow {
@@ -374,6 +481,17 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InvalidRequestError
+     * @throws InvalidInviteURIError
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws OwnProfileKeyDoesNotExistError
+     * @throws GroupVerificationError
+     * @throws GroupNotActiveError
+     * @throws UnknownGroupError
+     * @throws InvalidGroupStateError
      */
     public suspend fun joinGroup(groupLink: String): JsonGroupJoinInfo {
         withAccountOrThrow {
@@ -386,6 +504,13 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InvalidRequestError
      */
     public suspend fun leaveGroup(groupID: String): GroupInfo {
         withAccountOrThrow {
@@ -398,6 +523,8 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws InternalError
      */
     public suspend fun listAccounts(): AccountList {
         return ListAccountsRequest().submitSuspend(socketWrapper)
@@ -422,6 +549,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
      */
     public suspend fun listGroups(): GroupList {
         withAccountOrThrow {
@@ -438,6 +569,11 @@ public actual class Signal private constructor(
      * @param when The timestamp to use for when we mark as read. Defaults to the current system clock's timestamp.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws UntrustedIdentityError
      */
     public suspend fun markRead(
         to: JsonAddress,
@@ -459,6 +595,15 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws NoSendPermissionError
+     * @throws InternalError
+     * @throws InvalidRecipientError
+     * @throws UnknownGroupError
+     * @throws InvalidRequestError
+     * @throws RateLimitError
      */
     public suspend fun react(
         recipient: Recipient,
@@ -489,6 +634,13 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InternalError
+     * @throws InvalidRequestError
      */
     public suspend fun refuseMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
         withAccountOrThrow {
@@ -506,6 +658,9 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws CaptchaRequiredError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
      */
     public suspend fun register(voice: Boolean = false, captcha: String? = null) {
         RegisterRequest(
@@ -520,6 +675,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
      */
     public suspend fun remoteConfig(): RemoteConfigList {
         withAccountOrThrow {
@@ -537,6 +696,15 @@ public actual class Signal private constructor(
      * timestamp.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRecipientError
+     * @throws NoSendPermissionError
+     * @throws UnknownGroupError
+     * @throws InvalidRequestError
+     * @throws RateLimitError
      */
     public suspend fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
         withAccountOrThrow {
@@ -561,6 +729,11 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     *  @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
      */
     public suspend fun removeLinkedDevice(deviceId: Long) {
         withAccountOrThrow {
@@ -581,6 +754,11 @@ public actual class Signal private constructor(
      * @param blocked Request block list sync (default: true)
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws UntrustedIdentityError
      */
     public suspend fun requestSync(
         groups: Boolean = true,
@@ -606,6 +784,15 @@ public actual class Signal private constructor(
      * @param timestamp The timestamp to use when resetting session. Defaults to now.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
+     * @throws NoSendPermissionError
+     * @throws UnknownGroupError
+     * @throws RateLimitError
+     * @throws InvalidRecipientError
      */
     public suspend fun resetSession(
         address: JsonAddress,
@@ -627,6 +814,8 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws NoSuchAccountError
      */
     public suspend fun resolveAddress(partial: JsonAddress): JsonAddress {
         withAccountOrThrow {
@@ -651,6 +840,16 @@ public actual class Signal private constructor(
      * @param previews Link previews to include in the message.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws NoSendPermissionError
+     * @throws InvalidAttachmentError
+     * @throws InternalError
+     * @throws InvalidRequestError
+     * @throws UnknownGroupError
+     * @throws RateLimitError
+     * @throws InvalidRecipientError
      */
     public suspend fun send(
         recipient: Recipient,
@@ -696,6 +895,16 @@ public actual class Signal private constructor(
      * @param when The timestamp of the payment. Defaults to the current system clock time.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidBase64Error
+     * @throws InvalidRecipientError
+     * @throws UnknownGroupError
+     * @throws NoSendPermissionError
+     * @throws InvalidRequestError
+     * @throws RateLimitError
      */
     public suspend fun sendPayment(
         recipientAddress: JsonAddress,
@@ -717,6 +926,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
      */
     public suspend fun setDeviceName(deviceName: String) {
         withAccountOrThrow {
@@ -735,6 +948,13 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InvalidRequestError
      */
     public suspend fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
         withAccountOrThrow {
@@ -770,6 +990,12 @@ public actual class Signal private constructor(
      * @param visibleBadgeIds IDs of badges. Badges and their IDs are dynamically provided by the server.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidBase64Error
+     * @throws InvalidRequestError
      */
     public suspend fun setProfile(
         name: String,
@@ -804,6 +1030,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
      */
     override suspend fun subscribeSuspend(): Subscription {
         withAccountOrThrow {
@@ -829,6 +1059,11 @@ public actual class Signal private constructor(
      * [org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonSendMessageResult.proofRequiredFailure], which
      * corresponds to `ProofRequiredException` in the Signal-Android code.
      *
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
      * @see RateLimitChallenge
      */
     public suspend fun submitChallenge(challenge: RateLimitChallenge) {
@@ -858,6 +1093,15 @@ public actual class Signal private constructor(
      * @param trustLevel One of TRUSTED_UNVERIFIED, TRUSTED_VERIFIED or UNTRUSTED. Default is TRUSTED_VERIFIED
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InvalidRequestError
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws FingerprintVersionMismatchError
+     * @throws InvalidBase64Error
+     * @throws UnknownIdentityKeyError
+     * @throws InvalidFingerprintError
      */
     public suspend fun trust(
         address: JsonAddress,
@@ -891,6 +1135,15 @@ public actual class Signal private constructor(
      * @param when The timestamp of the typing message. Defaults to the current system clock time.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRecipientError
+     * @throws InvalidGroupError
+     * @throws UntrustedIdentityError
+     * @throws UnknownGroupError
+     * @throws InvalidRequestError
      */
     public suspend fun typing(
         recipient: Recipient,
@@ -925,6 +1178,10 @@ public actual class Signal private constructor(
      * @param inboxPosition The new inbox position for the contact.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     *  @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
      */
     public suspend fun updateContact(
         address: JsonAddress,
@@ -951,6 +1208,13 @@ public actual class Signal private constructor(
      * modification actions can be performed at once. See [GroupUpdate] for details and all possible update types.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InvalidRequestError
      */
     public suspend fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
         withAccountOrThrow {
@@ -1017,6 +1281,13 @@ public actual class Signal private constructor(
      * @param code The verification code from SMS or voice call.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws AccountHasNoKeysError
+     * @throws AccountAlreadyVerifiedError
+     * @throws AccountLockedError
+     * @throws NoSuchAccountError
      */
     public suspend fun verify(code: String) {
         val account = VerifyRequest(accountId, code).submitSuspend(socketWrapper)
