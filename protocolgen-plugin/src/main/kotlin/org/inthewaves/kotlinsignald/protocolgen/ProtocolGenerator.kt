@@ -26,6 +26,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
@@ -34,6 +35,30 @@ import kotlin.system.exitProcess
 
 // TODO: Deal with errors somehow. Kotlin doesn't really have checked exceptions, so we can't do a simple "throws"
 //  statement.
+
+class SpecialTypeHandlerChain(private val handlers: List<SpecialTypeHandler>) {
+    constructor(handler: SpecialTypeHandler) : this(listOf(handler))
+
+    constructor(vararg handlers: SpecialTypeHandler) : this(handlers.toList())
+
+    /**
+     * Creates a new chain from the current chain and adds the handler to the end
+     */
+    fun andThen(handler: SpecialTypeHandler) = SpecialTypeHandlerChain(handlers + handler)
+
+    fun executeChain(
+        builder: TypeSpec.Builder,
+        version: SignaldProtocolVersion,
+        className: ClassName,
+        structureDetails: Structure,
+        primaryConstructorBuilder: FunSpec.Builder?,
+        actionInfo: ProtocolGenerator.ActionInfo?
+    ) {
+        for (handler in handlers) {
+            handler.invoke(builder, version, className, structureDetails, primaryConstructorBuilder, actionInfo)
+        }
+    }
+}
 
 /**
  * Every structure / type is generated in the same way, with special handling for request and response types.
@@ -47,6 +72,8 @@ typealias SpecialTypeHandler = TypeSpec.Builder.(
     primaryConstructorBuilder: FunSpec.Builder?,
     actionInfo: ProtocolGenerator.ActionInfo?
 ) -> Unit
+
+fun SpecialTypeHandler.toChain() = SpecialTypeHandlerChain(this)
 
 class ProtocolGenerator(
     private val protocolJsonFile: File,
@@ -146,15 +173,30 @@ class ProtocolGenerator(
     private val extraTypes: Versioned<Map<SignaldType, Structure>>
         get() = mapOf(
             SignaldProtocolVersion.v1 to mapOf(
+                SignaldType("IncomingException") to Structure(
+                    fields = mapOf(
+                        "typedException" to Structure.Field(
+                            type = SignaldType(
+                                SignaldProtocolVersion.v1.getTypedExceptionSealedClassName(packageName).simpleName
+                            ),
+                            version = SignaldProtocolVersion.v1,
+                            required = true,
+                            list = false,
+                            doc = "An exception given by Signald"
+                        ),
+                    ),
+                    doc = "An incoming message representing an exception that can be sent by signald corresponding to" +
+                        " one of the documented error types in the protocol."
+                ),
                 SignaldType("ExceptionWrapper") to Structure(
                     fields = mapOf(
                         "message" to Structure.Field(SignaldType("string")),
                         "unexpected" to Structure.Field(SignaldType("boolean"))
                     ),
                     doc = "An incoming message representing an error that can be sent by signald after a v1 subscribe " +
-                            "request. This is not documented in the client protocol; however, as the signald socket can " +
-                            "send it anyway, we add this here for type safety purposes.\n\n" +
-                            """
+                        "request. This is not documented in the client protocol; however, as the signald socket can " +
+                        "send it anyway, we add this here for type safety purposes.\n\n" +
+                        """
                         Example: 
                         {
                             "type":"ExceptionWrapper",
@@ -174,8 +216,8 @@ class ProtocolGenerator(
                         ),
                     ),
                     doc = "Responses from the subscribe / unsubscribe endpoint. The protocol describes these as " +
-                            "empty responses, but race conditions can occur. This response can contain messages sent " +
-                            "before the (un)subscribe acknowledgement message from signald."
+                        "empty responses, but race conditions can occur. This response can contain messages sent " +
+                        "before the (un)subscribe acknowledgement message from signald."
                 ),
             )
         )
@@ -203,26 +245,29 @@ class ProtocolGenerator(
     fun generateSignaldProtocol() {
         println(
             "Generating signald protocol from $protocolJsonFile,\n" +
-                    "version ${protocolDoc.version.version} (doc version ${protocolDoc.docVersion} " +
-                    "into $genFilesDir"
+                "version ${protocolDoc.version.version} (doc version ${protocolDoc.docVersion} " +
+                "into $genFilesDir"
         )
 
         val signaldExceptionTypeSpec = TypeSpec.classBuilder(signaldExceptionClassName)
             .superclass(ClassName("kotlin", "Exception"))
             .addModifiers(KModifier.EXPECT, KModifier.OPEN)
             .addFunction(FunSpec.constructorBuilder().build())
-            .addFunction(FunSpec.constructorBuilder()
-                .addParameter("message", String::class.asClassName().copy(nullable = true))
-                .build()
+            .addFunction(
+                FunSpec.constructorBuilder()
+                    .addParameter("message", String::class.asClassName().copy(nullable = true))
+                    .build()
             )
-            .addFunction(FunSpec.constructorBuilder()
-                .addParameter("message", String::class.asClassName().copy(nullable = true))
-                .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
-                .build()
+            .addFunction(
+                FunSpec.constructorBuilder()
+                    .addParameter("message", String::class.asClassName().copy(nullable = true))
+                    .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
+                    .build()
             )
-            .addFunction(FunSpec.constructorBuilder()
-                .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
-                .build()
+            .addFunction(
+                FunSpec.constructorBuilder()
+                    .addParameter("cause", ClassName("kotlin", "Throwable").copy(nullable = true))
+                    .build()
             )
             .build()
         writeTypeSpecFile(signaldExceptionClassName, signaldExceptionTypeSpec, genFilesDir)
@@ -233,8 +278,8 @@ class ProtocolGenerator(
             addKdoc(
                 "%L",
                 "An exception that is thrown if " +
-                        "the resulting JSON can't be deserialized or " +
-                        "the socket returns an error response."
+                    "the resulting JSON can't be deserialized or " +
+                    "the socket returns an error response."
             )
             addProperty(
                 PropertySpec.builder("isRateLimitException", Boolean::class)
@@ -337,9 +382,11 @@ class ProtocolGenerator(
 
         val autoCloseableTypeSpec = TypeSpec.interfaceBuilder(autoCloseableClassName)
             .addModifiers(KModifier.EXPECT)
-            .addFunction(FunSpec.builder("close")
-                .addModifiers(KModifier.ABSTRACT)
-                .build())
+            .addFunction(
+                FunSpec.builder("close")
+                    .addModifiers(KModifier.ABSTRACT)
+                    .build()
+            )
             .build()
         writeTypeSpecFile(autoCloseableClassName, autoCloseableTypeSpec, genFilesDir)
 
@@ -506,8 +553,8 @@ class ProtocolGenerator(
                                 // TODO: Look into the @EncodeDefault annotation in upcoming kotlinx.serialization 1.3.0
                                 //  https://github.com/Kotlin/kotlinx.serialization/pull/1528
                                 "The version to include in the request. As this class won't be used to " +
-                                        "deserialize the response, the [Required] annotation is being used to " +
-                                        "force this field to be serialized"
+                                    "deserialize the response, the [Required] annotation is being used to " +
+                                    "force this field to be serialized"
                             )
                             .initializer("%S", protocolVersion.name.lowercase())
                             .build()
@@ -528,7 +575,7 @@ class ProtocolGenerator(
                         val idParameterSpec = ParameterSpec.builder("id", String::class)
                             .addKdoc(
                                 "The id to include in the request. " +
-                                        "This is expected to be present in the response JSON"
+                                    "This is expected to be present in the response JSON"
                             )
                             .defaultValue("this.%N", idPropertySpec)
                             .build()
@@ -697,7 +744,7 @@ class ProtocolGenerator(
         val actionErrorTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
         for ((version: SignaldProtocolVersion, actionMap: Map<SignaldActionName, Action>) in protocolDoc.actions) {
             val requestTypesToActionMap = actionRequestTypes.getOrPut(version) { linkedMapOf() }
-                    as MutableMap<SignaldType, ActionInfo>
+                as MutableMap<SignaldType, ActionInfo>
             val responseTypes: MutableSet<SignaldType> = actionResponseTypes.getOrPut(version) { linkedSetOf() }
             val errorTypes: MutableSet<SignaldType> = actionErrorTypes.getOrPut(version) { linkedSetOf() }
 
@@ -818,7 +865,6 @@ class ProtocolGenerator(
             }
         }
         println("actionErrorTypes: $actionErrorTypes")
-
 
         // Sometimes, we may need to modify structure, e.g. subclass something or create nested classes
         val specialTypeHandlers = getSpecialTypeHandler()
@@ -998,7 +1044,7 @@ class ProtocolGenerator(
 
                     specialTypeHandlers[version]
                         ?.get(structureTypeName)
-                        ?.invoke(
+                        ?.executeChain(
                             this,
                             version,
                             className,
@@ -1085,8 +1131,8 @@ class ProtocolGenerator(
                     addModifiers(KModifier.ABSTRACT)
                     addKdoc(
                         "A function to resolve the response body by verifying the type of the response and returning a " +
-                                "non-null value iff the wrapper and data is the right type. This is desirable due to type " +
-                                "erasure."
+                            "non-null value iff the wrapper and data is the right type. This is desirable due to type " +
+                            "erasure."
                     )
                 }
                 is ResponseResolveFunCreationParams.Override -> {
@@ -1201,7 +1247,7 @@ class ProtocolGenerator(
                         FunSpec.getterBuilder()
                             .addStatement(
                                 "return this !is %T && data != null && error == null && " +
-                                        "errorType == null && exception == null",
+                                    "errorType == null && exception == null",
                                 UNEXPECTED_ERROR_ACTION_NAME.asClassName(packageName, version)
                             )
                             .build()
@@ -1228,7 +1274,10 @@ class ProtocolGenerator(
                     "@throws %T if the signald socket sends a bad or error response, or unable to serialize our request",
                     requestFailedExceptionClassName
                 )
-                .addStatement("@throws %T if an I/O error occurs during socket communication", signaldExceptionClassName)
+                .addStatement(
+                    "@throws %T if an I/O error occurs during socket communication",
+                    signaldExceptionClassName
+                )
                 .build()
         )
     }
@@ -1265,95 +1314,101 @@ class ProtocolGenerator(
      * @return A map of special type handlers that act on a class builder. This will be called after the entire
      * class has been configured.
      */
-    private fun getSpecialTypeHandler(): Versioned<Map<SignaldType, SpecialTypeHandler>> {
-        val clientMessageWrapperSubclassHandler: SpecialTypeHandler = { version, className, _, constructorBuilder, _ ->
-            require(constructorBuilder != null)
+    private fun getSpecialTypeHandler(): Versioned<Map<SignaldType, SpecialTypeHandlerChain>> {
+        val clientMessageWrapperSubclassHandler =
+            SpecialTypeHandlerChain { version, className, _, constructorBuilder, _ ->
+                require(constructorBuilder != null)
 
-            val clientMessageWrapperClassName = getClientMessageWrapperClassName(version)
+                val clientMessageWrapperClassName = getClientMessageWrapperClassName(version)
 
-            if (version != SignaldProtocolVersion.v1) {
-                System.err.println(
-                    "Warning: Version is different (expected v1; got $version for $className --- schema should be verified"
+                if (version != SignaldProtocolVersion.v1) {
+                    System.err.println(
+                        "Warning: Version is different (expected v1; got $version for $className --- schema should be verified"
+                    )
+                }
+                superclass(clientMessageWrapperClassName)
+                val serialNameAnnotation = AnnotationSpec.builder(SerialName::class)
+                    .addMember("%S", className.simpleName)
+                    .build()
+                if (!annotationSpecs.any { it == serialNameAnnotation }) {
+                    addAnnotation(serialNameAnnotation)
+                }
+
+                // Move the properties into a nested data class.
+                val properties = propertySpecs.toMutableList()
+                propertySpecs.clear()
+
+                val innerDataClassName = className.nestedClass("Data")
+                val innerDataClass = TypeSpec.classBuilder(innerDataClassName).apply {
+                    superclass(clientMessageWrapperClassName.nestedClass("Data"))
+                    addModifiers(KModifier.DATA)
+                    addAnnotation(Serializable::class)
+                    addProperties(properties)
+                    primaryConstructor(constructorBuilder.build())
+                }.build()
+                addType(innerDataClass)
+
+                primaryConstructor(
+                    FunSpec.constructorBuilder()
+                        .addParameter(
+                            ParameterSpec.builder("version", String::class.asClassName().copy(nullable = true))
+                                .defaultValue("null")
+                                .build()
+                        )
+                        .addParameter(ParameterSpec.builder("data", innerDataClassName).build())
+                        .addParameter(
+                            ParameterSpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
+                                .defaultValue(if (className.simpleName == "ExceptionWrapper") "true" else "false")
+                                .build()
+                        )
+                        .addParameter(
+                            ParameterSpec.builder("account", String::class.asClassName().copy(nullable = true))
+                                .defaultValue("null")
+                                .build()
+                        )
+                        .build()
                 )
+
+                addProperty(
+                    PropertySpec.builder("version", String::class.asClassName().copy(nullable = true))
+                        .initializer("version")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .build()
+                )
+                addProperty(
+                    PropertySpec.builder("data", innerDataClassName)
+                        .initializer("data")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .build()
+                )
+                addProperty(
+                    PropertySpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
+                        .initializer("error")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .build()
+                )
+                addProperty(
+                    PropertySpec.builder("account", String::class.asClassName().copy(nullable = true))
+                        .initializer("account")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .build()
+                )
+
             }
-            superclass(clientMessageWrapperClassName)
-            val serialNameAnnotation = AnnotationSpec.builder(SerialName::class)
-                .addMember("%S", className.simpleName)
-                .build()
-            if (!annotationSpecs.any { it == serialNameAnnotation }) {
-                addAnnotation(serialNameAnnotation)
-            }
 
-            // Move the properties into a nested data class.
-            val properties = propertySpecs.toMutableList()
-            propertySpecs.clear()
-
-            val innerDataClassName = className.nestedClass("Data")
-            val innerDataClass = TypeSpec.classBuilder(innerDataClassName).apply {
-                superclass(clientMessageWrapperClassName.nestedClass("Data"))
-                addModifiers(KModifier.DATA)
-                addAnnotation(Serializable::class)
-                addProperties(properties)
-                primaryConstructor(constructorBuilder.build())
-            }.build()
-            addType(innerDataClass)
-
-            primaryConstructor(
-                FunSpec.constructorBuilder()
-                    .addParameter(
-                        ParameterSpec.builder("version", String::class.asClassName().copy(nullable = true))
-                            .defaultValue("null")
-                            .build()
-                    )
-                    .addParameter(ParameterSpec.builder("data", innerDataClassName).build())
-                    .addParameter(
-                        ParameterSpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
-                            .defaultValue(if (className.simpleName == "ExceptionWrapper") "true" else "false")
-                            .build()
-                    )
-                    .addParameter(
-                        ParameterSpec.builder("account", String::class.asClassName().copy(nullable = true))
-                            .defaultValue("null")
-                            .build()
-                    )
-                    .build()
-            )
-
-            addProperty(
-                PropertySpec.builder("version", String::class.asClassName().copy(nullable = true))
-                    .initializer("version")
-                    .addModifiers(KModifier.OVERRIDE)
-                    .build()
-            )
-            addProperty(
-                PropertySpec.builder("data", innerDataClassName)
-                    .initializer("data")
-                    .addModifiers(KModifier.OVERRIDE)
-                    .build()
-            )
-            addProperty(
-                PropertySpec.builder("error", Boolean::class.asClassName().copy(nullable = true))
-                    .initializer("error")
-                    .addModifiers(KModifier.OVERRIDE)
-                    .build()
-            )
-            addProperty(
-                PropertySpec.builder("account", String::class.asClassName().copy(nullable = true))
-                    .initializer("account")
-                    .addModifiers(KModifier.OVERRIDE)
-                    .build()
-            )
-        }
-
-        val subscribeUnsubscribeRequestHandler: SpecialTypeHandler = { version: SignaldProtocolVersion,
-                                                                       _,
-                                                                       _,
-                                                                       _,
-                                                                       actionInfo: ActionInfo?
+        val subscribeUnsubscribeRequestHandler = SpecialTypeHandlerChain {
+                version: SignaldProtocolVersion,
+                _,
+                _,
+                _,
+                actionInfo: ActionInfo?
             ->
             require(actionInfo != null)
 
-            fun FunSpec.Builder.buildOverrideForSubscribeRaceCondition(isForSuspend: Boolean, baseSubmitFunName: String) {
+            fun FunSpec.Builder.buildOverrideForSubscribeRaceCondition(
+                isForSuspend: Boolean,
+                baseSubmitFunName: String
+            ) {
                 beginControlFlow("try")
                 addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
                 endControlFlow()
@@ -1377,10 +1432,10 @@ class ProtocolGenerator(
 
                         for (i in 0 until 25) {
                             val incomingMessage: ClientMessageWrapper = try {
-                                %T.decodeFromString(ClientMessageWrapper.serializer(), rawJsonResponse)
+                                ClientMessageWrapper.decodeFromStringOrThrow(rawJsonResponse)
                             } catch (e: SerializationException) {
                                 val nextResponse: %T<*> = try {
-                                    SignaldJson.decodeFromString(
+                                    %T.decodeFromString(
                                         JsonMessageWrapper.serializer(${RESPONSE_DATA_SERIALIZER_PROPERTY_NAME}),
                                         rawJsonResponse
                                     )
@@ -1414,10 +1469,10 @@ class ProtocolGenerator(
                     SerializationException::class,
                     // val pendingChatMessages = mutableListOf<%T>()
                     getClientMessageWrapperClassName(version),
-                    // %T.serializer(ClientMessageWrapper.serializer(), rawJsonResponse)
-                    signaldJsonClassName,
                     // val nextResponse: %T<*> = try {
                     createJsonMessageWrapperInfo(version).className,
+                    // %T.decodeFromString(
+                    signaldJsonClassName,
                     // return %T(pendingChatMessages)
                     getSubscriptionResponseClassName(version),
                     // ?: throw %T(extraMessage = %S, cause = originalException)
@@ -1453,23 +1508,23 @@ class ProtocolGenerator(
 
         return mapOf(
             SignaldProtocolVersion.v0 to mapOf(
-                SignaldType("JsonStickerPackOperationMessage") to { _, _, _, _, _ ->
+                SignaldType("JsonStickerPackOperationMessage") to SpecialTypeHandlerChain { _, _, _, _, _ ->
                     addKdoc(
                         "\n\n%L",
                         "https://github.com/signalapp/Signal-Android/blob/44d014c4459e9ac34b74800002fa86b402d0501c/" +
-                                "libsignal/service/src/main/java/org/whispersystems/signalservice/api/messages/" +
-                                "multidevice/StickerPackOperationMessage.java"
+                            "libsignal/service/src/main/java/org/whispersystems/signalservice/api/messages/" +
+                            "multidevice/StickerPackOperationMessage.java"
                     )
                 },
             ),
             SignaldProtocolVersion.v1 to mapOf(
                 SignaldType("SubscribeRequest") to subscribeUnsubscribeRequestHandler,
                 SignaldType("UnsubscribeRequest") to subscribeUnsubscribeRequestHandler,
-                SignaldType(getClientMessageWrapperClassName(SignaldProtocolVersion.v1).simpleName) to { _,
-                                                                                                         className: ClassName,
-                                                                                                         _,
-                                                                                                         _,
-                                                                                                         _
+                SignaldType(getClientMessageWrapperClassName(SignaldProtocolVersion.v1).simpleName) to SpecialTypeHandlerChain { _,
+                    className: ClassName,
+                    _,
+                    _,
+                    _
                     ->
                     modifiers.remove(KModifier.DATA)
                     addModifiers(KModifier.SEALED)
@@ -1504,10 +1559,92 @@ class ProtocolGenerator(
                         "\n\n%L",
                         "Note that the `type` field has been removed. kotlinx.serialization uses that as a discriminator"
                     )
+
+                    // TODO: Bake this into a custom serializer
+                    val parseFun = FunSpec.builder("decodeFromStringOrThrow")
+                        .addParameter("incomingMessageString", String::class.asClassName())
+                        .returns(className)
+                        .addCode(
+                            CodeBlock.builder()
+                                .add(
+                                    """
+                                        return try {
+                                            %T.decodeFromString(serializer(), incomingMessageString)
+                                        } catch (e: %T) {
+                                            // Try to polymorphically deserialize the error.
+                                            val responseJson: %T = try {
+                                                SignaldJson.decodeFromString(%T.serializer(), incomingMessageString)
+                                            } catch (anotherException: SerializationException) {
+                                                e.addSuppressed(anotherException)
+                                                throw SerializationException(%S, e)
+                                            }
+                                            val isError = (responseJson["error"] as? %T)?.%M ?: false
+                                            if (!isError) {
+                                                throw SerializationException(%S, e)
+                                            }
+                                            val errorType = (responseJson["type"] as? %T)
+                                                ?.takeIf { it.isString }
+                                                ?.content
+                                                ?: throw SerializationException(%S, e)
+                                            val errorData = responseJson["data"] as? %T
+                                                ?: throw SerializationException(%S, e)
+                                            val deserializer = SignaldJson.serializersModule.getPolymorphic(TypedExceptionV1::class, errorType)
+                                                ?: throw SerializationException(%P, e)
+                            
+                                            val exceptionType: TypedExceptionV1 = try {
+                                                SignaldJson.decodeFromJsonElement(deserializer, errorData)
+                                            } catch (anotherException: SerializationException) {
+                                                e.addSuppressed(anotherException)
+                                                throw SerializationException(%P, e)
+                                            }
+                            
+                                            IncomingException(
+                                                version = (responseJson["version"] as? %T)
+                                                    ?.takeIf { it.isString }
+                                                    ?.content,
+                                                data = IncomingException.Data(typedException = exceptionType),
+                                                error = true,
+                                                account = (responseJson["account"] as? %T)
+                                                    ?.takeIf { it.isString }
+                                                    ?.content
+                                            )
+                                        }
+                                    """.trimIndent(),
+                                    // We could also throw suppressed exceptions containing actual reasons
+                                    signaldJsonClassName,
+                                    SerializationException::class.asClassName(),
+                                    JsonObject::class.asClassName(),
+                                    JsonObject::class.asClassName(),
+                                    "incoming object is not a valid JSON object",
+                                    JsonPrimitive::class.asClassName(), MemberName("kotlinx.serialization.json", "booleanOrNull"),
+                                    "incoming object is an unrecognized non-error type",
+                                    JsonPrimitive::class.asClassName(),
+                                    "incoming object has no type",
+                                    JsonObject::class.asClassName(),
+                                    "data is not a JSON object",
+                                    "${'$'}errorType is an unrecognized error type",
+                                    "body for ${'$'}errorType has invalid schema",
+                                    JsonPrimitive::class.asClassName(),
+                                    JsonPrimitive::class.asClassName(),
+                                )
+                                .build()
+                        )
+                        .build()
+
+                    addType(TypeSpec.companionObjectBuilder().addFunction(parseFun).build())
                 },
                 SignaldType("IncomingMessage") to clientMessageWrapperSubclassHandler,
                 SignaldType("ListenerState") to clientMessageWrapperSubclassHandler,
                 SignaldType("ExceptionWrapper") to clientMessageWrapperSubclassHandler,
+                SignaldType("IncomingException") to clientMessageWrapperSubclassHandler
+                    .andThen { _, _, _, _, _ ->
+                        val typedExceptionClass = SignaldProtocolVersion.v1.getTypedExceptionSealedClassName(packageName)
+                        addProperty(
+                            PropertySpec.builder("typedException", typedExceptionClass)
+                                .getter(FunSpec.getterBuilder().addStatement("return data.typedException").build())
+                                .build()
+                        )
+                    },
                 // SignaldType("InternalError") to clientMessageWrapperSubclassHandler,
                 SignaldType("WebSocketConnectionState") to clientMessageWrapperSubclassHandler,
             )

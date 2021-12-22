@@ -7,6 +7,57 @@ import kotlin.test.assertEquals
 
 internal class ClientMessageWrapperTest {
     @Test
+    fun testParsing() {
+        val untrustedErrorJson = """
+            {
+                "type":"UntrustedIdentityError",
+                "version":"v1",
+                "data":{"identifier":"e00eda40-e2c2-459c-87f4-304ae01f9d0a"},
+                "error":true,
+                "account":"+123"
+            }
+        """.trimIndent()
+        val expectedUntrustedError = IncomingException(
+            version = "v1",
+            data = IncomingException.Data(UntrustedIdentityError(identifier = "e00eda40-e2c2-459c-87f4-304ae01f9d0a")),
+            error = true,
+            account = "+123"
+        )
+        assertEquals(expectedUntrustedError, ClientMessageWrapper.decodeFromStringOrThrow(untrustedErrorJson))
+
+        val internalErrorJson = """
+            {
+                "type":"InternalError",
+                "version":"v1",
+                "data":{
+                    "exceptions":[
+                        "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                        "org.whispersystems.libsignal.DuplicateMessageException"
+                    ],
+                    "message":"org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+                },
+                "error":true,
+                "account":"+123"
+            }
+        """.trimIndent()
+        val expectedInternalError = IncomingException(
+            version = "v1",
+            data = IncomingException.Data(
+                InternalError(
+                    exceptions = listOf(
+                        "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
+                        "org.whispersystems.libsignal.DuplicateMessageException"
+                    ),
+                    message = "org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
+                )
+            ),
+            error = true,
+            account = "+123"
+        )
+        assertEquals(expectedInternalError, ClientMessageWrapper.decodeFromStringOrThrow(internalErrorJson))
+    }
+
+    @Test
     fun testPolymorphicSerialization() {
         val jsonString = """{"type":"ListenerState","version":"v1","data":{"connected":true}}"""
         val clientMessageWrapper = SignaldJson.decodeFromString<ClientMessageWrapper>(jsonString)
@@ -100,38 +151,5 @@ internal class ClientMessageWrapperTest {
         assertEquals(
             anotherExceptionMessage, SignaldJson.decodeFromString<ClientMessageWrapper>(anotherExceptionAsJsonString)
         )
-
-        /*
-        val (internalError, internalErrorJson) = InternalError(
-            version = "v1",
-            data = InternalError.Data(
-                exceptions = listOf(
-                    "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
-                    "org.whispersystems.libsignal.DuplicateMessageException"
-                ),
-                message = "org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
-            ),
-            error = true,
-            account = "+1234567890"
-        ) to """
-            {
-                "type":"InternalError",
-                "version":"v1",
-                "data":{
-                    "exceptions":[
-                        "org.signal.libsignal.metadata.ProtocolDuplicateMessageException",
-                        "org.whispersystems.libsignal.DuplicateMessageException"
-                    ],
-                    "message":"org.signal.libsignal.metadata.ProtocolDuplicateMessageException: org.whispersystems.libsignal.DuplicateMessageException: message with old counter 1 / 0"
-                },
-                "error":true,
-                "account":"+1234567890"
-            }
-        """.trimIndent()
-        assertEquals(
-            internalError, SignaldJson.decodeFromString<ClientMessageWrapper>(internalErrorJson)
-        )
-        
-         */
     }
 }
