@@ -4,6 +4,8 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.FinishLink
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
@@ -32,4 +34,36 @@ public data class FinishLinkRequest(
         } else {
             null
         }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchSessionError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws NoSuchAccountError
+     * @throws UserAlreadyExistsError
+     */
+    public override fun submit(socketCommunicator: SocketCommunicator, id: String): Account =
+        super.submit(socketCommunicator, id)
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchSessionError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws NoSuchAccountError
+     * @throws UserAlreadyExistsError
+     */
+    public override suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String
+    ): Account = super.submitSuspend(socketCommunicator, id)
 }

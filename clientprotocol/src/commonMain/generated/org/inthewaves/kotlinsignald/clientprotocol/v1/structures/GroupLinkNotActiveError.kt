@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("GroupLinkNotActiveError")
 public data class GroupLinkNotActiveError(
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

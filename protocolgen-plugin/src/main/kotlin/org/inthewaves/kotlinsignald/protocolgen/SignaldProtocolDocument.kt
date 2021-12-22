@@ -21,7 +21,7 @@ value class SignaldProtocolVersion(val name: String) {
     fun getResponseSealedClassName(pkg: PackageName) =
         ClassName(GenUtil.getStructuresPackage(pkg, this), "SignaldResponseBody${name.uppercase()}")
 
-    fun getTypedExceptionSealedInterfaceName(pkg: PackageName) =
+    fun getTypedExceptionSealedClassName(pkg: PackageName) =
         ClassName(GenUtil.getStructuresPackage(pkg, this), "TypedException${name.uppercase()}")
 
     fun getRequestSealedClassName(pkg: PackageName) =

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @SerialName("UntrustedIdentityError")
 public data class UntrustedIdentityError(
     public val identifier: String? = null,
-    public val message: String? = null,
+    public override val message: String? = null,
     @SerialName("identity_key")
     public val identityKey: IdentityKey? = null
-) : TypedExceptionV1
+) : TypedExceptionV1()

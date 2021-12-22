@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("FingerprintVersionMismatchError")
 public data class FingerprintVersionMismatchError(
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

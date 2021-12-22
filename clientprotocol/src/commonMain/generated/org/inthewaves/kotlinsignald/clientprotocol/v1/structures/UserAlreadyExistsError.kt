@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("UserAlreadyExistsError")
 public data class UserAlreadyExistsError(
     public val uuid: String? = null,
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

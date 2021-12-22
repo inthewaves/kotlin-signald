@@ -14,14 +14,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("InternalError")
 public data class InternalError(
-    public override val version: String? = null,
-    public override val data: Data,
-    public override val error: Boolean? = false,
-    public override val account: String? = null
-) : ClientMessageWrapper(), TypedExceptionV1 {
-    @Serializable
-    public data class Data(
-        public val exceptions: List<String> = emptyList(),
-        public val message: String? = null
-    ) : ClientMessageWrapper.Data()
-}
+    public val exceptions: List<String> = emptyList(),
+    public override val message: String? = null
+) : TypedExceptionV1()

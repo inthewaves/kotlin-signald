@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("ProfileUnavailableError")
 public data class ProfileUnavailableError(
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

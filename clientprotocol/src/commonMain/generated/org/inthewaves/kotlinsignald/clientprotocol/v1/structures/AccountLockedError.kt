@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("AccountLockedError")
 public data class AccountLockedError(
     public val more: String? = null,
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

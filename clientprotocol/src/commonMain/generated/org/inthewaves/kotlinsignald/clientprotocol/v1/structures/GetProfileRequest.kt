@@ -4,6 +4,8 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetProfile
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
@@ -39,4 +41,34 @@ public data class GetProfileRequest(
         } else {
             null
         }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws ProfileUnavailableError
+     */
+    public override fun submit(socketCommunicator: SocketCommunicator, id: String): Profile =
+        super.submit(socketCommunicator, id)
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws ProfileUnavailableError
+     */
+    public override suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String
+    ): Profile = super.submitSuspend(socketCommunicator, id)
 }

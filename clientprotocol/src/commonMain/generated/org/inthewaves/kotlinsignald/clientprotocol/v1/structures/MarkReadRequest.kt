@@ -4,6 +4,8 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.MarkRead
 
@@ -42,4 +44,34 @@ public data class MarkReadRequest(
     } else {
         null
     }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws UntrustedIdentityError
+     */
+    public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
+        super.submit(socketCommunicator, id)
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws UntrustedIdentityError
+     */
+    public override suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String
+    ): EmptyResponse = super.submitSuspend(socketCommunicator, id)
 }

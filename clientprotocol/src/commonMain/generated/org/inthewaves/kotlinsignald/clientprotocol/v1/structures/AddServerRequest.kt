@@ -5,6 +5,8 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
+import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
+import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.AddServer
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
@@ -28,4 +30,28 @@ public data class AddServerRequest(
         } else {
             null
         }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws InvalidProxyError
+     * @throws InternalError
+     */
+    public override fun submit(socketCommunicator: SocketCommunicator, id: String): String =
+        super.submit(socketCommunicator, id)
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws InvalidProxyError
+     * @throws InternalError
+     */
+    public override suspend fun submitSuspend(
+        socketCommunicator: SuspendSocketCommunicator,
+        id: String
+    ): String = super.submitSuspend(socketCommunicator, id)
 }

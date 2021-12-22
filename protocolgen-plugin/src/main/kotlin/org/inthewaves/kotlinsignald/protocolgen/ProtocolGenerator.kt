@@ -453,11 +453,10 @@ class ProtocolGenerator(
                 )
 
                 writeTypeSpecFile(
-                    protocolVersion.getTypedExceptionSealedInterfaceName(packageName),
-                    createSealedInterfaceTypeSpecBuilder(
-                        responseInterfaceClassName = protocolVersion.getTypedExceptionSealedInterfaceName(packageName)
-                    ).addKdoc("Here as an interface, because InternalError is used as a class of another subtype")
-                        .build(),
+                    protocolVersion.getTypedExceptionSealedClassName(packageName),
+                    createSealedClassTypeSpecBuilder(
+                        responseInterfaceClassName = protocolVersion.getTypedExceptionSealedClassName(packageName)
+                    ).superclass(signaldExceptionClassName).build(),
                     genFilesDir
                 )
             }
@@ -553,16 +552,7 @@ class ProtocolGenerator(
                                             .build()
                                     )
                                 }
-                                addKdoc(
-                                    "%L",
-                                    "@throws ${requestFailedExceptionTypeSpec.name} if the signald socket " +
-                                        "sends a bad or error response, or unable to serialize our request"
-                                )
-                                addKdoc(
-                                    "\n%L",
-                                    "@throws ${signaldExceptionClassName.simpleName} if an I/O error occurs during " +
-                                        "socket communication"
-                                )
+                                addKdocsForSocketCommunicatorSubmitBaseExceptions()
                                 addStatement("return $funName(socketCommunicator, id)")
                             }.build()
 
@@ -843,7 +833,7 @@ class ProtocolGenerator(
                 .plus(extraTypes[version]?.asSequence() ?: emptySequence())
             for ((structureTypeName: SignaldType, structureDetails: Structure) in sequence) {
                 val className = ClassName(structurePackage, structureTypeName.name)
-                val typeSpec = TypeSpec.classBuilder(className).apply {
+                val typeSpec = TypeSpec.classBuilder(className).apply typeSpecBuilder@{
                     addAnnotation(Serializable::class)
 
                     check(structureTypeName !in errorTypes || (structureTypeName !in responseTypes && structureTypeName !in requestTypes)) {
@@ -858,7 +848,7 @@ class ProtocolGenerator(
                     }
 
                     if (structureTypeName in errorTypes) {
-                        addSuperinterfaces(listOf(version.getTypedExceptionSealedInterfaceName(packageName)))
+                        superclass(version.getTypedExceptionSealedClassName(packageName))
                         addAnnotation(
                             AnnotationSpec.builder(SerialName::class).addMember("%S", structureTypeName.name).build()
                         )
@@ -888,6 +878,39 @@ class ProtocolGenerator(
                             )
                         )
                         addAnnotation(AnnotationSpec.builder(SerialName::class).addMember("%S", actionName).build())
+
+                        val kdoc = CodeBlock.builder().apply {
+                            for ((errorName, errorDoc) in responseActionInfo.errors) {
+                                val errorClass = errorName.asSignaldClassName(packageName, isStructure = true, version)
+
+                                if (errorDoc.isNullOrBlank()) {
+                                    addStatement("@throws %T", errorClass)
+                                } else {
+                                    addStatement("@throws %T %L", errorClass, errorDoc)
+                                }
+                            }
+                        }.build()
+
+                        addFunction(
+                            createSubscriptionSubmitOverrides(
+                                actionResponseDataType,
+                                isForSuspend = false
+                            ) { _, baseSubmitFunName ->
+                                addKdocsForSocketCommunicatorSubmitBaseExceptions()
+                                addKdoc(kdoc)
+                                addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
+                            }
+                        )
+                        addFunction(
+                            createSubscriptionSubmitOverrides(
+                                actionResponseDataType,
+                                isForSuspend = true
+                            ) { _, baseSubmitFunName ->
+                                addKdocsForSocketCommunicatorSubmitBaseExceptions()
+                                addKdoc(kdoc)
+                                addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
+                            }
+                        )
                     } else {
                         responseActionInfo = null
                     }
@@ -960,6 +983,9 @@ class ProtocolGenerator(
                                 if (kdoc.isNotBlank()) {
                                     addKdoc("%L", kdoc)
                                 }
+                                if (structureTypeName in errorTypes && fieldName == Exception::message.name) {
+                                    addModifiers(KModifier.OVERRIDE)
+                                }
                             }.build()
 
                             constructorBuilder.addParameter(parameter)
@@ -1004,7 +1030,7 @@ class ProtocolGenerator(
                                 beginControlFlow(
                                     "%M(%T::class)",
                                     MemberName("kotlinx.serialization.modules", "polymorphic"),
-                                    version.getTypedExceptionSealedInterfaceName(packageName)
+                                    version.getTypedExceptionSealedClassName(packageName)
                                 )
                                 withIndent {
                                     for (errorType in errorTypes) {
@@ -1195,6 +1221,46 @@ class ProtocolGenerator(
     fun getClientMessageWrapperClassName(version: SignaldProtocolVersion) =
         ClassName(GenUtil.getStructuresPackage(packageName, version), "ClientMessageWrapper")
 
+    fun FunSpec.Builder.addKdocsForSocketCommunicatorSubmitBaseExceptions() {
+        addKdoc(
+            CodeBlock.builder()
+                .addStatement(
+                    "@throws %T if the signald socket sends a bad or error response, or unable to serialize our request",
+                    requestFailedExceptionClassName
+                )
+                .addStatement("@throws %T if an I/O error occurs during socket communication", signaldExceptionClassName)
+                .build()
+        )
+    }
+
+    fun createSubscriptionSubmitOverrides(
+        returnType: ClassName,
+        isForSuspend: Boolean,
+        funSpecBuilderBlock: FunSpec.Builder.(isForSuspend: Boolean, baseSubmitFunName: String) -> Unit
+    ): FunSpec {
+        val baseSubmitFunName = if (isForSuspend) {
+            BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME
+        } else {
+            BASE_RESPONSE_SUBMIT_FUN_NAME
+        }
+        return FunSpec.builder(baseSubmitFunName).apply {
+            addModifiers(KModifier.OVERRIDE)
+            val socketCommClassName =
+                if (isForSuspend) {
+                    addModifiers(KModifier.SUSPEND)
+                    suspendSocketCommunicatorClassName
+                } else {
+                    socketCommunicatorClassName
+                }
+
+            addParameter("socketCommunicator", socketCommClassName)
+            addParameter("id", String::class)
+            returns(returnType)
+
+            funSpecBuilderBlock(isForSuspend, baseSubmitFunName)
+        }.build()
+    }
+
     /**
      * @return A map of special type handlers that act on a class builder. This will be called after the entire
      * class has been configured.
@@ -1287,40 +1353,22 @@ class ProtocolGenerator(
             ->
             require(actionInfo != null)
 
-            fun createSubscriptionSubmitOverrides(isForSuspend: Boolean): FunSpec {
-                val baseSubmitFunName = if (isForSuspend) {
-                    BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME
+            fun FunSpec.Builder.buildOverrideForSubscribeRaceCondition(isForSuspend: Boolean, baseSubmitFunName: String) {
+                beginControlFlow("try")
+                addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
+                endControlFlow()
+                beginControlFlow("catch (originalException: %T)", requestFailedExceptionClassName)
+                addComment("Because of race conditions where an incoming message can be sent / broadcasted through")
+                addComment("the socket before we receive the ${actionInfo.actionName} acknowledgement message,")
+                addComment("we parse and store all incoming messages until we get the ack.")
+
+                val readLineFunName = if (isForSuspend) {
+                    SOCKET_COMM_READLINE_SUSPEND_FUN_NAME
                 } else {
-                    BASE_RESPONSE_SUBMIT_FUN_NAME
+                    SOCKET_COMM_READLINE_FUN_NAME
                 }
-                return FunSpec.builder(baseSubmitFunName).apply {
-                    addModifiers(KModifier.OVERRIDE)
-                    val socketCommClassName =
-                        if (isForSuspend) {
-                            addModifiers(KModifier.SUSPEND)
-                            suspendSocketCommunicatorClassName
-                        } else {
-                            socketCommunicatorClassName
-                        }
-
-                    addParameter("socketCommunicator", socketCommClassName)
-                    addParameter("id", String::class)
-                    returns(getSubscriptionResponseClassName(version))
-                    beginControlFlow("try")
-                    addStatement("return super.${baseSubmitFunName}(socketCommunicator, id)")
-                    endControlFlow()
-                    beginControlFlow("catch (originalException: %T)", requestFailedExceptionClassName)
-                    addComment("Because of race conditions where an incoming message can be sent / broadcasted through")
-                    addComment("the socket before we receive the ${actionInfo.actionName} acknowledgement message,")
-                    addComment("we parse and store all incoming messages until we get the ack.")
-
-                    val readLineFunName = if (isForSuspend) {
-                        SOCKET_COMM_READLINE_SUSPEND_FUN_NAME
-                    } else {
-                        SOCKET_COMM_READLINE_FUN_NAME
-                    }
-                    addCode(
-                        """
+                addCode(
+                    """
                         if (originalException.cause !is %T) {
                             throw originalException
                         }
@@ -1362,29 +1410,45 @@ class ProtocolGenerator(
                             cause = originalException
                         )
                     """.trimIndent(),
-                        // if (originalException.cause !is %T) {
-                        SerializationException::class,
-                        // val pendingChatMessages = mutableListOf<%T>()
-                        getClientMessageWrapperClassName(version),
-                        // %T.serializer(ClientMessageWrapper.serializer(), rawJsonResponse)
-                        signaldJsonClassName,
-                        // val nextResponse: %T<*> = try {
-                        createJsonMessageWrapperInfo(version).className,
-                        // return %T(pendingChatMessages)
-                        getSubscriptionResponseClassName(version),
-                        // ?: throw %T(extraMessage = %S, cause = originalException)
-                        requestFailedExceptionClassName, "unable to read line from socket",
-                        // throw %T(
-                        //     extraMessage = %S,
-                        //     cause = originalException
-                        // )
-                        requestFailedExceptionClassName, "too many messages; didn't see subscribe acknowledgement"
-                    )
-                    endControlFlow()
-                }.build()
+                    // if (originalException.cause !is %T) {
+                    SerializationException::class,
+                    // val pendingChatMessages = mutableListOf<%T>()
+                    getClientMessageWrapperClassName(version),
+                    // %T.serializer(ClientMessageWrapper.serializer(), rawJsonResponse)
+                    signaldJsonClassName,
+                    // val nextResponse: %T<*> = try {
+                    createJsonMessageWrapperInfo(version).className,
+                    // return %T(pendingChatMessages)
+                    getSubscriptionResponseClassName(version),
+                    // ?: throw %T(extraMessage = %S, cause = originalException)
+                    requestFailedExceptionClassName, "unable to read line from socket",
+                    // throw %T(
+                    //     extraMessage = %S,
+                    //     cause = originalException
+                    // )
+                    requestFailedExceptionClassName, "too many messages; didn't see subscribe acknowledgement"
+                )
+                endControlFlow()
             }
-            addFunction(createSubscriptionSubmitOverrides(isForSuspend = false))
-            addFunction(createSubscriptionSubmitOverrides(isForSuspend = true))
+
+            fun isSubmitFunOverride(funSpec: FunSpec) = KModifier.OVERRIDE in funSpec.modifiers &&
+                (funSpec.name == BASE_RESPONSE_SUBMIT_SUSPEND_FUN_NAME || funSpec.name == BASE_RESPONSE_SUBMIT_FUN_NAME)
+
+            val originalKdoc = funSpecs.find(::isSubmitFunOverride)!!.kdoc
+            funSpecs.removeAll(::isSubmitFunOverride)
+            val returnType = getSubscriptionResponseClassName(version)
+            addFunction(
+                createSubscriptionSubmitOverrides(returnType, isForSuspend = false) { isForSuspend, baseSubmitFunName ->
+                    addKdoc(originalKdoc)
+                    buildOverrideForSubscribeRaceCondition(isForSuspend, baseSubmitFunName)
+                }
+            )
+            addFunction(
+                createSubscriptionSubmitOverrides(returnType, isForSuspend = true) { isForSuspend, baseSubmitFunName ->
+                    addKdoc(originalKdoc)
+                    buildOverrideForSubscribeRaceCondition(isForSuspend, baseSubmitFunName)
+                }
+            )
         }
 
         return mapOf(
@@ -1444,7 +1508,7 @@ class ProtocolGenerator(
                 SignaldType("IncomingMessage") to clientMessageWrapperSubclassHandler,
                 SignaldType("ListenerState") to clientMessageWrapperSubclassHandler,
                 SignaldType("ExceptionWrapper") to clientMessageWrapperSubclassHandler,
-                SignaldType("InternalError") to clientMessageWrapperSubclassHandler,
+                // SignaldType("InternalError") to clientMessageWrapperSubclassHandler,
                 SignaldType("WebSocketConnectionState") to clientMessageWrapperSubclassHandler,
             )
         )

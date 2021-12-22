@@ -40,6 +40,14 @@ public data class UnsubscribeRequest(
         null
     }
 
+    /**
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws InternalError
+     */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         SubscriptionResponse {
         try {
@@ -95,6 +103,14 @@ public data class UnsubscribeRequest(
         }
     }
 
+    /**
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws InternalError
+     */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
         id: String
