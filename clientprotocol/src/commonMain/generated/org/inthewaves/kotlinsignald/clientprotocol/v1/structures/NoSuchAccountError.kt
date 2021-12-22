@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("NoSuchAccountError")
 public data class NoSuchAccountError(
     public val account: String? = null,
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

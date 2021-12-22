@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("CaptchaRequiredError")
 public data class CaptchaRequiredError(
     public val more: String? = null,
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

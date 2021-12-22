@@ -101,6 +101,7 @@ internal class ClientMessageWrapperTest {
             anotherExceptionMessage, SignaldJson.decodeFromString<ClientMessageWrapper>(anotherExceptionAsJsonString)
         )
 
+        /*
         val (internalError, internalErrorJson) = InternalError(
             version = "v1",
             data = InternalError.Data(
@@ -130,5 +131,7 @@ internal class ClientMessageWrapperTest {
         assertEquals(
             internalError, SignaldJson.decodeFromString<ClientMessageWrapper>(internalErrorJson)
         )
+        
+         */
     }
 }

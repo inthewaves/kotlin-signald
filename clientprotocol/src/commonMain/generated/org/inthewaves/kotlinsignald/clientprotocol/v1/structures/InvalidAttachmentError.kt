@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 @SerialName("InvalidAttachmentError")
 public data class InvalidAttachmentError(
     public val filename: String? = null,
-    public val message: String? = null
-) : TypedExceptionV1
+    public override val message: String? = null
+) : TypedExceptionV1()

@@ -1542,7 +1542,14 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/Typ
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0 {
+public abstract class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0 : java/io/IOException {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0$Companion;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v0/structures/TypedExceptionV0$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public abstract class org/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper {
@@ -1575,6 +1582,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun getGroupID ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AcceptInvitationRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -1643,7 +1654,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountAlreadyVerifiedError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -1675,7 +1686,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountHasNoKeysError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -1740,7 +1751,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Acc
 	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountLockedError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public final fun getMore ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -1776,6 +1787,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Add
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUri ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AddLinkedDeviceRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -1807,6 +1822,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Add
 	public final fun getServer ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Server;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/String;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AddServerRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -1910,6 +1929,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/App
 	public final fun getMembers ()Ljava/util/List;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ApproveMembershipRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2059,7 +2082,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Cap
 	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/CaptchaRequiredError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public final fun getMore ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -2128,6 +2151,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Cre
 	public final fun getTitle ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/CreateGroupRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2162,6 +2189,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Del
 	public final fun getServer ()Ljava/lang/Boolean;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/DeleteAccountRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2339,7 +2370,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Fin
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FingerprintVersionMismatchError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -2376,6 +2407,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Fin
 	public final fun getSessionId ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Account;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/FinishLinkRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2409,6 +2444,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gen
 	public final fun getServer ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/LinkingURI;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GenerateLinkingURIRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2440,6 +2479,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public final fun getAccount ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AllIdentityKeyList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetAllIdentities;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2476,6 +2519,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public final fun getRevision ()Ljava/lang/Integer;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetGroupRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2509,6 +2556,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public final fun getAddress ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IdentityKeyList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetIdentitiesRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2540,6 +2591,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public final fun getAccount ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/LinkedDevices;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetLinkedDevicesRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2576,6 +2631,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public final fun getAsync ()Ljava/lang/Boolean;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Profile;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetProfileRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2601,6 +2660,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Get
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GetServersRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
@@ -2703,6 +2766,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUri ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkInfoRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -2733,7 +2800,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupLinkNotActiveError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -2835,7 +2902,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupNotActiveError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -2867,7 +2934,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Gro
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupVerificationError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3135,23 +3202,19 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inc
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper, org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;
-	public final fun component3 ()Ljava/lang/Boolean;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;
-	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/util/List;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/List;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;
 	public fun equals (Ljava/lang/Object;)Z
-	public fun getAccount ()Ljava/lang/String;
-	public synthetic fun getData ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper$Data;
-	public fun getData ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;
-	public fun getError ()Ljava/lang/Boolean;
-	public fun getVersion ()Ljava/lang/String;
+	public final fun getExceptions ()Ljava/util/List;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3173,40 +3236,6 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Int
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper$Data {
-	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data$Companion;
-	public fun <init> ()V
-	public synthetic fun <init> (ILjava/util/List;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/util/List;Ljava/lang/String;)V
-	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/util/List;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/util/List;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;
-	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getExceptions ()Ljava/util/List;
-	public final fun getMessage ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
-}
-
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InternalError$Data$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError$Companion;
 	public fun <init> ()V
@@ -3219,7 +3248,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFilename ()Ljava/lang/String;
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidAttachmentError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3251,7 +3280,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidBase64Error;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3283,7 +3312,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidFingerprintError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3315,7 +3344,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3347,7 +3376,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidGroupStateError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3379,7 +3408,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidInviteURIError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3411,7 +3440,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidProxyError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3443,7 +3472,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRecipientError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3475,7 +3504,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Inv
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/InvalidRequestError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -3510,6 +3539,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Joi
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUri ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JoinGroupRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -4417,6 +4450,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Lea
 	public final fun getGroupID ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/LeaveGroupRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -4508,6 +4545,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Lis
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ListAccountsRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
@@ -4541,6 +4582,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Lis
 	public final fun getAsync ()Ljava/lang/Boolean;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ListContactsRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -4572,6 +4617,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Lis
 	public final fun getAccount ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ListGroupsRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -4680,6 +4729,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Mar
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getWhen ()Ljava/lang/Long;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/MarkReadRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -4710,7 +4763,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoK
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoKnownUUIDError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -4742,7 +4795,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoS
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSendPermissionError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -4776,7 +4829,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoS
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAccount ()Ljava/lang/String;
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchAccountError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -4808,7 +4861,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoS
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/NoSuchSessionError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -4878,7 +4931,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Own
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/OwnProfileKeyDoesNotExistError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -5030,7 +5083,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Pro
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileUnavailableError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -5140,7 +5193,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rat
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RateLimitError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -5184,6 +5237,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rea
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUsername ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ReactRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5255,6 +5312,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ref
 	public final fun getMembers ()Ljava/util/List;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RefuseMembershipRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5293,6 +5354,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Reg
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getVoice ()Ljava/lang/Boolean;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Account;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RegisterRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5390,6 +5455,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rem
 	public final fun getAccount ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoteConfigList;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoteConfigRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5462,6 +5531,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rem
 	public final fun getTimestamp ()J
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoteDeleteRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5495,6 +5568,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rem
 	public final fun getDeviceId ()J
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoveLinkedDeviceRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5528,6 +5605,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Rem
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUuid ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoveServerRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5568,6 +5649,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Req
 	public final fun getGroups ()Ljava/lang/Boolean;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RequestSyncRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5604,6 +5689,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Res
 	public final fun getTimestamp ()Ljava/lang/Long;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ResetSessionRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5637,6 +5726,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Res
 	public final fun getPartial ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ResolveAddressRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5675,6 +5768,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Sen
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getWhen ()Ljava/lang/Long;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendPaymentRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5725,6 +5822,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Sen
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getUsername ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -5954,7 +6055,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ser
 	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerNotFoundError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public final fun getUuid ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -5991,6 +6092,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Set
 	public final fun getDeviceName ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SetDeviceNameRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6029,6 +6134,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Set
 	public final fun getGroup ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SetExpirationRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6073,6 +6182,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Set
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public final fun getVisibleBadgeIds ()Ljava/util/List;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SetProfile;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6133,6 +6246,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Sub
 	public final fun getChallenge ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubmitChallengeRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6240,6 +6357,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Tru
 	public final fun getTrustLevel ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/TrustRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6260,7 +6381,14 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Tru
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract interface class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 {
+public abstract class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1 : java/io/IOException {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1$Companion;
+	public synthetic fun <init> (ILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypedExceptionV1$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypingMessage {
@@ -6319,6 +6447,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Typ
 	public final fun getTyping ()Z
 	public final fun getWhen ()Ljava/lang/Long;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/EmptyResponse;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/TypingRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6349,7 +6481,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Unk
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownGroupError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -6381,7 +6513,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Unk
 	public final fun copy (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UnknownIdentityKeyError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -6452,7 +6584,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Unt
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getIdentifier ()Ljava/lang/String;
 	public final fun getIdentityKey ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IdentityKey;
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UntrustedIdentityError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -6494,6 +6626,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Upd
 	public final fun getName ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Profile;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateContactRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6548,6 +6684,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Upd
 	public final fun getUpdateRole ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupMember;
 	public final fun getUpdateTimer ()Ljava/lang/Integer;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UpdateGroupRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6579,7 +6719,7 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Use
 	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError;
 	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/UserAlreadyExistsError;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMessage ()Ljava/lang/String;
+	public fun getMessage ()Ljava/lang/String;
 	public final fun getUuid ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -6615,6 +6755,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ver
 	public final fun getCode ()Ljava/lang/String;
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
 	public fun hashCode ()I
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Account;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/VerifyRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
@@ -6640,6 +6784,10 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Ver
 	public fun <init> ()V
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public synthetic fun getTypedResponseOrNull$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/requests/JsonMessageWrapper;)Ljava/lang/Object;
+	public fun submit (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public synthetic fun submit$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator;Ljava/lang/String;)Ljava/lang/Object;
+	public fun submitSuspend (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun submitSuspend$clientprotocol (Lorg/inthewaves/kotlinsignald/clientprotocol/SuspendSocketCommunicator;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/VersionRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 

@@ -42,6 +42,16 @@ public data class SubscribeRequest(
         null
     }
 
+    /**
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         SubscriptionResponse {
         try {
@@ -97,6 +107,16 @@ public data class SubscribeRequest(
         }
     }
 
+    /**
+     * @throws RequestFailedException if the signald socket sends a bad or error response, or unable
+     * to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
         id: String
