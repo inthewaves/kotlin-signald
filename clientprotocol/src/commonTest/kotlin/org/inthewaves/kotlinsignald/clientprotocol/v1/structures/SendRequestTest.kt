@@ -128,6 +128,27 @@ internal class SendRequestTest {
     }
 
     @Test
+    fun testTypedExceptionThrown() {
+        assertThrows<RateLimitError> {
+            val requestBody = SendRequest("+1", recipientGroupId = "GROUPID")
+            requestBody.submit(object : SocketCommunicator {
+                override fun submit(request: String): String {
+                    return """
+                        {
+                            "type":"send",
+                            "id":"${requestBody.id}",
+                            "error":{"message":"RateLimitException: Rate limited exceeded [413]"},
+                            "error_type":"RateLimitError"
+                        }
+                    """.trimIndent()
+                }
+                override fun readLine(): String = error("unused")
+                override fun close() {}
+            })
+        }
+    }
+
+    @Test
     fun testAuthorizationFailedError() {
         val exception = assertThrows<RequestFailedException> {
             val requestBody = SendRequest("+1", recipientGroupId = "GROUPID")

@@ -709,12 +709,32 @@ class ProtocolGenerator(
                                 )
                                 endControlFlow()
                                 beginControlFlow("if (!response.isSuccessful)")
-                                addStatement(
-                                    "throw %T(responseJsonString = responseJson," +
-                                        " errorBody = response.error," +
-                                        " errorType = response.errorType," +
-                                        " exception = response.exception)",
-                                    requestFailedExceptionClassName
+                                addCode(
+                                    """
+                                        val deserializer = SignaldJson.serializersModule.getPolymorphic(TypedExceptionV1::class, response.errorType)
+                                        deserializer?.let {
+                                            response.error?.let { errorJson ->
+                                                try { 
+                                                    throw SignaldJson.decodeFromJsonElement(deserializer, errorJson)
+                                                } catch (e: SerializationException) {
+                                                    throw RequestFailedException(
+                                                        responseJsonString = responseJson,
+                                                        errorBody = response.error,
+                                                        errorType = response.errorType,
+                                                        exception = response.exception,
+                                                        cause = e,
+                                                    )
+                                                }
+                                            }
+                                        } ?: throw RequestFailedException(
+                                            responseJsonString = responseJson,
+                                            errorBody = response.error,
+                                            errorType = response.errorType,
+                                            exception = response.exception,
+                                            extraMessage = "unknown error type or missing error body"
+                                        )
+                                        
+                                    """.trimIndent()
                                 )
                                 endControlFlow()
                                 addCode("return %N(response) ?: ", responseVerificationFunSpec)
