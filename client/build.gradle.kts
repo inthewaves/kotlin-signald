@@ -98,7 +98,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-nodejs:0.0.7")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.5.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.0")
             }
         }
     }
