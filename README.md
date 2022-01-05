@@ -110,7 +110,8 @@ val response: SendResponse = try {
   // e can be of type RequestFailedException, which contains
   // specific information if signald sent back an error response.
   // Otherwise, the SignaldException can also be an I/O error from
-  // the socket
+  // the socket. There are also various error types that can be
+  // thrown that subclass RequestFailedException
 }
 ```
 
@@ -155,6 +156,7 @@ This snippet provides an overview of the `Signal` class (API inspired by [pysign
 ```kotlin
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
@@ -234,12 +236,14 @@ signal.send(
 // Subscribes to receive incoming messages.
 // This will block the thread when it waits for an incoming message,
 // which is not recommended if you need to do other stuff.
-// Use the client-coroutines module (on JVM) if you want coroutine support.
+// Use the client-coroutines module (on JVM or JS) if you want coroutine support.
 signal.subscribeAndConsumeBlocking { message: ClientMessageWrapper ->
   when (message) {
-    is ExceptionWrapper -> TODO()
-    is IncomingMessage -> TODO()
-    is ListenerState -> TODO()
+    is IncomingMessage -> // ...
+    is ExceptionWrapper -> // ...
+    is IncomingException -> // ..
+    is ListenerState -> // ..
+    is WebSocketConnectionState -> // ...
   }
 }
 ```
@@ -295,9 +299,10 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.collect
 import org.inthewaves.kotlinsignald.Signal
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ExceptionWrapper
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
-import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ListenerState
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.WebSocketConnectionState
 import org.inthewaves.kotlinsignald.subscription.signalMessagesChannel
 
 suspend fun receiveMessages(signal: Signal) {
@@ -306,8 +311,10 @@ suspend fun receiveMessages(signal: Signal) {
     channel.consumeEach { message ->
       when (message) {
         is IncomingMessage -> TODO()
-        is ListenerState -> TODO()
         is ExceptionWrapper -> TODO()
+        is IncomingException -> TODO()
+        is ListenerState -> TODO()
+        is WebSocketConnectionState -> TODO()
       }
     }
   }
