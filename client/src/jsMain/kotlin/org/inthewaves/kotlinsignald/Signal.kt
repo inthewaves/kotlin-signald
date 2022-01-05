@@ -44,6 +44,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidInviteUR
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidProxyError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRecipientError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRequestError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IsIdentifierRegisteredRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JoinGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
@@ -473,6 +474,57 @@ public actual class Signal private constructor(
     public suspend fun getGroupLinkInfo(groupLink: String): JsonGroupJoinInfo {
         withAccountOrThrow {
             return GroupLinkInfoRequest(account = accountId, uri = groupLink).submitSuspend(socketWrapper)
+        }
+    }
+
+    /**
+     * Takes a UUID of an identifier to check if it is registered on Signal. This UUID is either a Phone
+     * Number Identity (PNI) or an Account Identity (ACI).
+     *
+     * Example: "aeed01f0-a234-478e-8cf7-261c283151e7"
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     * @throws GroupLinkNotActiveError
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
+     * @throws GroupVerificationError
+     */
+    public suspend fun isIdentifierRegistered(identifierUuid: String): Boolean {
+        withAccountOrThrow {
+            return IsIdentifierRegisteredRequest(account = accountId, identifier = identifierUuid)
+                .submitSuspend(socketWrapper)
+                .value == true
+        }
+    }
+
+    /**
+     * Takes an [address] and determines if the address is registered on Signal. If the [address] doesn't contain a
+     * UUID, it will attempt to resolve the address first
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails or if the [address] doesn't have a UUID even after
+     * resolving
+     * @throws GroupLinkNotActiveError
+     * @throws InternalError
+     * @throws InvalidProxyError
+     * @throws ServerNotFoundError
+     * @throws NoSuchAccountError
+     * @throws InvalidRequestError
+     * @throws GroupVerificationError
+     */
+    public suspend fun isAddressRegistered(address: JsonAddress): Boolean {
+        withAccountOrThrow {
+            val identifier = address.uuid
+                ?: resolveAddress(address).uuid
+                ?: throw SignaldException("address doesn't have a UUID even after resolving")
+
+            return IsIdentifierRegisteredRequest(account = accountId, identifier = identifier)
+                .submitSuspend(socketWrapper)
+                .value == true
         }
     }
 

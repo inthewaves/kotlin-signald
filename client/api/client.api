@@ -195,6 +195,8 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun getProfile (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Z)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Profile;
 	public static synthetic fun getProfile$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;ZILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Profile;
 	public final fun getServers ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ServerList;
+	public final fun isAddressRegistered (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)Z
+	public final fun isIdentifierRegistered (Ljava/lang/String;)Z
 	public final fun isRegisteredWithSignald ()Z
 	public final fun joinGroup (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
 	public final fun leaveGroup (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
