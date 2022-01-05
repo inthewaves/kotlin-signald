@@ -20,6 +20,8 @@ $dokka.location:org.inthewaves.kotlinsignald/Signal/getIdentities/#org.inthewave
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getLinkedDevices/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-linked-devices.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getProfile/#org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress#kotlin.Boolean/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-profile.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getServers/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-servers.html
+$dokka.location:org.inthewaves.kotlinsignald/Signal/isAddressRegistered/#org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]is-address-registered.html
+$dokka.location:org.inthewaves.kotlinsignald/Signal/isIdentifierRegistered/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]is-identifier-registered.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/joinGroup/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]join-group.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/leaveGroup/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]leave-group.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/listAccounts/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]list-accounts.html
