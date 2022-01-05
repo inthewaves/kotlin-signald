@@ -485,13 +485,10 @@ public actual class Signal private constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
-     * @throws GroupLinkNotActiveError
      * @throws InternalError
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
-     * @throws InvalidRequestError
-     * @throws GroupVerificationError
      */
     public suspend fun isIdentifierRegistered(identifierUuid: String): Boolean {
         withAccountOrThrow {
@@ -508,13 +505,10 @@ public actual class Signal private constructor(
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails or if the [address] doesn't have a UUID even after
      * resolving
-     * @throws GroupLinkNotActiveError
      * @throws InternalError
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
-     * @throws InvalidRequestError
-     * @throws GroupVerificationError
      */
     public suspend fun isAddressRegistered(address: JsonAddress): Boolean {
         withAccountOrThrow {
