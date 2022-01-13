@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 public data class BooleanMessage(
-    public val `value`: Boolean? = null
+    public val value: Boolean? = null
 ) : SignaldResponseBodyV1()

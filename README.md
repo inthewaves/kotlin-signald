@@ -370,7 +370,7 @@ To regenerate the classes,
 - Replace `protocol.json` with a newer version
 - Run `./gradlew generateSignaldClasses`
 - Reformat the code with `./gradlew ktlintFormat` 
-- Find and replace instances of <code>\`data\`:</code> with `data:`
+- Find and replace instances of <code>\`data\`:</code> with `data:` and <code>\`value\`:</code> with `value:`
 - Optimize imports with IDEA
 
 ### Compiling a dynamic library (experimental)

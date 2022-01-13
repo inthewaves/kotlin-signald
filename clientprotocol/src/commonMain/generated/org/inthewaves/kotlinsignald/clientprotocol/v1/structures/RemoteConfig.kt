@@ -25,5 +25,5 @@ public data class RemoteConfig(
      *
      * Example: 1:2,61:2,81:2,82:2,65:2,31:2,47:2,41:2,32:2,385:2,971:2,974:2,49:2,33:2,*:1
      */
-    public val `value`: String? = null
+    public val value: String? = null
 )

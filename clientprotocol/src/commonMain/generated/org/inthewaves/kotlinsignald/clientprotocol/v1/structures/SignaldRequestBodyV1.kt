@@ -139,7 +139,7 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
             responseJsonString =
             responseJson,
             extraMessage =
-            """response failed verification (wrapper type: ${response::class.simpleName}, data type: ${response.data!!::class.simpleName})"""
+            """response failed verification (wrapper type: ${response::class.simpleName}, data type: ${response.data?.let { it::class.simpleName } ?: "unknown"})"""
         )
     }
 
@@ -237,7 +237,7 @@ public sealed class SignaldRequestBodyV1<ResponseData> {
             responseJsonString =
             responseJson,
             extraMessage =
-            """response failed verification (wrapper type: ${response::class.simpleName}, data type: ${response.data!!::class.simpleName})"""
+            """response failed verification (wrapper type: ${response::class.simpleName}, data type: ${response.data?.let { it::class.simpleName } ?: "unknown"})"""
         )
     }
 }

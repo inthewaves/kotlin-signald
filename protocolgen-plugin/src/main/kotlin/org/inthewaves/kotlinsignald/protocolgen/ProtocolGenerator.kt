@@ -744,7 +744,7 @@ class ProtocolGenerator(
                                     "responseJson",
                                     "response failed verification " +
                                         "(wrapper type: \${response::class.simpleName}, " +
-                                        "data type: \${response.data!!::class.simpleName})"
+                                        "data type: \${response.data?.let { it::class.simpleName } ?: \"unknown\"})"
                                 )
                             }.build()
                             return listOf(publicSubmitFun, internalSubmitFun)
