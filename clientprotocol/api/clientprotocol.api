@@ -6345,6 +6345,244 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Set
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Ljava/lang/String;)V
+	public synthetic fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Ljava/util/List;
+	public final fun getAvatar ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;
+	public final fun getEmail ()Ljava/util/List;
+	public final fun getName ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;
+	public final fun getOrganization ()Ljava/lang/String;
+	public final fun getPhone ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContact$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCity ()Ljava/lang/String;
+	public final fun getCountry ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getNeighborhood ()Ljava/lang/String;
+	public final fun getPobox ()Ljava/lang/String;
+	public final fun getPostcode ()Ljava/lang/String;
+	public final fun getRegion ()Ljava/lang/String;
+	public final fun getStreet ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAddress$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;Ljava/lang/Boolean;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;
+	public final fun component2 ()Ljava/lang/Boolean;
+	public final fun copy (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttachment ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAttachment;
+	public fun hashCode ()I
+	public final fun isProfile ()Ljava/lang/Boolean;
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactAvatar$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactEmail$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplay ()Ljava/lang/String;
+	public final fun getFamily ()Ljava/lang/String;
+	public final fun getGiven ()Ljava/lang/String;
+	public final fun getMiddle ()Ljava/lang/String;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getSuffix ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactName$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SharedContactPhone$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public abstract class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SignaldRequestBodyV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SignaldRequestBodyV1$Companion;
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V

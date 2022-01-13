@@ -4,9 +4,7 @@ import kotlinx.serialization.decodeFromString
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldJson
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.ConfigurationMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonStickerPackOperationMessage
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Name
 import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.Optional
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.SharedContact
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -384,19 +382,80 @@ internal class IncomingMessageTest {
                             profileKeyUpdate = false,
                             contacts = listOf(
                                 SharedContact(
-                                    name = Name(
-                                        display = Optional(present = true),
-                                        given = Optional(present = true),
-                                        family = Optional(present = true),
-                                        prefix = Optional(present = true),
-                                        suffix = Optional(present = true),
-                                        middle = Optional(present = true)
+                                    name = SharedContactName(
+                                        display = "TestPrefix TestGivenName TestMiddleName TestLastName TestSuffix",
+                                        given = "TestGivenName",
+                                        middle = "TestMiddleName",
+                                        family = "TestLastName",
+                                        prefix = "TestPrefix",
+                                        suffix = "TestSuffix",
                                     ),
-                                    avatar = Optional(present = true),
-                                    phone = Optional(present = false),
-                                    email = Optional(present = true),
-                                    address = Optional(present = true),
-                                    organization = Optional(present = false)
+                                    email = listOf(
+                                        SharedContactEmail(
+                                            type = "HOME",
+                                            value = "example@example.com",
+                                            label = ""
+                                        ),
+                                        // using the Other type inside the AOSP contacts app
+                                        SharedContactEmail(
+                                            type = "CUSTOM",
+                                            value = "other@example.com",
+                                            label = ""
+                                        ),
+                                        SharedContactEmail(
+                                            type = "CUSTOM",
+                                            value = "customlabel@example.com",
+                                            label = "CustomLabel"
+                                        ),
+                                    ),
+                                    phone = listOf(
+                                        SharedContactPhone(
+                                            type = "MOBILE",
+                                            value = "+123",
+                                            label = ""
+                                        ),
+                                        SharedContactPhone(
+                                            type = "CUSTOM",
+                                            value = "1337",
+                                            label = "Custom phone"
+                                        ),
+                                        SharedContactPhone(
+                                            type = "HOME",
+                                            value = "123",
+                                            label = "",
+                                        ),
+                                        SharedContactPhone(
+                                            type = "CUSTOM",
+                                            value = "224",
+                                            label = "",
+                                        )
+                                    ),
+                                    address = listOf(
+                                        SharedContactAddress(
+                                            type = "HOME",
+                                            label = "",
+                                            street = "1234 Test Street",
+                                            pobox = "",
+                                            neighborhood = "",
+                                            city = "",
+                                            region = "",
+                                            postcode = "",
+                                            country = ""
+                                        )
+                                    ),
+                                    avatar = SharedContactAvatar(
+                                        attachment = JsonAttachment(
+                                            contentType = "image/jpeg",
+                                            id = "4911111111111111100",
+                                            size = 9226,
+                                            width = 720,
+                                            height = 720,
+                                            voiceNote = false,
+                                            key = "aFqkZ2aLj00RRbnUmkYt77AXRMNejPxTbYPd1utI2uLaD3bYebbcaXxbd/X9pnM/gJQ4vJFOdH7/ATEMQE/TJQ==",
+                                            digest = "lH6wWCrMzC5TRZhcr5W5idoqvZ5PRR0FCSQ+90D8PfI="
+                                        ),
+                                        isProfile = false
+                                    )
                                 )
                             ),
                             viewOnce = false
@@ -430,39 +489,77 @@ internal class IncomingMessageTest {
                                 "contacts": [
                                     {
                                         "name": {
-                                            "display": {
-                                                "present": true
+                                            "display": "TestPrefix TestGivenName TestMiddleName TestLastName TestSuffix",
+                                            "given": "TestGivenName",
+                                            "middle": "TestMiddleName",
+                                            "family": "TestLastName",
+                                            "prefix": "TestPrefix",
+                                            "suffix": "TestSuffix"
+                                        },
+                                        "email": [
+                                            {
+                                                "type": "HOME",
+                                                "value": "example@example.com",
+                                                "label": ""
                                             },
-                                            "given": {
-                                                "present": true
+                                            {
+                                                "type": "CUSTOM",
+                                                "value": "other@example.com",
+                                                "label": ""
                                             },
-                                            "family": {
-                                                "present": true
-                                            },
-                                            "prefix": {
-                                                "present": true
-                                            },
-                                            "suffix": {
-                                                "present": true
-                                            },
-                                            "middle": {
-                                                "present": true
+                                            {
+                                                "type": "CUSTOM",
+                                                "value": "customlabel@example.com",
+                                                "label": "CustomLabel"
                                             }
-                                        },
+                                        ],
+                                        "phone": [
+                                            {
+                                                "type": "MOBILE",
+                                                "value": "+123",
+                                                "label": ""
+                                            },
+                                            {
+                                                "type": "CUSTOM",
+                                                "value": "1337",
+                                                "label": "Custom phone"
+                                            },
+                                            {
+                                                "type": "HOME",
+                                                "value": "123",
+                                                "label": ""
+                                            },
+                                            {
+                                                "type": "CUSTOM",
+                                                "value": "224",
+                                                "label": ""
+                                            }
+                                        ],
+                                        "address": [
+                                            {
+                                                "type": "HOME",
+                                                "label": "",
+                                                "street": "1234 Test Street",
+                                                "pobox": "",
+                                                "neighborhood": "",
+                                                "city": "",
+                                                "region": "",
+                                                "postcode": "",
+                                                "country": ""
+                                            }
+                                        ],
                                         "avatar": {
-                                            "present": true
-                                        },
-                                        "phone": {
-                                            "present": false
-                                        },
-                                        "email": {
-                                            "present": true
-                                        },
-                                        "address": {
-                                            "present": true
-                                        },
-                                        "organization": {
-                                            "present": false
+                                            "attachment": {
+                                                "contentType": "image/jpeg",
+                                                "id": "4911111111111111100",
+                                                "size": 9226,
+                                                "width": 720,
+                                                "height": 720,
+                                                "voiceNote": false,
+                                                "key": "aFqkZ2aLj00RRbnUmkYt77AXRMNejPxTbYPd1utI2uLaD3bYebbcaXxbd/X9pnM/gJQ4vJFOdH7/ATEMQE/TJQ==",
+                                                "digest": "lH6wWCrMzC5TRZhcr5W5idoqvZ5PRR0FCSQ+90D8PfI="
+                                            },
+                                            "is_profile": false
                                         }
                                     }
                                 ],
