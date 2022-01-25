@@ -3,7 +3,6 @@ package org.inthewaves.kotlinsignald
 import kotlinx.datetime.Clock
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
 import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AcceptInvitationRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Account
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountAlreadyVerifiedError
@@ -47,6 +46,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRequestE
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IsIdentifierRegisteredRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JoinGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMention
@@ -64,6 +64,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.MarkReadRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoKnownUUIDError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSendPermissionError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchAccountError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchSessionError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Payment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Profile
@@ -81,6 +82,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveServerReq
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RequestSyncRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResetSessionRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResolveAddressRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendPaymentRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
@@ -102,6 +104,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequ
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UserAlreadyExistsError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VerifyRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.VersionRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.WaitForScanRequest
 import org.inthewaves.kotlinsignald.subscription.Subscription
 
 /**
@@ -1377,6 +1380,24 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun version(): JsonVersionMessage = VersionRequest().submit(socketWrapper)
+
+    /**
+     * Waits until the user scans the QR code and then returns. This can be used before the call to [finishLink] in
+     * order to get an update when the scan happens. The state of the scan is stored with the session ID.
+     *
+     * If this function is not used, the [finishLink] function will automatically block waiting for a scan (the same
+     * functionality that exists currently).
+     *
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchSessionError
+     * @throws ScanTimeoutError
+     * @throws InternalError
+     */
+    @Throws(SignaldException::class)
+    public fun waitForScan(sessionId: String) {
+        WaitForScanRequest(sessionId = sessionId).submit(socketWrapper)
+    }
 
     /**
      * Receive incoming messages by creating a new, dedicated socket connection. After making a subscribe request,
