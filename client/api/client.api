@@ -240,6 +240,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun updateGroup (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/GroupUpdate;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
 	public final fun verify (Ljava/lang/String;)V
 	public final fun version ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonVersionMessage;
+	public final fun waitForScan (Ljava/lang/String;)V
 }
 
 public abstract interface class org/inthewaves/kotlinsignald/SignaldClient {
