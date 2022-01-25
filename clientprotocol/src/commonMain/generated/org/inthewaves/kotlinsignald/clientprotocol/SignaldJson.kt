@@ -30,6 +30,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchSessionEr
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavailableError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypedExceptionV1
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
@@ -78,6 +79,7 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(InvalidFingerprintError::class)
             subclass(InvalidGroupError::class)
             subclass(GroupLinkNotActiveError::class)
+            subclass(ScanTimeoutError::class)
         }
     }
 }

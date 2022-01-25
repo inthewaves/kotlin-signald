@@ -6,7 +6,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.inthewaves.kotlinsignald.clientprotocol.SocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
-import org.inthewaves.kotlinsignald.clientprotocol.v0.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.Send
 
