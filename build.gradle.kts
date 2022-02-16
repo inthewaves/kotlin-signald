@@ -24,7 +24,7 @@ buildscript {
 
 allprojects {
     group = "org.inthewaves.kotlin-signald"
-    version = "0.21.0+signald-0.16.1-10-1e470457"
+    version = "0.22.0+signald-0.17.0-1-5a6f8a4b"
 
     repositories {
         mavenCentral()
