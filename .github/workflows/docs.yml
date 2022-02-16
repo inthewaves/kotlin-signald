@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: ./gradlew dokkaHtmlMultiModule
-      - uses: JamesIves/github-pages-deploy-action@da91e735be5cabb471a4b8afe367d10606da4683 # 4.1.7
+      - uses: JamesIves/github-pages-deploy-action@b36f842fa378d7cbf6695fcac86ecdcef3af8af3 # 4.2.3
         with:
           branch: gh-pages
           folder: build/dokka/htmlMultiModule
