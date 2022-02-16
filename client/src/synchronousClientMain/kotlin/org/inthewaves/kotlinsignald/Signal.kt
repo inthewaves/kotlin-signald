@@ -13,6 +13,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddLinkedDevice
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AddServerRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AllIdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ApproveMembershipRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AttachmentTooLargeError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AuthorizationFailedError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CreateGroupRequest
@@ -98,6 +100,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownIdentityKeyError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnregisteredUserError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UntrustedIdentityError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateContactRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UpdateGroupRequest
@@ -200,6 +203,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws InternalError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
     public fun acceptInvitation(
@@ -261,6 +265,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws InternalError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun approveMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
@@ -363,6 +369,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws InternalError
      * @throws NoSuchAccountError
      * @throws UserAlreadyExistsError
+     * @throws ScanTimeoutError
      */
     @Throws(SignaldException::class)
     public fun finishLink(deviceName: String, sessionId: String): Account {
@@ -422,6 +429,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws GroupVerificationError
      * @throws InvalidGroupStateError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
     public fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
@@ -439,6 +447,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun getIdentities(address: JsonAddress): IdentityKeyList {
@@ -476,6 +485,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun getProfile(address: JsonAddress, async: Boolean = false): Profile {
@@ -595,6 +605,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
     public fun leaveGroup(groupID: String): GroupInfo {
@@ -662,6 +673,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws InvalidProxyError
      * @throws InternalError
      * @throws UntrustedIdentityError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun markRead(
@@ -693,6 +705,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun react(
@@ -732,6 +745,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun refuseMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
@@ -799,6 +814,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
@@ -825,11 +841,12 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
-     *  @throws InternalError
+     * @throws InternalError
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
     public fun removeLinkedDevice(deviceId: Long) {
@@ -856,6 +873,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws UntrustedIdentityError
+     * @throws InvalidRequestError
      */
     @Throws(SignaldException::class)
     public fun requestSync(
@@ -891,6 +909,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun resetSession(
@@ -915,6 +934,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws SignaldException if the request to the socket fails
      * @throws InternalError
      * @throws NoSuchAccountError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun resolveAddress(partial: JsonAddress): JsonAddress {
@@ -950,6 +970,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
+     * @throws AttachmentTooLargeError
      */
     @Throws(SignaldException::class)
     public fun send(
@@ -1007,6 +1028,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws NoSendPermissionError
      * @throws InvalidRequestError
      * @throws RateLimitError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun sendPayment(
@@ -1059,6 +1081,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
@@ -1175,6 +1199,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws InvalidBase64Error
      * @throws UnknownIdentityKeyError
      * @throws InvalidFingerprintError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun trust(
@@ -1218,6 +1243,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UntrustedIdentityError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun typing(
@@ -1291,6 +1317,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
     public fun updateGroup(groupID: String, groupUpdate: GroupUpdate): GroupInfo {
@@ -1382,8 +1410,9 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     public fun version(): JsonVersionMessage = VersionRequest().submit(socketWrapper)
 
     /**
-     * Waits until the user scans the QR code and then returns. This can be used before the call to [finishLink] in
-     * order to get an update when the scan happens. The state of the scan is stored with the session ID.
+     * An optional part of the linking process. Intended to be called after displaying the QR code, will
+     * return quickly after the user scans the QR code. [finishLink] must be called after [waitForScan]
+     * returns a non-error.
      *
      * If this function is not used, the [finishLink] function will automatically block waiting for a scan (the same
      * functionality that exists currently).
@@ -1411,6 +1440,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
      */
     public override fun subscribe(): Subscription {
         withAccountOrThrow {
@@ -1430,10 +1460,13 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
      * @throws NoSuchAccountError
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
      */
     override suspend fun subscribeSuspend(): IncomingMessageSubscription = subscribe()
 
@@ -1449,6 +1482,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
     public fun subscribeAndConsumeBlocking(messageConsumer: (ClientMessageWrapper) -> Unit) {
