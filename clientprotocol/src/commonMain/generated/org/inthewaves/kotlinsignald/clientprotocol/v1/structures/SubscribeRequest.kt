@@ -51,6 +51,7 @@ public data class SubscribeRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         SubscriptionResponse {
@@ -116,6 +117,7 @@ public data class SubscribeRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

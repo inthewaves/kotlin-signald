@@ -4,7 +4,7 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 import kotlinx.serialization.Serializable
 
 /**
- * represents a file attached to a message. When seding, only `filename` is required.
+ * represents a file attached to a message. When sending, only `filename` is required.
  */
 @Serializable
 public data class JsonAttachment(

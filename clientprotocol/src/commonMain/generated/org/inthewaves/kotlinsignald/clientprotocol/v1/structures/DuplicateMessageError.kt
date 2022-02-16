@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class DuplicateMessageError(
+    public val timestamp: Long? = null,
     public val message: String? = null
 )

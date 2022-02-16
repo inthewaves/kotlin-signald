@@ -16,7 +16,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 @SerialName("is_identifier_registered")
 public data class IsIdentifierRegisteredRequest(
     /**
-     * The account to use to retrieve the remote config
+     * The account to use to use
      *
      * Example: "+12024561414"
      */

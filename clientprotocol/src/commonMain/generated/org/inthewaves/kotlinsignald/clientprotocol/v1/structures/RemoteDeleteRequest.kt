@@ -68,6 +68,7 @@ public data class RemoteDeleteRequest(
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -86,6 +87,7 @@ public data class RemoteDeleteRequest(
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

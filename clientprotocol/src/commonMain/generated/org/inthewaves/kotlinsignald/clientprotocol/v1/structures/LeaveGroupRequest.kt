@@ -50,6 +50,7 @@ public data class LeaveGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupInfo =
         super.submit(socketCommunicator, id)
@@ -66,6 +67,7 @@ public data class LeaveGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

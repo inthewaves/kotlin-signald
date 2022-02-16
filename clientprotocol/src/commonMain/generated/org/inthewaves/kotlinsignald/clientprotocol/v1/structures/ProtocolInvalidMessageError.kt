@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class ProtocolInvalidMessageError(
     public val sender: String? = null,
+    public val timestamp: Long? = null,
     public val message: String? = null,
     @SerialName("sender_device")
     public val senderDevice: Int? = null,

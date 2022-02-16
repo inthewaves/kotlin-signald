@@ -86,6 +86,8 @@ public data class UpdateGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupInfo =
         super.submit(socketCommunicator, id)
@@ -102,6 +104,8 @@ public data class UpdateGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

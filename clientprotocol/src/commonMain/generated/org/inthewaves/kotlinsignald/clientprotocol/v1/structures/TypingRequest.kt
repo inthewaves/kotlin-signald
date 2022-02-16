@@ -59,6 +59,7 @@ public data class TypingRequest(
      * @throws UntrustedIdentityError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -77,6 +78,7 @@ public data class TypingRequest(
      * @throws UntrustedIdentityError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

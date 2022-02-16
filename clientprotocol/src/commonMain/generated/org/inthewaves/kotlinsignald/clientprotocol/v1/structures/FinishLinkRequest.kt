@@ -12,7 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 /**
  * After a linking URI has been requested, finish_link must be called with the session_id provided
  * with the URI. it will return information about the new account once the linking process is completed
- * by the other device.
+ * by the other device and the new account is setup. Note that the account setup process can sometimes
+ * take some time, if rapid userfeedback is required after scanning, use wait_for_scan first, then
+ * finish setup with finish_link.
  */
 @Serializable
 @SerialName("finish_link")
@@ -46,6 +48,7 @@ public data class FinishLinkRequest(
      * @throws InternalError
      * @throws NoSuchAccountError
      * @throws UserAlreadyExistsError
+     * @throws ScanTimeoutError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Account =
         super.submit(socketCommunicator, id)
@@ -61,6 +64,7 @@ public data class FinishLinkRequest(
      * @throws InternalError
      * @throws NoSuchAccountError
      * @throws UserAlreadyExistsError
+     * @throws ScanTimeoutError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

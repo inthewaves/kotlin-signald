@@ -50,6 +50,7 @@ public data class GetIdentitiesRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): IdentityKeyList =
         super.submit(socketCommunicator, id)
@@ -63,6 +64,7 @@ public data class GetIdentitiesRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

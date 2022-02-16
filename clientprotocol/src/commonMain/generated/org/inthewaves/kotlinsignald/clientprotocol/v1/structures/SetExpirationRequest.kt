@@ -59,6 +59,8 @@ public data class SetExpirationRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -75,6 +77,8 @@ public data class SetExpirationRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

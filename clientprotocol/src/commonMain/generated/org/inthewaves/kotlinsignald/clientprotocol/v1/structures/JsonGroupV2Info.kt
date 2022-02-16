@@ -54,5 +54,10 @@ public data class JsonGroupV2Info(
      * indicates if the group is an announcements group. Only admins are allowed to send messages to
      * announcements groups. Options are UNKNOWN, ENABLED or DISABLED
      */
-    public val announcements: String? = null
+    public val announcements: String? = null,
+    /**
+     * will be set to true for incoming messages to indicate the user has been removed from the
+     * group
+     */
+    public val removed: Boolean? = null
 ) : SignaldResponseBodyV1()

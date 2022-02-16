@@ -16,12 +16,6 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.RequestSync
 @SerialName("request_sync")
 public data class RequestSyncRequest(
     /**
-     * The account to use
-     *
-     * Example: "+12024561414"
-     */
-    public val account: String,
-    /**
      * request group sync (default true)
      */
     public val groups: Boolean? = null,
@@ -36,7 +30,17 @@ public data class RequestSyncRequest(
     /**
      * request block list sync (default true)
      */
-    public val blocked: Boolean? = null
+    public val blocked: Boolean? = null,
+    /**
+     * request storage service keys
+     */
+    public val keys: Boolean? = null,
+    /**
+     * The account to use
+     *
+     * Example: "+12024561414"
+     */
+    public val account: String
 ) : SignaldRequestBodyV1<EmptyResponse>() {
     internal override val responseWrapperSerializer: KSerializer<RequestSync>
         get() = RequestSync.serializer()
@@ -63,6 +67,7 @@ public data class RequestSyncRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws UntrustedIdentityError
+     * @throws InvalidRequestError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -77,6 +82,7 @@ public data class RequestSyncRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws UntrustedIdentityError
+     * @throws InvalidRequestError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

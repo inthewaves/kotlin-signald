@@ -56,6 +56,7 @@ public data class ResetSessionRequest(
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -74,6 +75,7 @@ public data class ResetSessionRequest(
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

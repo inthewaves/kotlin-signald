@@ -52,6 +52,7 @@ public data class GetProfileRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Profile =
         super.submit(socketCommunicator, id)
@@ -66,6 +67,7 @@ public data class GetProfileRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -10,8 +10,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.GetGroup
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
 /**
- * Query the server for the latest state of a known group. If no account in signald is a member of
- * the group (anymore), an error with error_type: 'UnknownGroupError' is returned.
+ * Query the server for the latest state of a known group. If the account is not a member of the
+ * group, an UnknownGroupError is returned.
  */
 @Serializable
 @SerialName("get_group")
@@ -59,6 +59,7 @@ public data class GetGroupRequest(
      * @throws GroupVerificationError
      * @throws InvalidGroupStateError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -76,6 +77,7 @@ public data class GetGroupRequest(
      * @throws GroupVerificationError
      * @throws InvalidGroupStateError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -72,6 +72,7 @@ public data class TrustRequest(
      * @throws InvalidBase64Error
      * @throws UnknownIdentityKeyError
      * @throws InvalidFingerprintError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -90,6 +91,7 @@ public data class TrustRequest(
      * @throws InvalidBase64Error
      * @throws UnknownIdentityKeyError
      * @throws InvalidFingerprintError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

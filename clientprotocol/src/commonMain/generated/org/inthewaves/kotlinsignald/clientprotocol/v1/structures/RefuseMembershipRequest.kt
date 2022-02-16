@@ -58,6 +58,8 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -74,6 +76,8 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws UnregisteredUserError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

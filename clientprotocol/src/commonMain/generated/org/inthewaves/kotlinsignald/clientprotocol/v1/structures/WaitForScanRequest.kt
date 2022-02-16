@@ -9,6 +9,11 @@ import org.inthewaves.kotlinsignald.clientprotocol.SuspendSocketCommunicator
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.WaitForScan
 
+/**
+ * An optional part of the linking process. Intended to be called after displaying the QR code, will
+ * return quickly after the user scans the QR code. finish_link must be called after wait_for_scan
+ * returns a non-error
+ */
 @Serializable
 @SerialName("wait_for_scan")
 public data class WaitForScanRequest(

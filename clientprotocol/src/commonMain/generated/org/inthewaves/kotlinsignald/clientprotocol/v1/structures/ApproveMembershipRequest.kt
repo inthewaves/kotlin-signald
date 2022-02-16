@@ -57,6 +57,7 @@ public data class ApproveMembershipRequest(
      * @throws InternalError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -73,6 +74,7 @@ public data class ApproveMembershipRequest(
      * @throws InternalError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
