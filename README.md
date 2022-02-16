@@ -11,6 +11,9 @@ and requests. The client protocol classes are generated from the signald protoco
 
 Documentation for the library is available at https://inthewaves.github.io/kotlin-signald/
 
+This main motivation for this library was to have a type-safe method to communicate with signald and to also experiment
+with KotlinPoet to generate Kotlin code from a protocol document.
+
 ## Supported platforms
 
 > This library is experimental, with the API subject to breaking changes.
