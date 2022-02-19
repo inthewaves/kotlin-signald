@@ -6713,6 +6713,76 @@ public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/Sig
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Boolean;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Boolean;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Boolean;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;Ljava/lang/String;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAccount ()Ljava/lang/String;
+	public synthetic fun getData ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper$Data;
+	public fun getData ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;
+	public fun getError ()Ljava/lang/Boolean;
+	public fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/ClientMessageWrapper$Data {
+	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/Long;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/Long;)V
+	public synthetic fun <init> (Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Long;
+	public final fun copy (Ljava/lang/Long;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;
+	public static synthetic fun copy$default (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Ljava/lang/Long;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getVersion ()Ljava/lang/Long;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/StorageChange$Data$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubmitChallengeRequest : org/inthewaves/kotlinsignald/clientprotocol/v1/structures/SignaldRequestBodyV1 {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SubmitChallengeRequest$Companion;
 	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V

@@ -1673,6 +1673,7 @@ class ProtocolGenerator(
                     },
                 // SignaldType("InternalError") to clientMessageWrapperSubclassHandler,
                 SignaldType("WebSocketConnectionState") to clientMessageWrapperSubclassHandler,
+                SignaldType("StorageChange") to clientMessageWrapperSubclassHandler,
             )
         )
     }

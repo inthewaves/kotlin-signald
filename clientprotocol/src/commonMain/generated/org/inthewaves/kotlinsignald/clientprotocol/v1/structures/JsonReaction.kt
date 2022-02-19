@@ -8,7 +8,7 @@ public data class JsonReaction(
     /**
      * the emoji to react with
      *
-     * Example: "?"
+     * Example: "👍"
      */
     public val emoji: String? = null,
     /**
