@@ -1,0 +1,392 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>GroupChange</title>
+</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" defer></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+
+  
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html"><span>kotlin-signald</span></a></div>
+      <div>0.25.0+signald-0.17.0-10-4c7897e2</div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div class="main-content" id="content" pageids="clientprotocol::org.inthewaves.kotlinsignald.clientprotocol.v1.structures/GroupChange///PointingToDeclaration//1348745360">
+          <div class="breadcrumbs"><a href="../../index.html">clientprotocol</a>/<a href="../index.html">org.inthewaves.kotlinsignald.clientprotocol.v1.structures</a>/<a href="index.html">GroupChange</a></div>
+          <div class="cover ">
+            <h1 class="cover"><span>Group</span><wbr><span><span>Change</span></span></h1>
+            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">GroupChange</a><span class="token punctuation">(</span>editor<span class="token operator">: </span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">?</span><span class="token punctuation">, </span>revision<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token punctuation">, </span>newMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>deleteMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>modifyMemberRoles<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>modifiedProfileKeys<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>newPendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-pending-member/index.html">GroupPendingMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>deletePendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>promotePendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>newTitle<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span>newAvatar<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token punctuation">, </span>newTimer<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token punctuation">, </span>newAccessControl<span class="token operator">: </span><a href="../-group-access-control/index.html">GroupAccessControl</a><span class="token operator">?</span><span class="token punctuation">, </span>newRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-requesting-member/index.html">GroupRequestingMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>deleteRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>promoteRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token punctuation">, </span>newInviteLinkPassword<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token punctuation">, </span>newDescription<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span>newIsAnnouncementGroup<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Represents a group change made by a user. This can also represent request link invites. Only the fields relevant to the group change performed will be set. Note that in signald, group changes are currently only received from incoming messages from a message subscription.</p></div>            </div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+            <div class="tabs-section-body">
+              <h2 class="tabbedcontent">Constructors</h2>
+              <div class="table" data-togglable="Constructors"><a data-name="-694064682%2FConstructors%2F1348745360" anchor-label="GroupChange" id="-694064682%2FConstructors%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue TabbedContent">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-group-change.html"><span>Group</span><wbr><span><span>Change</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-694064682%2FConstructors%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-group-change.html"><span class="token function">GroupChange</span></a><span class="token punctuation">(</span>editor<span class="token operator">: </span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>revision<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>deleteMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>modifyMemberRoles<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>modifiedProfileKeys<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>newPendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-pending-member/index.html">GroupPendingMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>deletePendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>promotePendingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>newTitle<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newAvatar<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newTimer<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newAccessControl<span class="token operator">: </span><a href="../-group-access-control/index.html">GroupAccessControl</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-requesting-member/index.html">GroupRequestingMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>deleteRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>promoteRequestingMembers<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span>newInviteLinkPassword<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newDescription<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span>newIsAnnouncementGroup<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Properties</h2>
+              <div class="table" data-togglable="Properties"><a data-name="-1630833875%2FProperties%2F1348745360" anchor-label="deleteMembers" id="-1630833875%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="delete-members.html">deleteMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1630833875%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-1630833875%2FProperties%2F1348745360" anchor-label="deleteMembers" id="-1630833875%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="delete-members.html">deleteMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1630833875%2FProperties%2F1348745360" anchor-label="deleteMembers" id="-1630833875%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents users that have been removed from the group. This can be from admins removing users, or users choosing to leave the group</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1998104590%2FProperties%2F1348745360" anchor-label="deletePendingMembers" id="-1998104590%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="delete-pending-members.html">deletePendingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1998104590%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-1998104590%2FProperties%2F1348745360" anchor-label="deletePendingMembers" id="-1998104590%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="delete-pending-members.html">deletePendingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="302916352%2FProperties%2F1348745360" anchor-label="deleteRequestingMembers" id="302916352%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="delete-requesting-members.html">deleteRequestingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="302916352%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="302916352%2FProperties%2F1348745360" anchor-label="deleteRequestingMembers" id="302916352%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="delete-requesting-members.html">deleteRequestingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="621060114%2FProperties%2F1348745360" anchor-label="editor" id="621060114%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="editor.html">editor</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="621060114%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="621060114%2FProperties%2F1348745360" anchor-label="editor" id="621060114%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="editor.html">editor</a><span class="token operator">: </span><a href="../-json-address/index.html">JsonAddress</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="621060114%2FProperties%2F1348745360" anchor-label="editor" id="621060114%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">The user that made the change.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-358549593%2FProperties%2F1348745360" anchor-label="modifiedProfileKeys" id="-358549593%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="modified-profile-keys.html">modifiedProfileKeys</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-358549593%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-358549593%2FProperties%2F1348745360" anchor-label="modifiedProfileKeys" id="-358549593%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="modified-profile-keys.html">modifiedProfileKeys</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-358549593%2FProperties%2F1348745360" anchor-label="modifiedProfileKeys" id="-358549593%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents users that have rotated their profile key. Note that signald currently does not expose profile keys to clients. The joined revision property will always be 0 in this list.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1742727598%2FProperties%2F1348745360" anchor-label="modifyMemberRoles" id="-1742727598%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="modify-member-roles.html">modifyMemberRoles</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1742727598%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-1742727598%2FProperties%2F1348745360" anchor-label="modifyMemberRoles" id="-1742727598%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="modify-member-roles.html">modifyMemberRoles</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1742727598%2FProperties%2F1348745360" anchor-label="modifyMemberRoles" id="-1742727598%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents users with their new, modified role.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-46125338%2FProperties%2F1348745360" anchor-label="newAccessControl" id="-46125338%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-access-control.html">newAccessControl</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-46125338%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-46125338%2FProperties%2F1348745360" anchor-label="newAccessControl" id="-46125338%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-access-control.html">newAccessControl</a><span class="token operator">: </span><a href="../-group-access-control/index.html">GroupAccessControl</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-46125338%2FProperties%2F1348745360" anchor-label="newAccessControl" id="-46125338%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">If not null, then this group change modified one of the access controls. Some of the properties in here will be null.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="230243938%2FProperties%2F1348745360" anchor-label="newAvatar" id="230243938%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-avatar.html">newAvatar</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="230243938%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="230243938%2FProperties%2F1348745360" anchor-label="newAvatar" id="230243938%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-avatar.html">newAvatar</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="230243938%2FProperties%2F1348745360" anchor-label="newAvatar" id="230243938%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Whether this group change changed the avatar.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="364836899%2FProperties%2F1348745360" anchor-label="newDescription" id="364836899%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-description.html">newDescription</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="364836899%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="364836899%2FProperties%2F1348745360" anchor-label="newDescription" id="364836899%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-description.html">newDescription</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1123381245%2FProperties%2F1348745360" anchor-label="newInviteLinkPassword" id="1123381245%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-invite-link-password.html">newInviteLinkPassword</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1123381245%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="1123381245%2FProperties%2F1348745360" anchor-label="newInviteLinkPassword" id="1123381245%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-invite-link-password.html">newInviteLinkPassword</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1123381245%2FProperties%2F1348745360" anchor-label="newInviteLinkPassword" id="1123381245%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Whether this group change involved resetting the group invite link.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="745948401%2FProperties%2F1348745360" anchor-label="newIsAnnouncementGroup" id="745948401%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-is-announcement-group.html">newIsAnnouncementGroup</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="745948401%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="745948401%2FProperties%2F1348745360" anchor-label="newIsAnnouncementGroup" id="745948401%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-is-announcement-group.html">newIsAnnouncementGroup</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="745948401%2FProperties%2F1348745360" anchor-label="newIsAnnouncementGroup" id="745948401%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Whether this change affected the announcement group setting. Possible values are UNKNOWN, ENABLED or DISABLED</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-380272986%2FProperties%2F1348745360" anchor-label="newMembers" id="-380272986%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-members.html">newMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-380272986%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-380272986%2FProperties%2F1348745360" anchor-label="newMembers" id="-380272986%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-members.html">newMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-380272986%2FProperties%2F1348745360" anchor-label="newMembers" id="-380272986%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents users have been added to the group. This can be from group members adding users, or a users joining via a group link that required no approval.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-176610727%2FProperties%2F1348745360" anchor-label="newPendingMembers" id="-176610727%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-pending-members.html">newPendingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-176610727%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-176610727%2FProperties%2F1348745360" anchor-label="newPendingMembers" id="-176610727%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-pending-members.html">newPendingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-pending-member/index.html">GroupPendingMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-176610727%2FProperties%2F1348745360" anchor-label="newPendingMembers" id="-176610727%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents a user that has been invited to the group by another user.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1809771321%2FProperties%2F1348745360" anchor-label="newRequestingMembers" id="1809771321%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-requesting-members.html">newRequestingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1809771321%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="1809771321%2FProperties%2F1348745360" anchor-label="newRequestingMembers" id="1809771321%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-requesting-members.html">newRequestingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-requesting-member/index.html">GroupRequestingMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1809771321%2FProperties%2F1348745360" anchor-label="newRequestingMembers" id="1809771321%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">Represents users that have requested to join the group via the group link. Note that members requesting to join might not necessarily have the list of users in the group, so they won't be able to send a peer-to-peer group update message to inform users of their request to join. Other users in the group may inform us that the revision has increased, but the members requesting access will have to be obtained from the server instead (which signald will handle). For now, a get_group request has to be made to get the users that have requested to join the group.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-714057094%2FProperties%2F1348745360" anchor-label="newTimer" id="-714057094%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-timer.html">newTimer</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-714057094%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-714057094%2FProperties%2F1348745360" anchor-label="newTimer" id="-714057094%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-timer.html">newTimer</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-714057094%2FProperties%2F1348745360" anchor-label="newTimer" id="-714057094%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">New disappearing messages timer value.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-464139577%2FProperties%2F1348745360" anchor-label="newTitle" id="-464139577%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="new-title.html">newTitle</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-464139577%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-464139577%2FProperties%2F1348745360" anchor-label="newTitle" id="-464139577%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="new-title.html">newTitle</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-512468679%2FProperties%2F1348745360" anchor-label="promotePendingMembers" id="-512468679%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="promote-pending-members.html">promotePendingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-512468679%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-512468679%2FProperties%2F1348745360" anchor-label="promotePendingMembers" id="-512468679%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="promote-pending-members.html">promotePendingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-755644327%2FProperties%2F1348745360" anchor-label="promoteRequestingMembers" id="-755644327%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="promote-requesting-members.html">promoteRequestingMembers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-755644327%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-755644327%2FProperties%2F1348745360" anchor-label="promoteRequestingMembers" id="-755644327%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="promote-requesting-members.html">promoteRequestingMembers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-group-member/index.html">GroupMember</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-709836572%2FProperties%2F1348745360" anchor-label="revision" id="-709836572%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a>
+                <div class="table-row" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="revision.html">revision</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-709836572%2FProperties%2F1348745360"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark common-like" data-filterable-current=":clientprotocol:dokkaHtmlPartial/commonMain" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain" data-active="" data-toggle=":clientprotocol:dokkaHtmlPartial/commonMain">common</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":clientprotocol:dokkaHtmlPartial/commonMain"><a data-name="-709836572%2FProperties%2F1348745360" anchor-label="revision" id="-709836572%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="revision.html">revision</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-709836572%2FProperties%2F1348745360" anchor-label="revision" id="-709836572%2FProperties%2F1348745360" data-filterable-set=":clientprotocol:dokkaHtmlPartial/commonMain"></a><p class="paragraph">The group revision that this change brings the group to.</p></div></div>                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  
+</body></html>
+
+

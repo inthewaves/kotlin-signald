@@ -16,6 +16,7 @@ $dokka.location:org.inthewaves.kotlinsignald/Signal/generateLinkingUri/#kotlin.S
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getAllIdentities/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-all-identities.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getGroup/#kotlin.String#kotlin.Int?/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-group.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getGroupLinkInfo/#kotlin.String/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-group-link-info.html
+$dokka.location:org.inthewaves.kotlinsignald/Signal/getGroupRevisionPages/#kotlin.String#kotlin.Int#kotlin.Boolean/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-group-revision-pages.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getIdentities/#org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-identities.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getLinkedDevices/#/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-linked-devices.html
 $dokka.location:org.inthewaves.kotlinsignald/Signal/getProfile/#org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress#kotlin.Boolean/PointingToDeclaration/client/org.inthewaves.kotlinsignald/-signal/[synchronous-client]get-profile.html
