@@ -1,8 +1,10 @@
 package org.inthewaves.kotlinsignald.subscription
 
+import kotlinx.serialization.SerializationException
 import org.inthewaves.kotlinsignald.IncomingMessageSubscription
 import org.inthewaves.kotlinsignald.NodePersistentSocketWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException
+import org.inthewaves.kotlinsignald.clientprotocol.SignaldException
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscriptionResponse
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsubscribeRequest
@@ -38,7 +40,11 @@ public actual class Subscription internal constructor(
         }
 
         val newJsonLine = persistentSocket.readLineSuspend() ?: return null
-        return ClientMessageWrapper.decodeFromStringOrThrow(newJsonLine)
+        return try {
+            ClientMessageWrapper.decodeFromStringOrThrow(newJsonLine)
+        } catch (e: SerializationException) {
+            throw SignaldException("failed to serialize incoming message", cause = e)
+        }
     }
 
     public suspend fun unsubscribe(): SubscriptionResponse {

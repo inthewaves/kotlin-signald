@@ -40,6 +40,10 @@ public sealed class ClientMessageWrapper {
     public sealed class Data
 
     public companion object {
+        /**
+         * @throws [SerializationException] if deserialization fails
+         */
+        @Throws(SerializationException::class)
         public fun decodeFromStringOrThrow(incomingMessageString: String): ClientMessageWrapper =
             try {
                 SignaldJson.decodeFromString(serializer(), incomingMessageString)

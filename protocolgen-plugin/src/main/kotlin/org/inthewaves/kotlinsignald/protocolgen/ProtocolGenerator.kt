@@ -1583,6 +1583,12 @@ class ProtocolGenerator(
                     // TODO: Bake this into a custom serializer
                     val parseFun = FunSpec.builder("decodeFromStringOrThrow")
                         .addParameter("incomingMessageString", String::class.asClassName())
+                        .addKdoc("%L", "@throws [${SerializationException::class.simpleName}] if deserialization fails")
+                        .addAnnotation(
+                            AnnotationSpec.builder(ClassName("kotlin", "Throws"))
+                                .addMember("%L", "SerializationException::class")
+                                .build()
+                        )
                         .returns(className)
                         .addCode(
                             CodeBlock.builder()
