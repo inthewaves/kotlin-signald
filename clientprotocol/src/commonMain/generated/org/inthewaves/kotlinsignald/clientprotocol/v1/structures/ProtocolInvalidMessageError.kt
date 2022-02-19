@@ -5,14 +5,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("ProtocolInvalidMessageError")
 public data class ProtocolInvalidMessageError(
     public val sender: String? = null,
     public val timestamp: Long? = null,
-    public val message: String? = null,
+    public override val message: String? = null,
     @SerialName("sender_device")
     public val senderDevice: Int? = null,
     @SerialName("content_hint")
     public val contentHint: Int? = null,
     @SerialName("group_id")
     public val groupId: String? = null
-)
+) : TypedExceptionV1()

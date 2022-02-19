@@ -11,6 +11,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AccountLockedEr
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AttachmentTooLargeError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AuthorizationFailedError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.DuplicateMessageError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FingerprintVersionMismatchError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupNotActiveError
@@ -31,6 +32,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchAccountEr
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchSessionError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavailableError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProofRequiredError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProtocolInvalidMessageError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
@@ -52,6 +55,9 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
     ignoreUnknownKeys = true
     serializersModule = SerializersModule {
         polymorphic(TypedExceptionV1::class) {
+            subclass(UntrustedIdentityError::class)
+            subclass(ProtocolInvalidMessageError::class)
+            subclass(DuplicateMessageError::class)
             subclass(NoSuchAccountError::class)
             subclass(ServerNotFoundError::class)
             subclass(InvalidProxyError::class)
@@ -71,7 +77,6 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(InvalidInviteURIError::class)
             subclass(GroupNotActiveError::class)
             subclass(InvalidBase64Error::class)
-            subclass(UntrustedIdentityError::class)
             subclass(ProfileUnavailableError::class)
             subclass(NoKnownUUIDError::class)
             subclass(NoSuchSessionError::class)
@@ -86,6 +91,7 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(InvalidFingerprintError::class)
             subclass(InvalidGroupError::class)
             subclass(GroupLinkNotActiveError::class)
+            subclass(ProofRequiredError::class)
         }
     }
 }

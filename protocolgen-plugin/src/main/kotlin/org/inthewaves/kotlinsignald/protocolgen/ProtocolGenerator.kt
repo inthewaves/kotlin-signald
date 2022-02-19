@@ -761,12 +761,10 @@ class ProtocolGenerator(
         // linked maps and sets to preserve iteration order
         val actionRequestTypes = linkedMapOf<SignaldProtocolVersion, Map<SignaldType, ActionInfo>>()
         val actionResponseTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
-        val actionErrorTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
         for ((version: SignaldProtocolVersion, actionMap: Map<SignaldActionName, Action>) in protocolDoc.actions) {
             val requestTypesToActionMap = actionRequestTypes.getOrPut(version) { linkedMapOf() }
                 as MutableMap<SignaldType, ActionInfo>
             val responseTypes: MutableSet<SignaldType> = actionResponseTypes.getOrPut(version) { linkedSetOf() }
-            val errorTypes: MutableSet<SignaldType> = actionErrorTypes.getOrPut(version) { linkedSetOf() }
 
             val structuresPackage = GenUtil.getStructuresPackage(packageName, version)
             val (jsonMsgWrapperClassName, jsonMsgWrapperTypeSpec) = createJsonMessageWrapperInfo(version)
@@ -816,7 +814,6 @@ class ProtocolGenerator(
                     emptyResponseClassName
                 }
 
-                errorTypes.addAll(actionDetail.errors.asSequence().map { it.name })
 
                 val requestClassName = actionName.asClassName(packageName, version)
                 requestTypesToActionMap[actionDetail.request] = ActionInfo(
@@ -884,7 +881,8 @@ class ProtocolGenerator(
                 writeTypeSpecFile(requestClassName, typeSpec, genFilesDir)
             }
         }
-        println("actionErrorTypes: $actionErrorTypes")
+
+        val allErrorTypes = linkedMapOf<SignaldProtocolVersion, MutableSet<SignaldType>>()
 
         // Sometimes, we may need to modify structure, e.g. subclass something or create nested classes
         val specialTypeHandlers = getSpecialTypeHandler()
@@ -893,7 +891,8 @@ class ProtocolGenerator(
             val structurePackage = GenUtil.getStructuresPackage(packageName, version)
             val requestTypes: Map<SignaldType, ActionInfo> = actionRequestTypes[version] ?: emptyMap()
             val responseTypes: Set<SignaldType> = actionResponseTypes[version] ?: emptySet()
-            val errorTypes: Set<SignaldType> = actionErrorTypes[version] ?: emptySet()
+
+            val errorTypes: MutableSet<SignaldType> = allErrorTypes.getOrPut(version) { linkedSetOf() }
 
             val sequence = typeMapForVersion.asSequence()
                 .plus(extraTypes[version]?.asSequence() ?: emptySequence())
@@ -902,8 +901,10 @@ class ProtocolGenerator(
                 val typeSpec = TypeSpec.classBuilder(className).apply typeSpecBuilder@{
                     addAnnotation(Serializable::class)
 
-                    check(structureTypeName !in errorTypes || (structureTypeName !in responseTypes && structureTypeName !in requestTypes)) {
-                        "$structureTypeName is an error type but also a response and request type"
+                    if (structureDetails.error) {
+                        check(structureTypeName !in responseTypes && structureTypeName !in requestTypes) {
+                            "$structureTypeName is an error type but also a response and request type"
+                        }
                     }
                     check(structureTypeName !in responseTypes || structureTypeName !in requestTypes) {
                         "$structureTypeName is used for both a response and a request"
@@ -913,11 +914,12 @@ class ProtocolGenerator(
                         superclass(version.getResponseSealedClassName(packageName))
                     }
 
-                    if (structureTypeName in errorTypes) {
+                    if (structureDetails.error) {
                         superclass(version.getTypedExceptionSealedClassName(packageName))
                         addAnnotation(
                             AnnotationSpec.builder(SerialName::class).addMember("%S", structureTypeName.name).build()
                         )
+                        errorTypes.add(structureTypeName)
                     }
 
                     val responseActionInfo: ActionInfo?
@@ -1049,7 +1051,7 @@ class ProtocolGenerator(
                                 if (kdoc.isNotBlank()) {
                                     addKdoc("%L", kdoc)
                                 }
-                                if (structureTypeName in errorTypes && fieldName == Exception::message.name) {
+                                if (structureDetails.error && fieldName == Exception::message.name) {
                                     addModifiers(KModifier.OVERRIDE)
                                 }
                             }.build()
@@ -1077,8 +1079,6 @@ class ProtocolGenerator(
             }
         }
 
-        println(actionErrorTypes)
-
         val jsonProperty = PropertySpec.builder(signaldJsonClassName.simpleName, Json::class)
             .initializer(
                 CodeBlock.builder()
@@ -1091,7 +1091,7 @@ class ProtocolGenerator(
                             MemberName("kotlinx.serialization.modules", "SerializersModule")
                         )
                         withIndent {
-                            for ((version, errorTypes) in actionErrorTypes) {
+                            for ((version, errorTypes) in allErrorTypes) {
                                 if (errorTypes.isEmpty()) continue
                                 beginControlFlow(
                                     "%M(%T::class)",
