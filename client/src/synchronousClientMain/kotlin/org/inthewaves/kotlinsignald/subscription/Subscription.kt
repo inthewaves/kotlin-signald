@@ -54,7 +54,7 @@ public actual class Subscription internal constructor(
         return try {
             ClientMessageWrapper.decodeFromStringOrThrow(newJsonLine)
         } catch (e: SerializationException) {
-            throw SignaldException("failed to serialize incoming message", cause = e)
+            throw SignaldException("failed to serialize incoming message", e)
         }
     }
 
