@@ -190,6 +190,8 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun getGroup (Ljava/lang/String;Ljava/lang/Integer;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public static synthetic fun getGroup$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun getGroupLinkInfo (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
+	public final fun getGroupRevisionPages (Ljava/lang/String;IZ)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupHistoryPage;
+	public static synthetic fun getGroupRevisionPages$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/String;IZILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupHistoryPage;
 	public final fun getIdentities (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IdentityKeyList;
 	public final fun getLinkedDevices ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/LinkedDevices;
 	public final fun getProfile (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Z)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Profile;

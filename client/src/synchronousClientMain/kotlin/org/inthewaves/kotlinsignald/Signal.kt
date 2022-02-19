@@ -24,10 +24,12 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FinishLinkReque
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GenerateLinkingURIRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetAllIdentities
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetGroupRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetGroupRevisionPagesRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetIdentitiesRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetLinkedDevicesRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetProfileRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GetServersRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupHistoryPage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkInfoRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
@@ -435,6 +437,41 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     public fun getGroup(groupID: String, revision: Int? = null): JsonGroupV2Info {
         withAccountOrThrow {
             return GetGroupRequest(account = accountId, groupID = groupID, revision = revision).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * Query the server for group revision history. The history contains information about the changes
+     * between each revision and the user that made the change.
+     *
+     * @param revision The latest known revision of the group, default value (-1) forces fetch from server
+     * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
+     * @throws SignaldException if the request to the socket fails
+     * @throws NoSuchAccountError
+     * @throws UnknownGroupError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws InternalError
+     * @throws GroupVerificationError
+     * @throws InvalidGroupStateError
+     * @throws InvalidRequestError
+     * @throws AuthorizationFailedError caused when not a member of the group, when requesting logs
+     * from a revision lower than your joinedAtVersion, etc.
+     * @throws RateLimitError
+     */
+    @Throws(SignaldException::class)
+    public fun getGroupRevisionPages(
+        groupId: String,
+        fromRevision: Int,
+        includeFirstRevision: Boolean = false
+    ): GroupHistoryPage {
+        withAccountOrThrow {
+            return GetGroupRevisionPagesRequest(
+                account = accountId,
+                groupId = groupId,
+                fromRevision = fromRevision,
+                includeFirstRevision = includeFirstRevision
+            ).submit(socketWrapper)
         }
     }
 
