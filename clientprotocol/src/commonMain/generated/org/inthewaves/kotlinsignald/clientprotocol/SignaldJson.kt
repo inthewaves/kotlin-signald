@@ -55,9 +55,9 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
     ignoreUnknownKeys = true
     serializersModule = SerializersModule {
         polymorphic(TypedExceptionV1::class) {
-            subclass(UntrustedIdentityError::class)
-            subclass(ProtocolInvalidMessageError::class)
             subclass(DuplicateMessageError::class)
+            subclass(ProtocolInvalidMessageError::class)
+            subclass(UntrustedIdentityError::class)
             subclass(NoSuchAccountError::class)
             subclass(ServerNotFoundError::class)
             subclass(InvalidProxyError::class)
