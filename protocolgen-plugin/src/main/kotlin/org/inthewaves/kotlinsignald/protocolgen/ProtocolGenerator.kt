@@ -1091,8 +1091,9 @@ class ProtocolGenerator(
                             MemberName("kotlinx.serialization.modules", "SerializersModule")
                         )
                         withIndent {
-                            for ((version, errorTypes) in allErrorTypes) {
-                                if (errorTypes.isEmpty()) continue
+                            for ((version, unsortedErrorTypes) in allErrorTypes) {
+                                if (unsortedErrorTypes.isEmpty()) continue
+                                val errorTypes = unsortedErrorTypes.sortedBy { it.name }
                                 beginControlFlow(
                                     "%M(%T::class)",
                                     MemberName("kotlinx.serialization.modules", "polymorphic"),
