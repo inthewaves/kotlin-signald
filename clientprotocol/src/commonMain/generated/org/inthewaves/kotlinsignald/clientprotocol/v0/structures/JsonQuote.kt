@@ -22,7 +22,7 @@ public data class JsonQuote(
     /**
      * the body of the message being quoted
      *
-     * Example: "hey ? what's up?"
+     * Example: "hey ￼ what's up?"
      */
     public val text: String? = null,
     /**

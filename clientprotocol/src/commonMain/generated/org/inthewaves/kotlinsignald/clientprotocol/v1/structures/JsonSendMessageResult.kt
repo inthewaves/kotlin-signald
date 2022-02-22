@@ -19,4 +19,4 @@ public data class JsonSendMessageResult(
     public val identityFailure: String? = null,
     @SerialName("proof_required_failure")
     public val proofRequiredFailure: ProofRequiredError? = null
-)
+) : SignaldResponseBodyV1()

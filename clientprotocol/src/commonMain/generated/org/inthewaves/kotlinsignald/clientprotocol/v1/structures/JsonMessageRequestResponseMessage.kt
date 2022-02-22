@@ -3,9 +3,15 @@ package org.inthewaves.kotlinsignald.clientprotocol.v1.structures
 
 import kotlinx.serialization.Serializable
 
+/**
+ * Responses to message requests from unknown users or groups
+ */
 @Serializable
 public data class JsonMessageRequestResponseMessage(
     public val person: JsonAddress? = null,
     public val groupId: String? = null,
+    /**
+     * One of UNKNOWN, ACCEPT, DELETE, BLOCK, BLOCK_AND_DELETE, UNBLOCK_AND_ACCEPT
+     */
     public val type: String? = null
 )
