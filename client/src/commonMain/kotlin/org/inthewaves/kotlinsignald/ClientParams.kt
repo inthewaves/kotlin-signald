@@ -2,15 +2,21 @@ package org.inthewaves.kotlinsignald
 
 import org.inthewaves.kotlinsignald.Recipient.Group
 import org.inthewaves.kotlinsignald.Recipient.Individual
+import org.inthewaves.kotlinsignald.Recipient.Self
+import org.inthewaves.kotlinsignald.SyncRequest.MessageRequestResponse.Action
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupAccessControl
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupMember
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IncomingMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAddress
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMessageRequestResponseMessage
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonViewOnceOpenMessage
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendSyncMessageRequest
 import kotlin.jvm.JvmOverloads
 import kotlin.jvm.JvmStatic
 
 /**
- * Specifies a submission to a rate limit challenge issued by the server.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.submitChallenge] function. Specifies a submission to a rate limit
+ * challenge issued by the server.
  */
 public sealed class RateLimitChallenge(public val challengeToken: String) {
     public class PushChallenge(challengeToken: String) : RateLimitChallenge(challengeToken)
@@ -26,8 +32,11 @@ public sealed class RateLimitChallenge(public val challengeToken: String) {
 }
 
 /**
- * Specifies a recipient type for functions that can send to either type (e.g., `react`, `remoteDelete`, `send`,
- * `setExpiration`, `typing`). Recipients are either to a [Group] or an [Individual].
+ * Specifies a recipient type for functions that can send to either type (e.g.,
+ * [org.inthewaves.kotlinsignald.Signal.react], [org.inthewaves.kotlinsignald.Signal.remoteDelete],
+ * [org.inthewaves.kotlinsignald.Signal.send], [org.inthewaves.kotlinsignald.Signal.setExpiration],
+ * [org.inthewaves.kotlinsignald.Signal.typing]). Recipients are either to a [Group] or an [Individual] (or [Self] for
+ * Note to Self).
  */
 public sealed class Recipient {
     /**
@@ -52,6 +61,11 @@ public sealed class Recipient {
      * A Signal user as the recipient.
      */
     public class Individual(public val address: JsonAddress) : Recipient()
+
+    /**
+     * For sending to own user (i.e., Note to Self).
+     */
+    public object Self : Recipient()
 
     public companion object {
         /**
@@ -84,12 +98,15 @@ public sealed class Recipient {
 
         @JvmStatic
         public fun forUUID(uuid: String): Individual = Individual(JsonAddress(uuid = uuid))
+
+        @JvmStatic
+        public fun forSelf(): Self = Self
     }
 }
 
 /**
- * Used with the `updateGroup` function. This is a class to enforce that only one of the group attributes are updated
- * at once.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.updateGroup] function. This is a class to enforce that only one of
+ * the group attributes are updated at once.
  */
 public sealed interface GroupUpdate {
     public class Title(public val newTitle: String) : GroupUpdate
@@ -123,7 +140,7 @@ public enum class GroupLinkStatus {
 }
 
 /**
- * Used with the [trust] function.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.trust] function.
  */
 public sealed class Fingerprint {
     public class SafetyNumber(public val safetyNumber: String) : Fingerprint()
@@ -135,7 +152,7 @@ public sealed class Fingerprint {
 }
 
 /**
- * Used with the [updateGroup] function.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.updateGroup] function.
  *
  * Derived from
  * [https://github.com/signalapp/Signal-Android/blob/c615b14c512d3b0fffec3da93f8e2e3607ed6ab4/libsignal/service/src/main/proto/Groups.proto#L49]
@@ -150,8 +167,48 @@ public enum class AccessRequired(public val value: Int) {
 }
 
 /**
- * Used with the `updateGroup` function inside of [GroupUpdate]. A class to enforce that only one of the access
- * controls are updated at once.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.sendSyncRequest] function for [SendSyncMessageRequest] to send
+ * sync requests to other devices.
+ */
+public sealed class SyncRequest {
+    /**
+     * For use in the [org.inthewaves.kotlinsignald.Signal.sendSyncRequest] to respond to incoming message requests.
+     * Users and group conversations can be requested to be deleted from other devices, and it's also possible to
+     * request other devices block messages (note that signald itself doesn't handle blocking at the moment).
+     *
+     * Corresponds to constructing an instance of [JsonMessageRequestResponseMessage].
+     *
+     * Warning: Using the [Action.BLOCK] and [Action.BLOCK_AND_DELETE] options relies on other devices to do the
+     * blocking, and it does not make you leave the group!
+     */
+    public class MessageRequestResponse(public val recipient: Recipient, public val action: Action) : SyncRequest() {
+        public enum class Action {
+            ACCEPT, DELETE, BLOCK, BLOCK_AND_DELETE, UNBLOCK_AND_ACCEPT
+        }
+    }
+
+    /**
+     * Corresponds to constructing an instance of [JsonViewOnceOpenMessage]
+     */
+    public class ViewOnceOpened(public val sender: JsonAddress, public val messageTimestamp: Long) : SyncRequest() {
+        /**
+         * @throws IllegalArgumentException if the message is missing a source or a timestamp
+         */
+        public constructor(message: IncomingMessage) : this(message.data)
+
+        /**
+         * @throws IllegalArgumentException if the message is missing a source or a timestamp
+         */
+        public constructor(message: IncomingMessage.Data) : this(
+            requireNotNull(message.source)  { "message is missing a source" },
+            requireNotNull(message.timestamp) { "message is missing a timestamp" }
+        )
+    }
+}
+
+/**
+ * Used with the [org.inthewaves.kotlinsignald.Signal.updateGroup] function inside of [GroupUpdate]. A class to enforce
+ * that only one of the access controls are updated at once.
  */
 public sealed class AccessControlUpdate {
     internal abstract val accessRequired: AccessRequired
@@ -189,7 +246,7 @@ public sealed class AccessControlUpdate {
 }
 
 /**
- * Used with the `trust` function.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.trust] function.
  */
 public enum class TrustLevel {
     TRUSTED_UNVERIFIED, TRUSTED_VERIFIED, UNTRUSTED

@@ -54,10 +54,13 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonAttachment
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupJoinInfo
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonGroupV2Info
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMention
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonMessageRequestResponseMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonPreview
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonQuote
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonReaction
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonSendMessageResult
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonVersionMessage
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.JsonViewOnceOpenMessage
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LeaveGroupRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkedDevices
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.LinkingURI
@@ -90,6 +93,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutErro
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendPaymentRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendResponse
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendSyncMessageRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.Server
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
@@ -444,7 +448,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * Query the server for group revision history. The history contains information about the changes
      * between each revision and the user that made the change.
      *
-     * @param revision The latest known revision of the group, default value (-1) forces fetch from server
+     * @param fromRevision The revision to start the pages from.
+     * @param includeFirstRevision Whether to include the state for the first revision in the pages.
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      * @throws NoSuchAccountError
@@ -750,7 +755,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
         reaction: JsonReaction,
         timestamp: Long = Clock.System.now().toEpochMilliseconds()
     ): SendResponse {
-        withAccountOrThrow {
+        withAccountOrThrow { account ->
             val request = when (recipient) {
                 is Recipient.Group -> ReactRequest(
                     username = accountId,
@@ -762,6 +767,12 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Individual -> ReactRequest(
                     username = accountId,
                     recipientAddress = recipient.address,
+                    reaction = reaction,
+                    timestamp = timestamp
+                )
+                Recipient.Self -> ReactRequest(
+                    username = accountId,
+                    recipientAddress = account.address ?: throw SignaldException("account is missing address for self"),
                     reaction = reaction,
                     timestamp = timestamp
                 )
@@ -855,7 +866,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun remoteDelete(recipient: Recipient, timestampOfTarget: Long): SendResponse {
-        withAccountOrThrow {
+        withAccountOrThrow { account ->
             val request = when (recipient) {
                 is Recipient.Group -> RemoteDeleteRequest(
                     account = accountId,
@@ -866,6 +877,11 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Individual -> RemoteDeleteRequest(
                     account = accountId,
                     address = recipient.address,
+                    timestamp = timestampOfTarget
+                )
+                Recipient.Self -> RemoteDeleteRequest(
+                    account = accountId,
+                    address = account.address ?: throw SignaldException("account is missing address for self"),
                     timestamp = timestampOfTarget
                 )
             }
@@ -1019,7 +1035,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
         mentions: Collection<JsonMention> = emptyList(),
         previews: Collection<JsonPreview> = emptyList(),
     ): SendResponse {
-        withAccountOrThrow {
+        withAccountOrThrow { account ->
             val request = when (recipient) {
                 is Recipient.Group -> SendRequest(
                     username = accountId,
@@ -1035,6 +1051,16 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Individual -> SendRequest(
                     username = accountId,
                     recipientAddress = recipient.address,
+                    messageBody = messageBody,
+                    attachments = attachments.toList(),
+                    quote = quote,
+                    timestamp = timestamp,
+                    mentions = mentions.toList(),
+                    previews = previews.toList(),
+                )
+                Recipient.Self -> SendRequest(
+                    username = accountId,
+                    recipientAddress = account.address ?: throw SignaldException("account is missing address for self"),
                     messageBody = messageBody,
                     attachments = attachments.toList(),
                     quote = quote,
@@ -1084,6 +1110,58 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     }
 
     /**
+     * Sends a sync message to the account's devices.
+     *
+     * This can be used, for example, to request that a certain group is blocked or deleted on other devices (via
+     * [SyncRequest.MessageRequestResponse])
+     *
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws InvalidRequestError
+     * @throws RateLimitError
+     * @throws InternalError
+     * @throws UnregisteredUserError
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws AuthorizationFailedError
+     */
+    @Throws(SignaldException::class)
+    public fun sendSyncRequest(
+        syncRequest: SyncRequest
+    ): JsonSendMessageResult {
+        withAccountOrThrow { account ->
+            val request = when (syncRequest) {
+                is SyncRequest.MessageRequestResponse -> SendSyncMessageRequest(
+                    account = accountId,
+                    messageRequestResponse = when (syncRequest.recipient) {
+                        is Recipient.Group -> JsonMessageRequestResponseMessage(
+                            groupId = syncRequest.recipient.groupID,
+                            type = syncRequest.action.name
+                        )
+                        is Recipient.Individual -> JsonMessageRequestResponseMessage(
+                            person = syncRequest.recipient.address,
+                            type = syncRequest.action.name
+                        )
+                        Recipient.Self -> JsonMessageRequestResponseMessage(
+                            // should we just not allow Recipient.Self?
+                            person = account.address ?: throw SignaldException("missing address for self"),
+                            type = syncRequest.action.name
+                        )
+                    }
+                )
+                is SyncRequest.ViewOnceOpened -> SendSyncMessageRequest(
+                    account = accountId,
+                    viewOnceOpenMessage = JsonViewOnceOpenMessage(syncRequest.sender, syncRequest.messageTimestamp)
+                )
+            }
+            return request.submit(socketWrapper)
+        }
+    }
+
+    /**
      * Set this device's name. This will show up on the mobile device on the same account under linked devices
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
@@ -1123,7 +1201,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun setExpiration(recipient: Recipient, expiration: Int): SendResponse {
-        withAccountOrThrow {
+        withAccountOrThrow { account ->
             val request = when (recipient) {
                 is Recipient.Group -> SetExpirationRequest(
                     account = accountId,
@@ -1133,6 +1211,11 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Individual -> SetExpirationRequest(
                     account = accountId,
                     address = recipient.address,
+                    expiration = expiration,
+                )
+                Recipient.Self -> SetExpirationRequest(
+                    account = accountId,
+                    address = account.address ?: throw SignaldException("account is missing address for self"),
                     expiration = expiration,
                 )
             }
@@ -1288,7 +1371,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
         isTyping: Boolean,
         `when`: Long = Clock.System.now().toEpochMilliseconds()
     ) {
-        withAccountOrThrow {
+        withAccountOrThrow { account ->
             val request = when (recipient) {
                 is Recipient.Group -> TypingRequest(
                     account = accountId,
@@ -1299,6 +1382,12 @@ public actual class Signal @Throws(SignaldException::class) constructor(
                 is Recipient.Individual -> TypingRequest(
                     account = accountId,
                     address = recipient.address,
+                    typing = isTyping,
+                    `when` = `when`
+                )
+                Recipient.Self -> TypingRequest(
+                    account = accountId,
+                    address = account.address ?: throw SignaldException("account is missing address for self"),
                     typing = isTyping,
                     `when` = `when`
                 )
