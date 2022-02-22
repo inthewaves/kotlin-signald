@@ -133,10 +133,19 @@ public sealed interface GroupUpdate {
 }
 
 /**
- * Used with the [updateGroup] function.
+ * Used with the [org.inthewaves.kotlinsignald.Signal.leaveGroup] function.
  */
-public enum class GroupLinkStatus {
-    OFF, ON_NO_ADMIN_APPROVAL, ON_WITH_ADMIN_APPROVAL
+public enum class LeaveGroupType {
+    /** Leaves the group without deleting the group chat from other devices. */
+    LEAVE_ONLY,
+    /** Requests deletion of the group chat from other devices, and then leaves the group */
+    DELETE_FROM_OTHER_DEVICES,
+    /**
+     * Requests blocking and deletion of the group chat from other devices, and then leaves the group. Note that
+     * signald itself doesn't support blocking right now; however, this will request that other devices add it to
+     * block list
+     */
+    BLOCK_AND_DELETE_FROM_OTHER_DEVICES,
 }
 
 /**
@@ -149,6 +158,13 @@ public sealed class Fingerprint {
      * @param qrCodeData base64-encoded QR code data.
      */
     public class QrCodeData(public val qrCodeData: String) : Fingerprint()
+}
+
+/**
+ * Used with the [org.inthewaves.kotlinsignald.Signal.updateGroup] function.
+ */
+public enum class GroupLinkStatus {
+    OFF, ON_NO_ADMIN_APPROVAL, ON_WITH_ADMIN_APPROVAL
 }
 
 /**
@@ -200,7 +216,7 @@ public sealed class SyncRequest {
          * @throws IllegalArgumentException if the message is missing a source or a timestamp
          */
         public constructor(message: IncomingMessage.Data) : this(
-            requireNotNull(message.source)  { "message is missing a source" },
+            requireNotNull(message.source) { "message is missing a source" },
             requireNotNull(message.timestamp) { "message is missing a timestamp" }
         )
     }

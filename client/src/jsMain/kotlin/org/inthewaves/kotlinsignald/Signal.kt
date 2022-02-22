@@ -597,7 +597,12 @@ public actual class Signal private constructor(
     }
 
     /**
-     * Leaves a group with the specified [groupID]
+     * Leaves a group with the specified [groupID].
+     *
+     * https://github.com/signalapp/Signal-Desktop/blob/37d47764729d3cc6e8a8d9aeba1c0d2501549bcb/ts/models/conversations.ts#L2428
+     *
+     * @param leaveGroupType Other actions to perform when leaving a group. Defaults to just leaving the group without
+     * requesting that other devices block the group or delete its chat history.
      *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
@@ -610,8 +615,29 @@ public actual class Signal private constructor(
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError
      */
-    public suspend fun leaveGroup(groupID: String): GroupInfo {
+    public suspend fun leaveGroup(groupID: String, leaveGroupType: LeaveGroupType = LeaveGroupType.LEAVE_ONLY): GroupInfo {
         withAccountOrThrow {
+            when (leaveGroupType) {
+                LeaveGroupType.LEAVE_ONLY -> {
+                    // do nothing
+                }
+                LeaveGroupType.DELETE_FROM_OTHER_DEVICES -> {
+                    sendSyncRequest(
+                        SyncRequest.MessageRequestResponse(
+                            recipient = Recipient.forGroup(groupID),
+                            action = SyncRequest.MessageRequestResponse.Action.DELETE
+                        )
+                    )
+                }
+                LeaveGroupType.BLOCK_AND_DELETE_FROM_OTHER_DEVICES -> {
+                    sendSyncRequest(
+                        SyncRequest.MessageRequestResponse(
+                            recipient = Recipient.forGroup(groupID),
+                            action = SyncRequest.MessageRequestResponse.Action.BLOCK_AND_DELETE
+                        )
+                    )
+                }
+            }
             return LeaveGroupRequest(account = accountId, groupID = groupID).submitSuspend(socketWrapper)
         }
     }

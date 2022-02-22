@@ -638,6 +638,10 @@ public actual class Signal @Throws(SignaldException::class) constructor(
     /**
      * Leaves a group with the specified [groupID]
      *
+     * @param leaveGroupType Other actions to perform when leaving a group. Defaults to just leaving the group without
+     * requesting that other devices block the group or delete its chat history. This will perform an extra socket
+     * connection to make the request.
+     *
      * @throws RequestFailedException if signald sends an error response or the incoming message is invalid
      * @throws SignaldException if the request to the socket fails
      * @throws NoSuchAccountError
@@ -650,8 +654,29 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws AuthorizationFailedError
      */
     @Throws(SignaldException::class)
-    public fun leaveGroup(groupID: String): GroupInfo {
+    public fun leaveGroup(groupID: String, leaveGroupType: LeaveGroupType = LeaveGroupType.LEAVE_ONLY): GroupInfo {
         withAccountOrThrow {
+            when (leaveGroupType) {
+                LeaveGroupType.LEAVE_ONLY -> {
+                    // do nothing
+                }
+                LeaveGroupType.DELETE_FROM_OTHER_DEVICES -> {
+                    sendSyncRequest(
+                        SyncRequest.MessageRequestResponse(
+                            recipient = Recipient.forGroup(groupID),
+                            action = SyncRequest.MessageRequestResponse.Action.DELETE
+                        )
+                    )
+                }
+                LeaveGroupType.BLOCK_AND_DELETE_FROM_OTHER_DEVICES -> {
+                    sendSyncRequest(
+                        SyncRequest.MessageRequestResponse(
+                            recipient = Recipient.forGroup(groupID),
+                            action = SyncRequest.MessageRequestResponse.Action.BLOCK_AND_DELETE
+                        )
+                    )
+                }
+            }
             return LeaveGroupRequest(account = accountId, groupID = groupID).submit(socketWrapper)
         }
     }

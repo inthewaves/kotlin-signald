@@ -110,6 +110,14 @@ public abstract interface class org/inthewaves/kotlinsignald/IncomingMessageSubs
 	public abstract fun nextMessageSuspend (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class org/inthewaves/kotlinsignald/LeaveGroupType : java/lang/Enum {
+	public static final field BLOCK_AND_DELETE_FROM_OTHER_DEVICES Lorg/inthewaves/kotlinsignald/LeaveGroupType;
+	public static final field DELETE_FROM_OTHER_DEVICES Lorg/inthewaves/kotlinsignald/LeaveGroupType;
+	public static final field LEAVE_ONLY Lorg/inthewaves/kotlinsignald/LeaveGroupType;
+	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/LeaveGroupType;
+	public static fun values ()[Lorg/inthewaves/kotlinsignald/LeaveGroupType;
+}
+
 public final class org/inthewaves/kotlinsignald/PersistentSocketWrapper : java/lang/AutoCloseable, org/inthewaves/kotlinsignald/clientprotocol/SocketCommunicator {
 	public static final field Companion Lorg/inthewaves/kotlinsignald/PersistentSocketWrapper$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -144,6 +152,7 @@ public abstract class org/inthewaves/kotlinsignald/Recipient {
 	public static final fun forIndividual (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 	public static final fun forNumber (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 	public static final fun forReply (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IncomingMessage;)Lorg/inthewaves/kotlinsignald/Recipient;
+	public static final fun forSelf ()Lorg/inthewaves/kotlinsignald/Recipient$Self;
 	public static final fun forUUID (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 }
 
@@ -154,6 +163,7 @@ public final class org/inthewaves/kotlinsignald/Recipient$Companion {
 	public final fun forIndividual (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 	public final fun forNumber (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 	public final fun forReply (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IncomingMessage;)Lorg/inthewaves/kotlinsignald/Recipient;
+	public final fun forSelf ()Lorg/inthewaves/kotlinsignald/Recipient$Self;
 	public final fun forUUID (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/Recipient$Individual;
 }
 
@@ -168,6 +178,10 @@ public final class org/inthewaves/kotlinsignald/Recipient$Group : org/inthewaves
 public final class org/inthewaves/kotlinsignald/Recipient$Individual : org/inthewaves/kotlinsignald/Recipient {
 	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;)V
 	public final fun getAddress ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
+}
+
+public final class org/inthewaves/kotlinsignald/Recipient$Self : org/inthewaves/kotlinsignald/Recipient {
+	public static final field INSTANCE Lorg/inthewaves/kotlinsignald/Recipient$Self;
 }
 
 public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsignald/SignaldClient {
@@ -201,7 +215,8 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun isIdentifierRegistered (Ljava/lang/String;)Z
 	public final fun isRegisteredWithSignald ()Z
 	public final fun joinGroup (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupJoinInfo;
-	public final fun leaveGroup (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
+	public final fun leaveGroup (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/LeaveGroupType;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
+	public static synthetic fun leaveGroup$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/String;Lorg/inthewaves/kotlinsignald/LeaveGroupType;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;
 	public final fun listAccounts ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/AccountList;
 	public final fun listContacts (Ljava/lang/Boolean;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileList;
 	public static synthetic fun listContacts$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/Boolean;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/ProfileList;
@@ -225,6 +240,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public static synthetic fun send$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/Recipient;Ljava/lang/String;JLjava/util/Collection;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonQuote;Ljava/util/Collection;Ljava/util/Collection;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun sendPayment (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Payment;J)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public static synthetic fun sendPayment$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Payment;JILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
+	public final fun sendSyncRequest (Lorg/inthewaves/kotlinsignald/SyncRequest;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonSendMessageResult;
 	public final fun setDeviceName (Ljava/lang/String;)V
 	public final fun setExpiration (Lorg/inthewaves/kotlinsignald/Recipient;I)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public final fun setProfile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;)V
@@ -269,6 +285,33 @@ public final class org/inthewaves/kotlinsignald/SocketWrapper : org/inthewaves/k
 
 public final class org/inthewaves/kotlinsignald/SocketWrapper$Companion {
 	public final fun create (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SocketWrapper;
+}
+
+public abstract class org/inthewaves/kotlinsignald/SyncRequest {
+}
+
+public final class org/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse : org/inthewaves/kotlinsignald/SyncRequest {
+	public fun <init> (Lorg/inthewaves/kotlinsignald/Recipient;Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;)V
+	public final fun getAction ()Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public final fun getRecipient ()Lorg/inthewaves/kotlinsignald/Recipient;
+}
+
+public final class org/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action : java/lang/Enum {
+	public static final field ACCEPT Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static final field BLOCK Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static final field BLOCK_AND_DELETE Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static final field DELETE Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static final field UNBLOCK_AND_ACCEPT Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static fun valueOf (Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+	public static fun values ()[Lorg/inthewaves/kotlinsignald/SyncRequest$MessageRequestResponse$Action;
+}
+
+public final class org/inthewaves/kotlinsignald/SyncRequest$ViewOnceOpened : org/inthewaves/kotlinsignald/SyncRequest {
+	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IncomingMessage$Data;)V
+	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/IncomingMessage;)V
+	public fun <init> (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;J)V
+	public final fun getMessageTimestamp ()J
+	public final fun getSender ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;
 }
 
 public final class org/inthewaves/kotlinsignald/TrustLevel : java/lang/Enum {
