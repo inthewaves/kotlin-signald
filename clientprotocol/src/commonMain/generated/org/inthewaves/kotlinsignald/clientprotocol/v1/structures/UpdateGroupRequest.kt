@@ -86,8 +86,13 @@ public data class UpdateGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Caused when not a member of the group, when trying to update
+     * something without the right permissions, etc. This can also be thrown if signald is setup as a
+     * linked device that has been removed by the primary device.
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update, e.g. trying
+     * to add a user that's already in the group
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupInfo =
         super.submit(socketCommunicator, id)
@@ -104,8 +109,13 @@ public data class UpdateGroupRequest(
      * @throws UnknownGroupError
      * @throws GroupVerificationError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Caused when not a member of the group, when trying to update
+     * something without the right permissions, etc. This can also be thrown if signald is setup as a
+     * linked device that has been removed by the primary device.
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update, e.g. trying
+     * to add a user that's already in the group
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -42,6 +42,7 @@ public data class SubmitChallengeRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -56,6 +57,7 @@ public data class SubmitChallengeRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -51,6 +51,8 @@ public data class ResolveAddressRequest(
      * @throws InternalError
      * @throws NoSuchAccountError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonAddress =
         super.submit(socketCommunicator, id)
@@ -63,6 +65,8 @@ public data class ResolveAddressRequest(
      * @throws InternalError
      * @throws NoSuchAccountError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -56,6 +56,7 @@ public data class GroupLinkInfoRequest(
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
      * @throws GroupVerificationError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         JsonGroupJoinInfo = super.submit(socketCommunicator, id)
@@ -72,6 +73,7 @@ public data class GroupLinkInfoRequest(
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
      * @throws GroupVerificationError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

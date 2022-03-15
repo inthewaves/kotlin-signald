@@ -5,12 +5,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Indicates the server rejected our credentials or a failed group update. Typically means the
- * linked device was removed by the primary device, or that the account was re-registered. For group
- * updates, this can indicate that we lack permissions.
+ * Indicates the server rejected our group update. This can be due to errors such as trying to add a
+ * user that's already in the group.
  */
 @Serializable
-@SerialName("AuthorizationFailedError")
-public data class AuthorizationFailedError(
+@SerialName("GroupPatchNotAcceptedError")
+public data class GroupPatchNotAcceptedError(
     public override val message: String? = null
 ) : TypedExceptionV1()

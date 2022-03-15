@@ -58,8 +58,12 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update.
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -76,8 +80,12 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update.
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

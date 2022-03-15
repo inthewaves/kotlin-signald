@@ -54,6 +54,8 @@ public data class AddLinkedDeviceRequest(
      * @throws InvalidProxyError
      * @throws InvalidRequestError caused by syntax errors with the provided linking URI
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -68,6 +70,8 @@ public data class AddLinkedDeviceRequest(
      * @throws InvalidProxyError
      * @throws InvalidRequestError caused by syntax errors with the provided linking URI
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -60,6 +60,7 @@ public data class SendSyncMessageRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         JsonSendMessageResult = super.submit(socketCommunicator, id)
@@ -77,6 +78,7 @@ public data class SendSyncMessageRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

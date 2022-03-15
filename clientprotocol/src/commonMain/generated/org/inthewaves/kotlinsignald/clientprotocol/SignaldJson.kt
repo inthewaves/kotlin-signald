@@ -15,6 +15,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.DuplicateMessag
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.FingerprintVersionMismatchError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupNotActiveError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupPatchNotAcceptedError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupVerificationError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InternalError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidAttachmentError
@@ -35,6 +36,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavaila
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProofRequiredError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProtocolInvalidMessageError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SQLError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypedExceptionV1
@@ -65,6 +67,7 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(FingerprintVersionMismatchError::class)
             subclass(GroupLinkNotActiveError::class)
             subclass(GroupNotActiveError::class)
+            subclass(GroupPatchNotAcceptedError::class)
             subclass(GroupVerificationError::class)
             subclass(InternalError::class)
             subclass(InvalidAttachmentError::class)
@@ -85,6 +88,7 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(ProofRequiredError::class)
             subclass(ProtocolInvalidMessageError::class)
             subclass(RateLimitError::class)
+            subclass(SQLError::class)
             subclass(ScanTimeoutError::class)
             subclass(ServerNotFoundError::class)
             subclass(UnknownGroupError::class)

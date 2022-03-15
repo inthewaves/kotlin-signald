@@ -61,6 +61,8 @@ public data class JoinGroupRequest(
      * @throws GroupNotActiveError
      * @throws UnknownGroupError
      * @throws InvalidGroupStateError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         JsonGroupJoinInfo = super.submit(socketCommunicator, id)
@@ -81,6 +83,8 @@ public data class JoinGroupRequest(
      * @throws GroupNotActiveError
      * @throws UnknownGroupError
      * @throws InvalidGroupStateError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

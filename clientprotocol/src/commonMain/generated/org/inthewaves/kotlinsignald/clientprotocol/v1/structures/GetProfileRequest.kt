@@ -53,6 +53,8 @@ public data class GetProfileRequest(
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Profile =
         super.submit(socketCommunicator, id)
@@ -68,6 +70,8 @@ public data class GetProfileRequest(
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

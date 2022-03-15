@@ -47,6 +47,7 @@ public data class UnsubscribeRequest(
      * during socket communication
      * @throws NoSuchAccountError
      * @throws InternalError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         SubscriptionResponse {
@@ -110,6 +111,7 @@ public data class UnsubscribeRequest(
      * during socket communication
      * @throws NoSuchAccountError
      * @throws InternalError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

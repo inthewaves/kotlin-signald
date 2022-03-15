@@ -53,6 +53,7 @@ public data class IsIdentifierRegisteredRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): BooleanMessage =
         super.submit(socketCommunicator, id)
@@ -66,6 +67,7 @@ public data class IsIdentifierRegisteredRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

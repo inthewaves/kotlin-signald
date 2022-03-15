@@ -64,6 +64,8 @@ public data class SendRequest(
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws AttachmentTooLargeError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -84,6 +86,8 @@ public data class SendRequest(
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws AttachmentTooLargeError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

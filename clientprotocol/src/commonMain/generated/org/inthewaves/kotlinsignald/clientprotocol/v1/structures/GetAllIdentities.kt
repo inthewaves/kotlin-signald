@@ -48,6 +48,8 @@ public data class GetAllIdentities(
      * @throws NoSuchAccountError
      * @throws ServerNotFoundError
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         AllIdentityKeyList = super.submit(socketCommunicator, id)
@@ -61,6 +63,8 @@ public data class GetAllIdentities(
      * @throws NoSuchAccountError
      * @throws ServerNotFoundError
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

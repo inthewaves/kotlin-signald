@@ -71,6 +71,8 @@ public data class CreateGroupRequest(
      * @throws InvalidGroupStateError
      * @throws UnknownGroupError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -91,6 +93,8 @@ public data class CreateGroupRequest(
      * @throws InvalidGroupStateError
      * @throws UnknownGroupError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
