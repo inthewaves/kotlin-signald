@@ -12,6 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.SubmitChallenge
 @Serializable
 @SerialName("submit_challenge")
 public data class SubmitChallengeRequest(
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
     public val account: String,
     public val challenge: String,
     @SerialName("captcha_token")

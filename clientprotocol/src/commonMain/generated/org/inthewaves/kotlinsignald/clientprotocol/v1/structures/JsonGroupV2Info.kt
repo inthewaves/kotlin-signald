@@ -35,7 +35,7 @@ public data class JsonGroupV2Info(
     public val members: List<JsonAddress> = emptyList(),
     public val pendingMembers: List<JsonAddress> = emptyList(),
     public val requestingMembers: List<JsonAddress> = emptyList(),
-    public val bannedMembers: List<JsonAddress> = emptyList(),
+    public val bannedMembers: List<BannedGroupMember> = emptyList(),
     /**
      * the signal.group link, if applicable
      */

@@ -12,6 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ListContacts
 @Serializable
 @SerialName("list_contacts")
 public data class ListContactsRequest(
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
     public val account: String,
     /**
      * return results from local store immediately, refreshing from server afterward if needed. If

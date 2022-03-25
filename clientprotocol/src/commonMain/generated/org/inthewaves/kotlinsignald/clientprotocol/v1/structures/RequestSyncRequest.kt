@@ -38,7 +38,7 @@ public data class RequestSyncRequest(
     /**
      * The account to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String
 ) : SignaldRequestBodyV1<EmptyResponse>() {

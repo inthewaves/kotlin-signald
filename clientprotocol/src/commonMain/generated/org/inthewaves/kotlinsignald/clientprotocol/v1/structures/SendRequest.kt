@@ -15,7 +15,11 @@ public data class SendRequest(
     /**
      * Example: "+12024561414"
      */
-    public val username: String,
+    public val username: String? = null,
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
+    public val account: String? = null,
     public val recipientAddress: JsonAddress? = null,
     /**
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
