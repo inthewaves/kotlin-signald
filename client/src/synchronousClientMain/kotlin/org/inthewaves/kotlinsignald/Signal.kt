@@ -881,12 +881,13 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
-    public fun refuseMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
+    public fun refuseMembership(groupID: String, members: Collection<JsonAddress>, alsoBan: Boolean = false): JsonGroupV2Info {
         withAccountOrThrow {
             return RefuseMembershipRequest(
                 account = accountId,
                 members = members.toList(),
-                groupId = groupID
+                groupId = groupID,
+                alsoBan = alsoBan
             ).submit(socketWrapper)
         }
     }
