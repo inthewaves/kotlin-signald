@@ -61,7 +61,7 @@ public data class SetExpirationRequest(
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
      * has been removed by the primary device. If trying to update a group, this can also be caused if
-     * group permissions don't allow the update.
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError If updating a group, caused when server rejects the group
@@ -84,7 +84,7 @@ public data class SetExpirationRequest(
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
      * has been removed by the primary device. If trying to update a group, this can also be caused if
-     * group permissions don't allow the update.
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError If updating a group, caused when server rejects the group

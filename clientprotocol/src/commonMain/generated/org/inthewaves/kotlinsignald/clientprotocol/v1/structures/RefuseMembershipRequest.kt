@@ -29,7 +29,9 @@ public data class RefuseMembershipRequest(
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     @SerialName("group_id")
-    public val groupId: String
+    public val groupId: String,
+    @SerialName("also_ban")
+    public val alsoBan: Boolean? = null
 ) : SignaldRequestBodyV1<JsonGroupV2Info>() {
     internal override val responseWrapperSerializer: KSerializer<RefuseMembership>
         get() = RefuseMembership.serializer()
@@ -60,7 +62,7 @@ public data class RefuseMembershipRequest(
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
      * has been removed by the primary device. If trying to update a group, this can also be caused if
-     * group permissions don't allow the update.
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
@@ -82,7 +84,7 @@ public data class RefuseMembershipRequest(
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
      * has been removed by the primary device. If trying to update a group, this can also be caused if
-     * group permissions don't allow the update.
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.

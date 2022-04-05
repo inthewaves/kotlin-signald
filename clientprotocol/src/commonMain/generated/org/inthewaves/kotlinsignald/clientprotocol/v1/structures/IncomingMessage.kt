@@ -52,6 +52,8 @@ public data class IncomingMessage(
         public val receiptMessage: ReceiptMessage? = null,
         @SerialName("typing_message")
         public val typingMessage: TypingMessage? = null,
+        @SerialName("story_message")
+        public val storyMessage: StoryMessage? = null,
         @SerialName("server_guid")
         public val serverGuid: String? = null
     ) : ClientMessageWrapper.Data()

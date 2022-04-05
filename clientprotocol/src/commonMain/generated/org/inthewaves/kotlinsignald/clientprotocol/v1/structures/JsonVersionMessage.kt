@@ -10,7 +10,7 @@ public data class JsonVersionMessage(
      */
     public val name: String? = null,
     /**
-     * Example: "custom-5931020a89ee98668e2b7ed528023fc095ad61fb-1"
+     * Example: "custom-fdb96344-1"
      */
     public val version: String? = null,
     /**

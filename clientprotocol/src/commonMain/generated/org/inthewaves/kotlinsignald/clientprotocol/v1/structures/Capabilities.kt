@@ -6,8 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class Capabilities(
+    /**
+     * this capability is deprecated and will always be true
+     */
     public val gv2: Boolean? = null,
     public val storage: Boolean? = null,
+    public val stories: Boolean? = null,
     @SerialName("gv1-migration")
     public val gv1Migration: Boolean? = null,
     @SerialName("sender_key")

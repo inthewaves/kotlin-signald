@@ -10,8 +10,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.BanUser
 import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrapper
 
 /**
- * Bans users from a group, even if users aren't in the group. If they are currently in the group,
- * they will also be removed.
+ * Bans users from a group. This works even if the users aren't in the group. If they are currently
+ * in the group, they will also be removed.
  */
 @Serializable
 @SerialName("ban_user")
@@ -19,7 +19,7 @@ public data class BanUserRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -59,9 +59,11 @@ public data class BanUserRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
-     * @throws GroupPatchNotAcceptedError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -78,9 +80,11 @@ public data class BanUserRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
-     * @throws GroupPatchNotAcceptedError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -87,5 +87,7 @@ public data class JsonDataMessage(
      * the eraId string from a group call message update
      */
     @SerialName("group_call_update")
-    public val groupCallUpdate: String? = null
+    public val groupCallUpdate: String? = null,
+    @SerialName("story_context")
+    public val storyContext: StoryContext? = null
 )

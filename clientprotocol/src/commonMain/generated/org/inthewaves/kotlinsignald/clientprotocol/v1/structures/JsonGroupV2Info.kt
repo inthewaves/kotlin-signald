@@ -35,7 +35,6 @@ public data class JsonGroupV2Info(
     public val members: List<JsonAddress> = emptyList(),
     public val pendingMembers: List<JsonAddress> = emptyList(),
     public val requestingMembers: List<JsonAddress> = emptyList(),
-    public val bannedMembers: List<BannedGroupMember> = emptyList(),
     /**
      * the signal.group link, if applicable
      */
@@ -62,6 +61,8 @@ public data class JsonGroupV2Info(
      * group
      */
     public val removed: Boolean? = null,
+    @SerialName("banned_members")
+    public val bannedMembers: List<BannedGroupMember> = emptyList(),
     /**
      * Represents a peer-to-peer group change done by a user. Will not be set if the group change
      * signature fails verification. This is usually only set inside of incoming messages.

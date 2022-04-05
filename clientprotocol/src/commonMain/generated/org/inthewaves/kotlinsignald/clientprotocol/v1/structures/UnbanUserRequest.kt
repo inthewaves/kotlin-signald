@@ -18,7 +18,7 @@ public data class UnbanUserRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -58,9 +58,11 @@ public data class UnbanUserRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
-     * @throws GroupPatchNotAcceptedError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -77,9 +79,11 @@ public data class UnbanUserRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
-     * @throws GroupPatchNotAcceptedError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
