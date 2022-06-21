@@ -58,7 +58,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":client"))
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
             }
         }
         val commonTest by getting {
