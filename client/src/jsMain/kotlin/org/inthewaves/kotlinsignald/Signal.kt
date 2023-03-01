@@ -350,8 +350,8 @@ public actual class Signal private constructor(
      * @throws ScanTimeoutError
      */
     public suspend fun finishLink(deviceName: String, sessionId: String): Account {
-        withAccountOrThrow {
-            return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submitSuspend(socketWrapper)
+        return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submitSuspend(socketWrapper).also {
+            accountInfo = it
         }
     }
 
@@ -367,9 +367,7 @@ public actual class Signal private constructor(
      * @throws InvalidProxyError
      */
     public suspend fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
-        withAccountOrThrow {
-            return GenerateLinkingURIRequest(server = serverUuid).submitSuspend(socketWrapper)
-        }
+        return GenerateLinkingURIRequest(server = serverUuid).submitSuspend(socketWrapper)
     }
 
     /**
