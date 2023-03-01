@@ -379,8 +379,8 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun finishLink(deviceName: String, sessionId: String): Account {
-        withAccountOrThrow {
-            return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submit(socketWrapper)
+        return FinishLinkRequest(deviceName = deviceName, sessionId = sessionId).submit(socketWrapper).also {
+            accountInfo = it
         }
     }
 
@@ -397,9 +397,7 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      */
     @Throws(SignaldException::class)
     public fun generateLinkingUri(serverUuid: String? = null): LinkingURI {
-        withAccountOrThrow {
-            return GenerateLinkingURIRequest(server = serverUuid).submit(socketWrapper)
-        }
+        return GenerateLinkingURIRequest(server = serverUuid).submit(socketWrapper)
     }
 
     /**
