@@ -51,7 +51,6 @@ public data class DeleteAccountRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
-     * @throws AuthorizationFailedError
      * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
@@ -66,7 +65,6 @@ public data class DeleteAccountRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
-     * @throws AuthorizationFailedError
      * @throws SQLError
      */
     public override suspend fun submitSuspend(

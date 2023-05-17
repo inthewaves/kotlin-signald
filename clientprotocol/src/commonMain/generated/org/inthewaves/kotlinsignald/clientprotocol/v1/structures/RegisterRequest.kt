@@ -57,6 +57,7 @@ public data class RegisterRequest(
      * @throws CaptchaRequiredError
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
+     * @throws RateLimitError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Account =
         super.submit(socketCommunicator, id)
@@ -69,6 +70,7 @@ public data class RegisterRequest(
      * @throws CaptchaRequiredError
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
+     * @throws RateLimitError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

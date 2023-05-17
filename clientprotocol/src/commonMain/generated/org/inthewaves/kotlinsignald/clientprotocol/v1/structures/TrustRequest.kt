@@ -75,6 +75,7 @@ public data class TrustRequest(
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -96,6 +97,7 @@ public data class TrustRequest(
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

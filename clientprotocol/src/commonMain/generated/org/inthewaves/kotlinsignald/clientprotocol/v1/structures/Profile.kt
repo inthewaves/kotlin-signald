@@ -27,6 +27,11 @@ public data class Profile(
     public val about: String? = null,
     public val emoji: String? = null,
     /**
+     * The user's name from local contact names
+     */
+    @SerialName("contact_name")
+    public val contactName: String? = null,
+    /**
      * The user's Signal profile name
      */
     @SerialName("profile_name")

@@ -10,15 +10,15 @@ public data class JsonVersionMessage(
      */
     public val name: String? = null,
     /**
-     * Example: "custom-fdb96344-1"
+     * Example: "0.23.2-7-1583b4df"
      */
     public val version: String? = null,
     /**
-     * Example: ""
+     * Example: "main"
      */
     public val branch: String? = null,
     /**
-     * Example: ""
+     * Example: "1583b4dfeaeec08bc34653ee55bf66731a2c6f75"
      */
     public val commit: String? = null
 ) : SignaldResponseBodyV1()

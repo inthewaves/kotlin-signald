@@ -54,6 +54,7 @@ public data class SetDeviceNameRequest(
      * @throws NoSuchAccountError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws InvalidRequestError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -69,6 +70,7 @@ public data class SetDeviceNameRequest(
      * @throws NoSuchAccountError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws InvalidRequestError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

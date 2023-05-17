@@ -36,6 +36,9 @@ public data class IncomingMessage(
          */
         @SerialName("server_deliver_timestamp")
         public val serverDeliverTimestamp: Long? = null,
+        /**
+         * removed from protocl
+         */
         @SerialName("has_legacy_message")
         public val hasLegacyMessage: Boolean? = null,
         @SerialName("has_content")
@@ -55,6 +58,8 @@ public data class IncomingMessage(
         @SerialName("story_message")
         public val storyMessage: StoryMessage? = null,
         @SerialName("server_guid")
-        public val serverGuid: String? = null
+        public val serverGuid: String? = null,
+        @SerialName("decryption_error_message")
+        public val decryptionErrorMessage: DecryptionErrorMessage? = null
     ) : ClientMessageWrapper.Data()
 }

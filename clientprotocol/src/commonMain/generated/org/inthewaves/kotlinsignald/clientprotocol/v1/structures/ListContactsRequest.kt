@@ -48,6 +48,8 @@ public data class ListContactsRequest(
      * @throws NoSuchAccountError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws InvalidRequestError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): ProfileList =
         super.submit(socketCommunicator, id)
@@ -63,6 +65,8 @@ public data class ListContactsRequest(
      * @throws NoSuchAccountError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws InvalidRequestError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

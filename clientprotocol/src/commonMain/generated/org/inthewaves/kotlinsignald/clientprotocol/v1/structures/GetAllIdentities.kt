@@ -50,6 +50,7 @@ public data class GetAllIdentities(
      * @throws InternalError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         AllIdentityKeyList = super.submit(socketCommunicator, id)
@@ -65,6 +66,7 @@ public data class GetAllIdentities(
      * @throws InternalError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

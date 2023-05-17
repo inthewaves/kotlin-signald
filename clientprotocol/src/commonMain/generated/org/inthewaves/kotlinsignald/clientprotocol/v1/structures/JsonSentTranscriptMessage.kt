@@ -12,6 +12,7 @@ public data class JsonSentTranscriptMessage(
     public val timestamp: Long? = null,
     public val expirationStartTimestamp: Long? = null,
     public val message: JsonDataMessage? = null,
+    public val story: StoryMessage? = null,
     public val unidentifiedStatus: Map<String, Boolean>? = null,
     public val isRecipientUpdate: Boolean? = null
 )

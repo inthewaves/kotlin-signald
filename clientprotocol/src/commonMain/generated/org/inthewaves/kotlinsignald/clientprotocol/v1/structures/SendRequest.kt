@@ -37,7 +37,12 @@ public data class SendRequest(
     /**
      * Optionally set to a sub-set of group members. Ignored if recipientGroupId isn't specified
      */
-    public val members: List<JsonAddress>? = null
+    public val members: List<JsonAddress>? = null,
+    /**
+     * set to true when replying to a story
+     */
+    @SerialName("is_for_story")
+    public val isForStory: Boolean? = null
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()
@@ -70,6 +75,8 @@ public data class SendRequest(
      * @throws AttachmentTooLargeError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -92,6 +99,8 @@ public data class SendRequest(
      * @throws AttachmentTooLargeError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

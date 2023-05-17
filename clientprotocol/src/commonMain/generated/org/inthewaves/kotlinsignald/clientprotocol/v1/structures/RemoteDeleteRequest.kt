@@ -64,13 +64,14 @@ public data class RemoteDeleteRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRecipientError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -85,13 +86,14 @@ public data class RemoteDeleteRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRecipientError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

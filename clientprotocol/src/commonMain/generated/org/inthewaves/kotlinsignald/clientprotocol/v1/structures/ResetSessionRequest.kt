@@ -52,13 +52,14 @@ public data class ResetSessionRequest(
      * @throws InvalidProxyError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -73,13 +74,14 @@ public data class ResetSessionRequest(
      * @throws InvalidProxyError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

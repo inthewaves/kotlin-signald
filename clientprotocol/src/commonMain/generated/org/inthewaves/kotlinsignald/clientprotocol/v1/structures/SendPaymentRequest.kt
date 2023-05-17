@@ -55,12 +55,13 @@ public data class SendPaymentRequest(
      * @throws InvalidBase64Error
      * @throws InvalidRecipientError
      * @throws UnknownGroupError
-     * @throws NoSendPermissionError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -77,12 +78,13 @@ public data class SendPaymentRequest(
      * @throws InvalidBase64Error
      * @throws InvalidRecipientError
      * @throws UnknownGroupError
-     * @throws NoSendPermissionError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
      * @throws AuthorizationFailedError
      * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

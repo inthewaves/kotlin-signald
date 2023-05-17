@@ -27,6 +27,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidInviteUR
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidProxyError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRecipientError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InvalidRequestError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NetworkError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoKnownUUIDError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSendPermissionError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchAccountError
@@ -34,15 +35,19 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.NoSuchSessionEr
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.OwnProfileKeyDoesNotExistError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProfileUnavailableError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProofRequiredError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProtocolInvalidKeyIdError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProtocolInvalidMessageError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ProtocolNoSessionError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RateLimitError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SQLError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ServerNotFoundError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SignalServerError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypedExceptionV1
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownIdentityKeyError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnregisteredUserError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnsupportedGroupError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UntrustedIdentityError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UserAlreadyExistsError
 import kotlin.native.concurrent.ThreadLocal
@@ -79,6 +84,7 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(InvalidProxyError::class)
             subclass(InvalidRecipientError::class)
             subclass(InvalidRequestError::class)
+            subclass(NetworkError::class)
             subclass(NoKnownUUIDError::class)
             subclass(NoSendPermissionError::class)
             subclass(NoSuchAccountError::class)
@@ -86,14 +92,18 @@ public val SignaldJson: Json = kotlinx.serialization.json.Json {
             subclass(OwnProfileKeyDoesNotExistError::class)
             subclass(ProfileUnavailableError::class)
             subclass(ProofRequiredError::class)
+            subclass(ProtocolInvalidKeyIdError::class)
             subclass(ProtocolInvalidMessageError::class)
+            subclass(ProtocolNoSessionError::class)
             subclass(RateLimitError::class)
             subclass(SQLError::class)
             subclass(ScanTimeoutError::class)
             subclass(ServerNotFoundError::class)
+            subclass(SignalServerError::class)
             subclass(UnknownGroupError::class)
             subclass(UnknownIdentityKeyError::class)
             subclass(UnregisteredUserError::class)
+            subclass(UnsupportedGroupError::class)
             subclass(UntrustedIdentityError::class)
             subclass(UserAlreadyExistsError::class)
         }

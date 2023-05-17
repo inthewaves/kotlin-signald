@@ -66,6 +66,12 @@ public data class SetExpirationRequest(
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError If updating a group, caused when server rejects the group
      * update.
+     * @throws UnsupportedGroupError
+     * @throws NetworkError
+     * @throws InvalidRecipientError
+     * @throws ProofRequiredError
+     * @throws RateLimitError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -89,6 +95,12 @@ public data class SetExpirationRequest(
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError If updating a group, caused when server rejects the group
      * update.
+     * @throws UnsupportedGroupError
+     * @throws NetworkError
+     * @throws InvalidRecipientError
+     * @throws ProofRequiredError
+     * @throws RateLimitError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

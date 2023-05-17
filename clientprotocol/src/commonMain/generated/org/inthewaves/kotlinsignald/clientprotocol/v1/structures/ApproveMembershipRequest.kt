@@ -62,6 +62,7 @@ public data class ApproveMembershipRequest(
      * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -83,6 +84,7 @@ public data class ApproveMembershipRequest(
      * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

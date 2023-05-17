@@ -93,6 +93,7 @@ public data class UpdateGroupRequest(
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update, e.g. trying
      * to add a user that's already in the group
+     * @throws UnsupportedGroupError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupInfo =
         super.submit(socketCommunicator, id)
@@ -116,6 +117,7 @@ public data class UpdateGroupRequest(
      * @throws SQLError
      * @throws GroupPatchNotAcceptedError Caused when server rejects the group update, e.g. trying
      * to add a user that's already in the group
+     * @throws UnsupportedGroupError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
