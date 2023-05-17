@@ -21,7 +21,7 @@ public data class UnsubscribeRequest(
     /**
      * The account to unsubscribe from
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String
 ) : SignaldRequestBodyV1<SubscriptionResponse>() {
@@ -47,6 +47,7 @@ public data class UnsubscribeRequest(
      * during socket communication
      * @throws NoSuchAccountError
      * @throws InternalError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String):
         SubscriptionResponse {
@@ -110,6 +111,7 @@ public data class UnsubscribeRequest(
      * during socket communication
      * @throws NoSuchAccountError
      * @throws InternalError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

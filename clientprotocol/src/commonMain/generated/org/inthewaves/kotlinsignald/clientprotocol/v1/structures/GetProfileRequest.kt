@@ -17,6 +17,8 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 public data class GetProfileRequest(
     /**
      * the signald account to use
+     *
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -53,6 +55,9 @@ public data class GetProfileRequest(
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws InvalidRequestError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Profile =
         super.submit(socketCommunicator, id)
@@ -68,6 +73,9 @@ public data class GetProfileRequest(
      * @throws NoSuchAccountError
      * @throws ProfileUnavailableError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws InvalidRequestError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

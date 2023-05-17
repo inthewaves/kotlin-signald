@@ -375,6 +375,7 @@ To regenerate the classes,
 - Reformat the code with `./gradlew ktlintFormat` 
 - Find and replace instances of <code>\`data\`:</code> with `data:` and <code>\`value\`:</code> with `value:`
 - Optimize imports with IDEA
+- `./gradlew apiDump`
 
 ### Compiling a dynamic library (experimental)
 

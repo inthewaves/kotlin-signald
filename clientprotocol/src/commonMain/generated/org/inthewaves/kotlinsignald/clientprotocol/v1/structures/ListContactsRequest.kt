@@ -12,6 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ListContacts
 @Serializable
 @SerialName("list_contacts")
 public data class ListContactsRequest(
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
     public val account: String,
     /**
      * return results from local store immediately, refreshing from server afterward if needed. If
@@ -43,6 +46,10 @@ public data class ListContactsRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws InvalidRequestError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): ProfileList =
         super.submit(socketCommunicator, id)
@@ -56,6 +63,10 @@ public data class ListContactsRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws InvalidRequestError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

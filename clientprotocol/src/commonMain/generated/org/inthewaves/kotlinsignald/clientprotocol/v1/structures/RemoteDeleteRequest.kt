@@ -18,7 +18,7 @@ public data class RemoteDeleteRequest(
     /**
      * the account to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -64,11 +64,14 @@ public data class RemoteDeleteRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRecipientError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -83,11 +86,14 @@ public data class RemoteDeleteRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRecipientError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -5,8 +5,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * indicates the server rejected our credentials. Typically means the linked device was removed by
- * the primary device, or that the account was re-registered
+ * Indicates the server rejected our credentials or a failed group update. Typically means the
+ * linked device was removed by the primary device, or that the account was re-registered. For group
+ * updates, this can indicate that we lack permissions.
  */
 @Serializable
 @SerialName("AuthorizationFailedError")

@@ -54,6 +54,7 @@ public data class RemoveLinkedDeviceRequest(
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -69,6 +70,7 @@ public data class RemoveLinkedDeviceRequest(
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

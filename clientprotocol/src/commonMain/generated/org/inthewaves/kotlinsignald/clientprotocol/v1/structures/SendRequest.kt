@@ -15,7 +15,11 @@ public data class SendRequest(
     /**
      * Example: "+12024561414"
      */
-    public val username: String,
+    public val username: String? = null,
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
+    public val account: String? = null,
     public val recipientAddress: JsonAddress? = null,
     /**
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
@@ -33,7 +37,12 @@ public data class SendRequest(
     /**
      * Optionally set to a sub-set of group members. Ignored if recipientGroupId isn't specified
      */
-    public val members: List<JsonAddress>? = null
+    public val members: List<JsonAddress>? = null,
+    /**
+     * set to true when replying to a story
+     */
+    @SerialName("is_for_story")
+    public val isForStory: Boolean? = null
 ) : SignaldRequestBodyV1<SendResponse>() {
     internal override val responseWrapperSerializer: KSerializer<Send>
         get() = Send.serializer()
@@ -64,6 +73,10 @@ public data class SendRequest(
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws AttachmentTooLargeError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -84,6 +97,10 @@ public data class SendRequest(
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws AttachmentTooLargeError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

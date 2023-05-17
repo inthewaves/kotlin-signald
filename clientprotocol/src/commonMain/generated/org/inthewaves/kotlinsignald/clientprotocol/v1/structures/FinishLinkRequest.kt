@@ -19,6 +19,10 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.JsonMessageWrappe
 @Serializable
 @SerialName("finish_link")
 public data class FinishLinkRequest(
+    /**
+     * overwrite existing account data if the phone number conflicts. false by default
+     */
+    public val overwrite: Boolean? = null,
     @SerialName("device_name")
     public val deviceName: String? = null,
     @SerialName("session_id")

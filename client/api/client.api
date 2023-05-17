@@ -191,6 +191,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public final fun addDevice (Ljava/lang/String;)V
 	public final fun addServer (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/Server;)Ljava/lang/String;
 	public final fun approveMembership (Ljava/lang/String;Ljava/util/Collection;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public final fun banUser (Ljava/lang/String;Ljava/util/Collection;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun createGroup (Ljava/util/Collection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public static synthetic fun createGroup$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/util/Collection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;ILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun deleteAccount (Z)V
@@ -225,7 +226,8 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public static synthetic fun markRead$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Ljava/util/Collection;JILjava/lang/Object;)V
 	public final fun react (Lorg/inthewaves/kotlinsignald/Recipient;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonReaction;J)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
 	public static synthetic fun react$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/Recipient;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonReaction;JILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/SendResponse;
-	public final fun refuseMembership (Ljava/lang/String;Ljava/util/Collection;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public final fun refuseMembership (Ljava/lang/String;Ljava/util/Collection;Z)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
+	public static synthetic fun refuseMembership$default (Lorg/inthewaves/kotlinsignald/Signal;Ljava/lang/String;Ljava/util/Collection;ZILjava/lang/Object;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun register (ZLjava/lang/String;)V
 	public static synthetic fun register$default (Lorg/inthewaves/kotlinsignald/Signal;ZLjava/lang/String;ILjava/lang/Object;)V
 	public final fun remoteConfig ()Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/RemoteConfigList;
@@ -253,6 +255,7 @@ public final class org/inthewaves/kotlinsignald/Signal : org/inthewaves/kotlinsi
 	public static synthetic fun trust$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Lorg/inthewaves/kotlinsignald/Fingerprint;Lorg/inthewaves/kotlinsignald/TrustLevel;ILjava/lang/Object;)V
 	public final fun typing (Lorg/inthewaves/kotlinsignald/Recipient;ZJ)V
 	public static synthetic fun typing$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/Recipient;ZJILjava/lang/Object;)V
+	public final fun unbanUser (Ljava/lang/String;Ljava/util/Collection;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonGroupV2Info;
 	public final fun updateContact (Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;)V
 	public static synthetic fun updateContact$default (Lorg/inthewaves/kotlinsignald/Signal;Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/JsonAddress;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)V
 	public final fun updateGroup (Ljava/lang/String;Lorg/inthewaves/kotlinsignald/GroupUpdate;)Lorg/inthewaves/kotlinsignald/clientprotocol/v1/structures/GroupInfo;

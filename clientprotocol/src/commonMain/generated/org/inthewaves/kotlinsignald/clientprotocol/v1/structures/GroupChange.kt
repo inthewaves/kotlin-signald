@@ -51,6 +51,10 @@ public data class GroupChange(
     public val deletePendingMembers: List<JsonAddress> = emptyList(),
     @SerialName("promote_pending_members")
     public val promotePendingMembers: List<GroupMember> = emptyList(),
+    @SerialName("new_banned_members")
+    public val newBannedMembers: List<BannedGroupMember> = emptyList(),
+    @SerialName("new_unbanned_members")
+    public val newUnbannedMembers: List<BannedGroupMember> = emptyList(),
     @SerialName("new_title")
     public val newTitle: String? = null,
     /**

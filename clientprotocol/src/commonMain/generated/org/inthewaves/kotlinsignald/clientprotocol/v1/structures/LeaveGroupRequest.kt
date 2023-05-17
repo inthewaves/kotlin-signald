@@ -15,7 +15,7 @@ public data class LeaveGroupRequest(
     /**
      * The account to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -51,6 +51,7 @@ public data class LeaveGroupRequest(
      * @throws GroupVerificationError
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupInfo =
         super.submit(socketCommunicator, id)
@@ -68,6 +69,7 @@ public data class LeaveGroupRequest(
      * @throws GroupVerificationError
      * @throws InvalidRequestError
      * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

@@ -6,5 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class GroupList(
     public val groups: List<JsonGroupV2Info> = emptyList(),
+    /**
+     * list of legacy (v1) groups, no longer supported (will always be empty)
+     */
     public val legacyGroups: List<JsonGroupInfo> = emptyList()
 ) : SignaldResponseBodyV1()

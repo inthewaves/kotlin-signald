@@ -18,7 +18,7 @@ public data class ResetSessionRequest(
     /**
      * The account to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -52,11 +52,14 @@ public data class ResetSessionRequest(
      * @throws InvalidProxyError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -71,11 +74,14 @@ public data class ResetSessionRequest(
      * @throws InvalidProxyError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
-     * @throws NoSendPermissionError
      * @throws UnknownGroupError
      * @throws RateLimitError
      * @throws InvalidRecipientError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

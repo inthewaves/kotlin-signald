@@ -18,7 +18,7 @@ public data class TrustRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -73,6 +73,9 @@ public data class TrustRequest(
      * @throws UnknownIdentityKeyError
      * @throws InvalidFingerprintError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): EmptyResponse =
         super.submit(socketCommunicator, id)
@@ -92,6 +95,9 @@ public data class TrustRequest(
      * @throws UnknownIdentityKeyError
      * @throws InvalidFingerprintError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

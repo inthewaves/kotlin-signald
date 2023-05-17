@@ -18,7 +18,7 @@ public data class GetIdentitiesRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -51,6 +51,9 @@ public data class GetIdentitiesRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): IdentityKeyList =
         super.submit(socketCommunicator, id)
@@ -65,6 +68,9 @@ public data class GetIdentitiesRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

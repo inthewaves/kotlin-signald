@@ -12,6 +12,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.ListGroups
 @Serializable
 @SerialName("list_groups")
 public data class ListGroupsRequest(
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
     public val account: String
 ) : SignaldRequestBodyV1<GroupList>() {
     internal override val responseWrapperSerializer: KSerializer<ListGroups>
@@ -37,6 +40,8 @@ public data class ListGroupsRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): GroupList =
         super.submit(socketCommunicator, id)
@@ -51,6 +56,8 @@ public data class ListGroupsRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

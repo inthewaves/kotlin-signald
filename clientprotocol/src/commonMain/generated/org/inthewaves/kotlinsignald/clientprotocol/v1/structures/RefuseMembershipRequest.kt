@@ -18,7 +18,7 @@ public data class RefuseMembershipRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -29,7 +29,9 @@ public data class RefuseMembershipRequest(
      * Example: "EdSqI90cS0UomDpgUXOlCoObWvQOXlH5G3Z2d3f4ayE="
      */
     @SerialName("group_id")
-    public val groupId: String
+    public val groupId: String,
+    @SerialName("also_ban")
+    public val alsoBan: Boolean? = null
 ) : SignaldRequestBodyV1<JsonGroupV2Info>() {
     internal override val responseWrapperSerializer: KSerializer<RefuseMembership>
         get() = RefuseMembership.serializer()
@@ -58,8 +60,12 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): JsonGroupV2Info =
         super.submit(socketCommunicator, id)
@@ -76,8 +82,12 @@ public data class RefuseMembershipRequest(
      * @throws GroupVerificationError
      * @throws InternalError
      * @throws InvalidRequestError
-     * @throws AuthorizationFailedError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
      * @throws UnregisteredUserError
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

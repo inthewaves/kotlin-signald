@@ -18,7 +18,7 @@ public data class GetLinkedDevicesRequest(
     /**
      * The account to interact with
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String
 ) : SignaldRequestBodyV1<LinkedDevices>() {
@@ -47,6 +47,8 @@ public data class GetLinkedDevicesRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): LinkedDevices =
         super.submit(socketCommunicator, id)
@@ -61,6 +63,8 @@ public data class GetLinkedDevicesRequest(
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
      * @throws InvalidRequestError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

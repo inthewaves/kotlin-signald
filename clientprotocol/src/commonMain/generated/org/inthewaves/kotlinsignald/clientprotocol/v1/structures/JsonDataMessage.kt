@@ -84,8 +84,17 @@ public data class JsonDataMessage(
      */
     public val payment: Payment? = null,
     /**
+     * whether or not this message changes the expiresInSeconds value for the whole chat. Some
+     * messages (remote deletes, reactions, etc) will have expiresInSeconds=0 even though the chat has
+     * disappearing messages enabled.
+     */
+    @SerialName("is_expiration_update")
+    public val isExpirationUpdate: Boolean? = null,
+    /**
      * the eraId string from a group call message update
      */
     @SerialName("group_call_update")
-    public val groupCallUpdate: String? = null
+    public val groupCallUpdate: String? = null,
+    @SerialName("story_context")
+    public val storyContext: StoryContext? = null
 )

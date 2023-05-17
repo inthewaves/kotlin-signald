@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class Optional(
+    public val empty: Boolean? = null,
     public val present: Boolean? = null
 )

@@ -18,7 +18,7 @@ public data class SendPaymentRequest(
     /**
      * the account to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -55,10 +55,13 @@ public data class SendPaymentRequest(
      * @throws InvalidBase64Error
      * @throws InvalidRecipientError
      * @throws UnknownGroupError
-     * @throws NoSendPermissionError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): SendResponse =
         super.submit(socketCommunicator, id)
@@ -75,10 +78,13 @@ public data class SendPaymentRequest(
      * @throws InvalidBase64Error
      * @throws InvalidRecipientError
      * @throws UnknownGroupError
-     * @throws NoSendPermissionError
      * @throws InvalidRequestError
      * @throws RateLimitError
      * @throws UnregisteredUserError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws ProofRequiredError
+     * @throws SignalServerError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

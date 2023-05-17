@@ -15,6 +15,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AllIdentityKeyL
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ApproveMembershipRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AttachmentTooLargeError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.AuthorizationFailedError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.BanUserRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CaptchaRequiredError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ClientMessageWrapper
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.CreateGroupRequest
@@ -35,6 +36,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkInfoRe
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupLinkNotActiveError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupNotActiveError
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupPatchNotAcceptedError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.GroupVerificationError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.IdentityKeyList
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.InternalError
@@ -89,6 +91,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RemoveServerReq
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.RequestSyncRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResetSessionRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ResolveAddressRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SQLError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.ScanTimeoutError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendPaymentRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SendRequest
@@ -104,6 +107,7 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubmitChallenge
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.SubscribeRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TrustRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.TypingRequest
+import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnbanUserRequest
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownGroupError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnknownIdentityKeyError
 import org.inthewaves.kotlinsignald.clientprotocol.v1.structures.UnregisteredUserError
@@ -284,6 +288,65 @@ public actual class Signal @Throws(SignaldException::class) constructor(
             ).submit(socketWrapper)
         }
     }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InternalError
+     * @throws InvalidRequestError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
+     */
+    @Throws(SignaldException::class)
+    public fun banUser(groupId: String, users: Collection<JsonAddress>): JsonGroupV2Info {
+        withAccountOrThrow {
+            return BanUserRequest(
+                account = accountId,
+                groupId = groupId,
+                users = users.toList()
+            ).submit(socketWrapper)
+        }
+    }
+
+    /**
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.RequestFailedException if the signald
+     * socket sends a bad or error response, or unable to serialize our request
+     * @throws org.inthewaves.kotlinsignald.clientprotocol.SignaldException if an I/O error occurs
+     * during socket communication
+     * @throws NoSuchAccountError
+     * @throws ServerNotFoundError
+     * @throws InvalidProxyError
+     * @throws UnknownGroupError
+     * @throws GroupVerificationError
+     * @throws InternalError
+     * @throws InvalidRequestError
+     * @throws AuthorizationFailedError Can be caused if signald is setup as a linked device that
+     * has been removed by the primary device. If trying to update a group, this can also be caused if
+     * group permissions don't allow the update  (e.g. current role insufficient or not a member).
+     * @throws SQLError
+     * @throws GroupPatchNotAcceptedError Caused when server rejects the group update.
+     */
+    @Throws(SignaldException::class)
+    public fun unbanUser(groupId: String, users: Collection<JsonAddress>): JsonGroupV2Info {
+        withAccountOrThrow {
+            return UnbanUserRequest(
+                account = accountId,
+                groupId = groupId,
+                users = users.toList()
+            ).submit(socketWrapper)
+        }
+    }
+
 
     /**
      * Creates a new group and returns the information of the newly created group.
@@ -820,12 +883,13 @@ public actual class Signal @Throws(SignaldException::class) constructor(
      * @throws UnregisteredUserError
      */
     @Throws(SignaldException::class)
-    public fun refuseMembership(groupID: String, members: Collection<JsonAddress>): JsonGroupV2Info {
+    public fun refuseMembership(groupID: String, members: Collection<JsonAddress>, alsoBan: Boolean = false): JsonGroupV2Info {
         withAccountOrThrow {
             return RefuseMembershipRequest(
                 account = accountId,
                 members = members.toList(),
-                groupId = groupID
+                groupId = groupID,
+                alsoBan = alsoBan
             ).submit(socketWrapper)
         }
     }

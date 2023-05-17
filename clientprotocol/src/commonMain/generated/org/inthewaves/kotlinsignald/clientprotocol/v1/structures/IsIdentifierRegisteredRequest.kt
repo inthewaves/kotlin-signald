@@ -18,7 +18,7 @@ public data class IsIdentifierRegisteredRequest(
     /**
      * The account to use to use
      *
-     * Example: "+12024561414"
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
      */
     public val account: String,
     /**
@@ -53,6 +53,7 @@ public data class IsIdentifierRegisteredRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws SQLError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): BooleanMessage =
         super.submit(socketCommunicator, id)
@@ -66,6 +67,7 @@ public data class IsIdentifierRegisteredRequest(
      * @throws InvalidProxyError
      * @throws ServerNotFoundError
      * @throws NoSuchAccountError
+     * @throws SQLError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,

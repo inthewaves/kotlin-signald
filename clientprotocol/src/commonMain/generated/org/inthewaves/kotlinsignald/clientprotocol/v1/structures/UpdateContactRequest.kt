@@ -15,6 +15,9 @@ import org.inthewaves.kotlinsignald.clientprotocol.v1.requests.UpdateContact
 @Serializable
 @SerialName("update_contact")
 public data class UpdateContactRequest(
+    /**
+     * Example: "0cc10e61-d64c-4dbc-b51c-334f7dd45a4a"
+     */
     public val account: String,
     public val address: JsonAddress,
     public val name: String? = null,
@@ -44,6 +47,9 @@ public data class UpdateContactRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override fun submit(socketCommunicator: SocketCommunicator, id: String): Profile =
         super.submit(socketCommunicator, id)
@@ -57,6 +63,9 @@ public data class UpdateContactRequest(
      * @throws ServerNotFoundError
      * @throws InvalidProxyError
      * @throws InternalError
+     * @throws AuthorizationFailedError
+     * @throws SQLError
+     * @throws NetworkError
      */
     public override suspend fun submitSuspend(
         socketCommunicator: SuspendSocketCommunicator,
