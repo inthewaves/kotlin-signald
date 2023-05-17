@@ -55,6 +55,7 @@ value class SignaldType(val name: String) {
     fun asBuiltinTypeNameOrNull(pkg: PackageName): TypeName? = when (name.lowercase()) {
         "string" -> String::class.asClassName()
         "boolean" -> Boolean::class.asClassName()
+        "float" -> Float::class.asClassName()
         "long" -> Long::class.asClassName()
         "int", "integer" -> Int::class.asClassName()
         "object" -> {
