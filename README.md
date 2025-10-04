@@ -1,4 +1,6 @@
-# kotlin-signald
+# kotlin-signald (deprecated)
+
+**signald is now deprecated, so this project is no longer active. See https://gitlab.com/signald/signald/-/blob/main/README.md**
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.inthewaves.kotlin-signald/client?color=%23334)](https://search.maven.org/artifact/org.inthewaves.kotlin-signald/client)
 
